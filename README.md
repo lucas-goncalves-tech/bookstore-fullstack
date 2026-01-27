@@ -28,7 +28,7 @@ git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
 cd bookstore-fullstack
 
 # Inicie os containers
-docker compose up -d
+docker compose up -d --build
 ```
 
 ### Serviços Disponíveis
