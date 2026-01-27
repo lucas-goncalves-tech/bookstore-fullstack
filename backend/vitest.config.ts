@@ -2,7 +2,6 @@ import { defineConfig } from "vitest/config";
 import { env } from "./src/core/config/env";
 export default defineConfig({
   test: {
-    include: ["./src/**/*.spec.ts"],
     environment: "node",
     globals: true,
     coverage: {
