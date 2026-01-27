@@ -1,0 +1,11 @@
+
+## Put all ignores necessary below for backend project
+
+node_modules
+.env
+uploads
+
+
+
+
+/src/generated/prisma
