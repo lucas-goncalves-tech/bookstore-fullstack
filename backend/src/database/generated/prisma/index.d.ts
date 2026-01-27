@@ -893,7 +893,7 @@ export namespace Prisma {
     id: string | null
     email: string | null
     name: string | null
-    password_hash: string | null
+    passwordHash: string | null
     role: $Enums.Role | null
   }
 
@@ -901,7 +901,7 @@ export namespace Prisma {
     id: string | null
     email: string | null
     name: string | null
-    password_hash: string | null
+    passwordHash: string | null
     role: $Enums.Role | null
   }
 
@@ -909,7 +909,7 @@ export namespace Prisma {
     id: number
     email: number
     name: number
-    password_hash: number
+    passwordHash: number
     role: number
     _all: number
   }
@@ -919,7 +919,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
-    password_hash?: true
+    passwordHash?: true
     role?: true
   }
 
@@ -927,7 +927,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
-    password_hash?: true
+    passwordHash?: true
     role?: true
   }
 
@@ -935,7 +935,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
-    password_hash?: true
+    passwordHash?: true
     role?: true
     _all?: true
   }
@@ -1016,7 +1016,7 @@ export namespace Prisma {
     id: string
     email: string
     name: string
-    password_hash: string
+    passwordHash: string
     role: $Enums.Role
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -1041,7 +1041,7 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
-    password_hash?: boolean
+    passwordHash?: boolean
     role?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1049,7 +1049,7 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
-    password_hash?: boolean
+    passwordHash?: boolean
     role?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1057,7 +1057,7 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
-    password_hash?: boolean
+    passwordHash?: boolean
     role?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -1065,11 +1065,11 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
-    password_hash?: boolean
+    passwordHash?: boolean
     role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "password_hash" | "role", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "passwordHash" | "role", ExtArgs["result"]["user"]>
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
@@ -1078,7 +1078,7 @@ export namespace Prisma {
       id: string
       email: string
       name: string
-      password_hash: string
+      passwordHash: string
       role: $Enums.Role
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -1506,7 +1506,7 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
-    readonly password_hash: FieldRef<"User", 'String'>
+    readonly passwordHash: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'Role'>
   }
     
@@ -1892,7 +1892,7 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     name: 'name',
-    password_hash: 'password_hash',
+    passwordHash: 'passwordHash',
     role: 'role'
   };
 
@@ -1972,7 +1972,7 @@ export namespace Prisma {
     id?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
-    password_hash?: StringFilter<"User"> | string
+    passwordHash?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
   }
 
@@ -1980,7 +1980,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
-    password_hash?: SortOrder
+    passwordHash?: SortOrder
     role?: SortOrder
   }
 
@@ -1991,7 +1991,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
-    password_hash?: StringFilter<"User"> | string
+    passwordHash?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
   }, "id" | "email">
 
@@ -1999,7 +1999,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
-    password_hash?: SortOrder
+    passwordHash?: SortOrder
     role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -2013,7 +2013,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
-    password_hash?: StringWithAggregatesFilter<"User"> | string
+    passwordHash?: StringWithAggregatesFilter<"User"> | string
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   }
 
@@ -2021,7 +2021,7 @@ export namespace Prisma {
     id?: string
     email: string
     name: string
-    password_hash: string
+    passwordHash: string
     role?: $Enums.Role
   }
 
@@ -2029,7 +2029,7 @@ export namespace Prisma {
     id?: string
     email: string
     name: string
-    password_hash: string
+    passwordHash: string
     role?: $Enums.Role
   }
 
@@ -2037,7 +2037,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2045,7 +2045,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2053,7 +2053,7 @@ export namespace Prisma {
     id?: string
     email: string
     name: string
-    password_hash: string
+    passwordHash: string
     role?: $Enums.Role
   }
 
@@ -2061,7 +2061,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2069,7 +2069,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    password_hash?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -2099,7 +2099,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
-    password_hash?: SortOrder
+    passwordHash?: SortOrder
     role?: SortOrder
   }
 
@@ -2107,7 +2107,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
-    password_hash?: SortOrder
+    passwordHash?: SortOrder
     role?: SortOrder
   }
 
@@ -2115,7 +2115,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
-    password_hash?: SortOrder
+    passwordHash?: SortOrder
     role?: SortOrder
   }
 

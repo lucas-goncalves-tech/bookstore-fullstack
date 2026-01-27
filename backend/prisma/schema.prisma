@@ -22,7 +22,11 @@ model User {
   id            String @id @default(uuid())
   email         String @unique
   name          String
-  password_hash String
+  passwordHash  String @map("password_hash")
   role          Role   @default(USER)
+
+  @@map("users")
 }
+
+
 
