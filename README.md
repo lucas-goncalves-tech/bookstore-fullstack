@@ -24,7 +24,7 @@ Este projeto utiliza **Docker Compose** para orquestrar o ambiente de desenvolvi
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-user/bookstore-fullstack.git
+git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
 cd bookstore-fullstack
 
 # Inicie os containers
