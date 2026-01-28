@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bookstore Registration</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a77d52",
+                        "background-light": "#ede9da",
+                        "background-dark": "#1c1916",
+                        "text-brown": "#4b3d33",
+                        "text-light-brown": "#7e756d",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Libre Baskerville", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-brown dark:text-gray-200 transition-colors duration-200 font-display min-h-screen flex flex-col">
+<div class="flex flex-1 w-full min-h-screen">
+<!-- Left Side: Image Panel -->
+<div class="hidden lg:flex lg:w-1/2 relative bg-primary/20">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Cozy library interior with warm lighting and wooden bookshelves filled with books" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA--5wmjvJsG3qsNzSbOzAeboz6Zf7Gra69Y5H-t-T62vVZvDTTAmtu_JKelZHAiqEvdbQGuWnQm_t4GAZHfkVNxLfEYiLP1xwPGMffZHb7GYUC3iTmh0RAoWK85xlaZabgNR5AsnSIUeSiYoGLETaUlrtot04KqtUyRJuTAApTnZEbsUXso1UtAjHFyVY6TiOskVjVdrdt55oI4qQown0O9kCVSdfL4cT3dGzOaV_elY49CQQQzy0OXHI7vsBNdozHL7TEnoAbY-vK');">
+<div class="absolute inset-0 bg-black/20"></div> <!-- Subtle overlay for depth -->
+</div>
+<div class="relative z-10 flex flex-col justify-end p-12 text-white">
+<blockquote class="font-serif text-3xl leading-snug mb-4">
+                    "A room without books is like a body without a soul."
+                </blockquote>
+<cite class="font-display font-medium text-lg opacity-90">— Marcus Tullius Cicero</cite>
+</div>
+</div>
+<!-- Right Side: Registration Form -->
+<div class="flex flex-1 flex-col justify-center items-center px-6 py-12 lg:px-24 w-full lg:w-1/2 bg-background-light dark:bg-background-dark">
+<div class="w-full max-w-md space-y-8">
+<!-- Header -->
+<div class="text-left space-y-2">
+<h1 class="font-serif text-4xl lg:text-5xl font-bold text-text-brown dark:text-white tracking-tight">
+                        Begin Your Story
+                    </h1>
+<p class="font-display text-text-brown/80 dark:text-gray-400 text-lg">
+                        Join thousands of book lovers and curate your personal library.
+                    </p>
+</div>
+<!-- Form -->
+<form class="space-y-6 mt-8">
+<!-- Name Input -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-text-brown dark:text-gray-300" for="name">
+                            Full Name
+                        </label>
+<input class="w-full px-4 py-3 rounded-lg border border-[#d6d0c4] dark:border-gray-700 bg-white dark:bg-gray-800 text-text-brown dark:text-white placeholder-text-light-brown/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="name" placeholder="Enter your full name" type="text"/>
+</div>
+<!-- Email Input -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-text-brown dark:text-gray-300" for="email">
+                            Email Address
+                        </label>
+<input class="w-full px-4 py-3 rounded-lg border border-[#d6d0c4] dark:border-gray-700 bg-white dark:bg-gray-800 text-text-brown dark:text-white placeholder-text-light-brown/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="email" placeholder="name@example.com" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-text-brown dark:text-gray-300" for="password">
+                            Password
+                        </label>
+<div class="relative">
+<input class="w-full px-4 py-3 pr-12 rounded-lg border border-[#d6d0c4] dark:border-gray-700 bg-white dark:bg-gray-800 text-text-brown dark:text-white placeholder-text-light-brown/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" id="password" placeholder="Create a password" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-text-light-brown hover:text-primary transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Button -->
+<button class="w-full flex items-center justify-center bg-primary hover:bg-[#8e6a45] text-white font-bold py-3.5 rounded-lg transition-colors duration-200 shadow-sm" type="button">
+                        Create Account
+                    </button>
+</form>
+<!-- Divider -->
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-[#d6d0c4] dark:border-gray-700"></div>
+<span class="flex-shrink-0 mx-4 text-sm text-text-brown/60 dark:text-gray-500 font-medium">Or continue with</span>
+<div class="flex-grow border-t border-[#d6d0c4] dark:border-gray-700"></div>
+</div>
+<!-- Google Button -->
+<button class="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-[#d6d0c4] dark:border-gray-700 text-text-brown dark:text-white font-semibold py-3.5 rounded-lg transition-colors duration-200" type="button">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M23.7663 12.2764C23.7663 11.4607 23.7 10.6406 23.559 9.83807H12.2402V14.4591H18.722C18.453 15.9494 17.5887 17.2678 16.3233 18.1056V21.1039H20.1903C22.4611 19.0139 23.7663 15.9273 23.7663 12.2764Z" fill="#4285F4"></path>
+<path d="M12.2399 24.0008C15.4764 24.0008 18.2057 22.9382 20.1943 21.1039L16.3273 18.1055C15.2515 18.8375 13.8625 19.252 12.2442 19.252C9.11366 19.252 6.45924 17.1399 5.50683 14.3003H1.51636V17.3912C3.55349 21.4434 7.70268 24.0008 12.2399 24.0008Z" fill="#34A853"></path>
+<path d="M5.50277 14.3003C5.00209 12.8099 5.00209 11.1961 5.50277 9.70575V6.61481H1.51649C-0.185733 10.0056 -0.185733 14.0005 1.51649 17.3912L5.50277 14.3003Z" fill="#FBBC05"></path>
+<path d="M12.2399 4.74966C13.9507 4.7232 15.6042 5.36697 16.8437 6.54867L20.2693 3.12262C18.0999 1.0855 15.2206 -0.034466 12.2399 0.000808666C7.70268 0.000808666 3.55349 2.55822 1.51636 6.61481L5.50264 9.70575C6.45042 6.86173 9.10939 4.74966 12.2399 4.74966Z" fill="#EA4335"></path>
+</svg>
+                    Sign up with Google
+                </button>
+<!-- Footer Link -->
+<div class="text-center pt-2">
+<p class="text-sm text-text-brown/80 dark:text-gray-400">
+                        Already a member? 
+                        <a class="font-bold text-primary hover:text-[#8e6a45] hover:underline transition-colors" href="#">
+                            Sign in
+                        </a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>
