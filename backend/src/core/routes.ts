@@ -4,6 +4,8 @@ import { AuthRoutes } from "../modules/auth/auth.routes";
 import { generateOpenAPISpec } from "../docs/openapi.generator";
 import { apiReference } from "@scalar/express-api-reference";
 
+import "../modules/auth/auth.doc";
+
 @injectable()
 export class Routes {
   private router: Router;
@@ -13,16 +15,14 @@ export class Routes {
   }
 
   private routes() {
-    const openApiSpec = generateOpenAPISpec();
-
     this.router.use(
       "/api-doc",
       apiReference({
         theme: "deepSpace",
-        content: openApiSpec,
+        content: generateOpenAPISpec(),
       }),
     );
-    this.router.get("/health", (req, res) => res.json({ message: "OK" }));
+    this.router.get("/health", (_req, res) => res.json({ message: "OK" }));
     this.router.use("/api/v1/auth", this.authRoutes.routes);
 
     // not found
