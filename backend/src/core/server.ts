@@ -1,8 +1,8 @@
 import "reflect-metadata";
 
-import { App } from "@/app";
 import { container } from "tsyringe";
 import { env } from "./config/env";
+import { App } from "../app";
 
 const app = container.resolve(App).getServer();
 

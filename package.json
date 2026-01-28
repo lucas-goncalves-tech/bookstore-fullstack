@@ -2,7 +2,7 @@
   "name": "bookstore-fullstack",
   "description": "> Projeto de estudo para desenvolvimento Backend (Express) e Frontend (Next.js) com foco em TDD, Clean Architecture e DevOps (Docker).",
   "scripts": {
-    "docker:up": "docker compose up",
+    "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "db:migrate": "docker compose exec api npx prisma migrate dev",
     "db:generate": "docker compose exec api npx prisma generate",

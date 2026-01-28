@@ -1,7 +1,8 @@
-import { inject, singleton } from "tsyringe";
 import express, { type Express } from "express";
 import helmet from "helmet";
 import cors from "cors";
+
+import { inject, singleton } from "tsyringe";
 import { Routes } from "./core/routes";
 import { errorHandler } from "./shared/middlewares/error-handler.middleware";
 

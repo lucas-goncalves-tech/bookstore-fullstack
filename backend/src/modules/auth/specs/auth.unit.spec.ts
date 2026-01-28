@@ -1,32 +1,11 @@
 import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
-import {
-  ICreateUserInput,
-  IUsersRepository,
-} from "../../users/interfaces/user.interface";
+import { IUsersRepository } from "../../users/interfaces/user.interface";
 import { AuthService } from "../auth.service";
-import { User } from "../../../database/generated/prisma";
 import { ConflictError } from "../../../shared/errors/conflict.error";
-
-function generateNewUser(override?: Record<string, unknown>): ICreateUserInput {
-  return {
-    email: "fake@test.com",
-    name: "Fake User",
-    password: "12345678",
-    confirmPassword: "12345678",
-    ...override,
-  };
-}
-
-function generateFakeUser(override?: Record<string, unknown>): User {
-  return {
-    id: "UUID",
-    email: "fake@test.com",
-    name: "Fake User",
-    role: "USER",
-    passwordHash: "1234",
-    ...override,
-  };
-}
+import {
+  generateFakeUser,
+  generateNewUser,
+} from "../../../tests/helpers/auth.helper";
 
 describe("AuthService UNIT", () => {
   const mockUsersRepository: Mocked<IUsersRepository> = {
@@ -42,13 +21,10 @@ describe("AuthService UNIT", () => {
 
   it("should create new user and return user data", async () => {
     const newUser = generateNewUser();
-    const fakeUser: User = {
-      id: "UUID",
+    const fakeUser = generateFakeUser({
       email: newUser.email,
       name: newUser.name,
-      role: "USER",
-      passwordHash: "1234",
-    };
+    });
     mockUsersRepository.findByEmail.mockResolvedValue(null);
     mockUsersRepository.create.mockResolvedValue(fakeUser);
     const result = await service.create(newUser);
