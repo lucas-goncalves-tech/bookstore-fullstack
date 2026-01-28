@@ -81,7 +81,7 @@ The project uses `npm` for dependency management and script execution. Turbopack
 - **Styling:** Use Tailwind CSS utility classes. Avoid writing custom CSS in `globals.css` unless absolutely necessary.
 - **Class Merging:** Always use the `cn(...)` utility function (imported from `@/lib/utils`) when combining conditional class names to ensure Tailwind classes are merged correctly (resolving conflicts via `tailwind-merge`).
 - **Type Safety:** Ensure all components and functions are strictly typed.
-- **Forms:** Use `react-hook-form` coupled with `zod` for schema validation for all form implementations.
+- **Forms:** Use `react-hook-form` coupled with `zod` for schema validation for all form implementations. @../backend/src/modules/\*\*/dto have files to copy and use on front end. never create schemas from scratch.
 - **Imports:** Use path aliases defined in `tsconfig.json` and `components.json`:
   - `@/components` -> `src/components`
   - `@/lib` -> `src/lib`
