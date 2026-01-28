@@ -119,7 +119,7 @@ export function RegisterForm() {
         <p className="text-sm text-[#4b3d33]/80 dark:text-gray-400">
           Já é um membro?{" "}
           <Link
-            href="/auth/login"
+            href="/auth"
             className="font-bold text-[#a77d52] hover:text-[#8e6a45] hover:underline transition-colors"
           >
             Entrar
