@@ -1,11 +1,12 @@
 import { Router } from "express";
 import swaggerUi from "swagger-ui-express";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
+import { AuthRoutes } from "../modules/auth/auth.routes";
 
 @injectable()
 export class Routes {
   private router: Router;
-  constructor() {
+  constructor(@inject(AuthRoutes) private readonly authRoutes: AuthRoutes) {
     this.router = Router();
     this.routes();
   }
@@ -13,6 +14,8 @@ export class Routes {
   private routes() {
     this.router.get("/health", (req, res) => res.json({ message: "OK" }));
     this.router.use("/api-docs", swaggerUi.serve, swaggerUi.setup());
+
+    this.router.use("/api/v1/auth", this.authRoutes.routes);
 
     // not found
     this.router.use((req, res) => {

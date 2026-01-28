@@ -1,28 +1,16 @@
-import "reflect-metadata";
-
 import { execSync } from "node:child_process";
-import { env } from "../core/config/env";
-import { container } from "tsyringe";
-import { PrismaDB } from "../database/prisma";
-import { PrismaClient } from "../database/generated/prisma";
-
-export const prisma_test = new PrismaClient({
-  datasources: {
-    db: {
-      url: env.DATABASE_TEST_URL,
-    },
-  },
-});
 
 export default async () => {
   try {
+    const dbUrl =
+      process.env.DATABASE_TEST_URL ||
+      "postgresql://test:test@db_test:5432/bookstore_test";
     execSync(
-      `DATABASE_URL=${env.DATABASE_TEST_URL} npx prisma db push --accept-data-loss --skip-generate`,
+      `DATABASE_URL=${dbUrl} npx prisma db push --accept-data-loss --skip-generate`,
       {
         stdio: "inherit",
       },
     );
-    container.register(PrismaDB, { useValue: prisma_test });
   } catch (err) {
     //eslint-disable-next-line
     console.error("Error ao sincronizar banco durante teste: ", err);

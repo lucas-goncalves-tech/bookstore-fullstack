@@ -1,4 +1,4 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import bcrypt from "bcrypt";
 import { UsersRepository } from "../users/users.repository";
 import {
@@ -10,6 +10,7 @@ import {
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { env } from "../../core/config/env";
 
+@injectable()
 export class AuthService {
   constructor(
     @inject(UsersRepository) private readonly usersRepository: IUsersRepository,

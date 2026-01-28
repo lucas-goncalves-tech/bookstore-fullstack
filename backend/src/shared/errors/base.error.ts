@@ -4,12 +4,12 @@ export class BaseError extends Error {
   constructor(
     public readonly message: string,
     public readonly statusCode: number,
-    public readonly errors?: Record<string, string[]>[],
+    public readonly errors?: unknown,
   ) {
     super(message);
     if (errors instanceof ZodError) {
       this.errors = errors.issues.map((issue) => ({
-        [issue.path.join(".")]: [issue.message],
+        [issue.path.join(".")]: issue.message,
       }));
     }
   }

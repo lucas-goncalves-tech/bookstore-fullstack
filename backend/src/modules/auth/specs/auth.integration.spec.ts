@@ -13,7 +13,7 @@ describe(`POST ${BASE_URL}/register`, () => {
     const newUser = generateNewUser();
 
     const { body, status } = await req
-      .get(BASE_URL + "/register")
+      .post(BASE_URL + "/register")
       .send(newUser);
 
     expect(status).toBe(201);
