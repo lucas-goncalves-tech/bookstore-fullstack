@@ -5,6 +5,15 @@ import {
 } from "@/validators/zod.validators";
 import { z } from "zod";
 
+export const registerResponseSchema = z.object({
+  message: z.string(),
+  data: z.object({
+    name: z.string(),
+    email: z.string(),
+    role: z.enum(["USER", "ADMIN"]),
+  }),
+});
+
 export const registerSchema = z
   .object({
     name: zodSafeString

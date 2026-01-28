@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRegisterViewModel } from "../hooks/use-register.view-model";
+import { useRegisterViewModel } from "../hooks/use-register.viewmodel";
 import { ErrorMessage } from "@/components/ui/error-message";
 
 export function RegisterForm() {

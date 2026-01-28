@@ -7,8 +7,9 @@
     "db:migrate": "docker compose exec api npx prisma migrate dev",
     "db:generate": "docker compose exec api npx prisma generate",
     "db:seed": "docker compose exec api npx prisma db seed",
-    "logs:api": "docker compose logs api",
-    "logs:db": "docker compose logs db",
+    "logs:api": "docker compose logs api -f",
+    "logs:db": "docker compose logs db -f",
+    "logs:web": "docker compose logs web -f",
     "logs": "docker compose logs",
     "test": "docker compose exec api npx vitest"
   },
