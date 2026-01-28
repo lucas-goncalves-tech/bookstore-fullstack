@@ -21,7 +21,18 @@ export class App {
 
   private middlewares() {
     this.app.use(express.json());
-    this.app.use(helmet());
+    this.app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
+            styleSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
+            imgSrc: ["'self'", "data:", "cdn.jsdelivr.net"],
+          },
+        },
+      }),
+    );
     this.app.use(cors());
   }
 

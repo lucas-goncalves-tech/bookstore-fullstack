@@ -19,7 +19,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.4.0",
     "@prisma/client": "^6.19.2",
+    "@scalar/express-api-reference": "^0.8.38",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
@@ -28,8 +30,8 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "reflect-metadata": "^0.2.2",
-    "swagger-ui-express": "^5.0.1",
     "tsyringe": "^4.10.0",
+    "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -41,7 +43,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^25.0.10",
     "@types/supertest": "^6.0.3",
-    "@types/swagger-ui-express": "^4.1.8",
+    "@types/yaml": "^1.9.6",
     "eslint": "^9.39.2",
     "globals": "^17.1.0",
     "husky": "^9.1.7",

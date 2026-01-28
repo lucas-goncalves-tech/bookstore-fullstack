@@ -1,7 +1,8 @@
 import { Router } from "express";
-import swaggerUi from "swagger-ui-express";
 import { inject, injectable } from "tsyringe";
 import { AuthRoutes } from "../modules/auth/auth.routes";
+import { generateOpenAPISpec } from "../docs/openapi.generator";
+import { apiReference } from "@scalar/express-api-reference";
 
 @injectable()
 export class Routes {
@@ -12,9 +13,16 @@ export class Routes {
   }
 
   private routes() {
-    this.router.get("/health", (req, res) => res.json({ message: "OK" }));
-    this.router.use("/api-docs", swaggerUi.serve, swaggerUi.setup());
+    const openApiSpec = generateOpenAPISpec();
 
+    this.router.use(
+      "/api-doc",
+      apiReference({
+        theme: "deepSpace",
+        content: openApiSpec,
+      }),
+    );
+    this.router.get("/health", (req, res) => res.json({ message: "OK" }));
     this.router.use("/api/v1/auth", this.authRoutes.routes);
 
     // not found

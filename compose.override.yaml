@@ -21,7 +21,7 @@ services:
     build:
       target: dev
     volumes:
-      - ./backend:/app
+      - ./backend/:/app
       - /app/node_modules
     environment:
       DATABASE_TEST_URL: postgres://test:test@db_test:5432/bookstore_test
