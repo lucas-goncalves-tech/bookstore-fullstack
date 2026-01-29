@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import { PrismaClient } from "./generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 @singleton()
 export class PrismaDB extends PrismaClient {

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx --watch src/core/server.ts",
+    "build": "tsc",
+    "start": "node dist/core/server.js",
     "test": "docker compose exec api npx vitest",
     "db:migrate": "docker compose exec api npx prisma migrate dev",
     "db:generate": "docker compose exec api npx prisma generate"
@@ -37,10 +39,8 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^25.0.10",
     "@types/supertest": "^6.0.3",
-    "@types/yaml": "^1.9.6",
     "eslint": "^9.39.2",
     "globals": "^17.1.0",
-    "lint-staged": "^16.2.7",
     "prisma": "^6.19.2",
     "supertest": "^7.2.2",
     "tsconfig-paths": "^4.2.0",

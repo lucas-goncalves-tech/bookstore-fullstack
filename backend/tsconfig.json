@@ -13,6 +13,13 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "test/**/*", "prisma/**/*"],
-  "exclude": ["node_modules", "dist", "coverage", "prisma"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "prisma",
+    "src/**/specs/*",
+    "src/tests/*"
+  ]
 }

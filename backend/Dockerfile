@@ -8,9 +8,10 @@ COPY . .
 CMD ["npm", "run", "dev"]
 
 FROM base AS prod
-RUN npm ci --only=production
+RUN npm ci
 COPY . .
+RUN npx prisma generate 
 RUN npm run build
 RUN mkdir -p /app/uploads && chown -R node:node /app/uploads
 USER node
-CMD ["node", "dist/server.js"]
+CMD ["npm", "run", "start"]
