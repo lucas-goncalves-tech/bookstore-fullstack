@@ -1,4 +1,8 @@
 services:
+  db:
+    ports:
+      - "5432:5432"
+
   db_test:
     image: postgres:15-alpine
     environment:
@@ -13,22 +17,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 30s
-  db:
-    ports:
-      - "5432:5432"
+
   api:
     build:
       target: dev
-    volumes:
-      - ./backend/:/app
-      - /app/node_modules
     environment:
+      NODE_ENV: development
       DATABASE_TEST_URL: postgres://test:test@db_test:5432/bookstore_test
+    volumes:
+      - ./:/app
+      - /app/node_modules
     depends_on:
       db_test:
         condition: service_healthy
-  web:
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
