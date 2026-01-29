@@ -1,4 +1,8 @@
-include: ["./backend/compose.yaml"]
+include:
+  - path:
+      - ./backend/compose.yaml
+      - ./backend/compose.dev.yaml
+
 services:
   web:
     build:
