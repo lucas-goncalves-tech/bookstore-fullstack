@@ -8,4 +8,4 @@ uploads
 
 
 
-/src/generated/prisma
+src/database/generated

@@ -7,14 +7,7 @@
     "dev": "tsx --watch src/core/server.ts",
     "test": "docker compose exec api npx vitest",
     "db:migrate": "docker compose exec api npx prisma migrate dev",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "eslint --fix",
-      "prettier --write",
-      "vitest related --run"
-    ]
+    "db:generate": "docker compose exec api npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -33,7 +26,6 @@
     "multer": "^2.0.2",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.10.0",
-    "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -48,7 +40,6 @@
     "@types/yaml": "^1.9.6",
     "eslint": "^9.39.2",
     "globals": "^17.1.0",
-    "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^6.19.2",
     "supertest": "^7.2.2",
