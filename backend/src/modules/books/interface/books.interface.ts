@@ -6,6 +6,8 @@ export interface IFindManyQuery {
   categoryId?: string;
   page?: number;
   limit?: number;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export interface IFindMany {

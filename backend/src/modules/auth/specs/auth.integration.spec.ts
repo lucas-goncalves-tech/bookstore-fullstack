@@ -3,7 +3,7 @@ import { postNewUser, BASE_URL } from "../../../tests/helpers/auth.helper";
 import { req } from "../../../tests/helpers/commom.helper";
 
 describe(`POST ${BASE_URL}/register`, () => {
-  it("should return status 201 when body is valid", async () => {
+  it("should register user with valid body", async () => {
     const { registerBody, registerStatus, newUser } = await postNewUser();
 
     expect(registerStatus).toBe(201);
@@ -50,7 +50,7 @@ describe(`POST ${BASE_URL}/register`, () => {
 });
 
 describe(`POST ${BASE_URL}/login`, () => {
-  it("should return status 204 with cookies when credentials is valid", async () => {
+  it("should login and set cookies with valid credentials", async () => {
     const { newUser } = await postNewUser();
 
     const { status, headers, body } = await req.post(BASE_URL + "/login").send({

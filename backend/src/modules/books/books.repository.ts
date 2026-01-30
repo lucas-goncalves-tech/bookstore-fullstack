@@ -24,6 +24,8 @@ export class BookRepository implements IBookRepository {
     limit = 10,
     categoryId,
     search,
+    minPrice,
+    maxPrice,
   }: IFindManyQuery): Promise<IFindMany> {
     const skip = (page - 1) * limit;
     const safeLimit = limit > 100 ? 100 : limit;
@@ -36,6 +38,12 @@ export class BookRepository implements IBookRepository {
         { title: { contains: search, mode: "insensitive" } },
         { author: { contains: search, mode: "insensitive" } },
       ];
+    if (minPrice || maxPrice) {
+      where.price = {
+        ...(minPrice && { gte: minPrice }),
+        ...(maxPrice && { lte: maxPrice }),
+      };
+    }
     const [data, total] = await Promise.all([
       this.prisma.book.findMany({
         where,
