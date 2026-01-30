@@ -1,5 +1,6 @@
+import { agent } from "supertest";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
-import { req } from "../helpers/commom.helper";
+import { app, req } from "../helpers/commom.helper";
 import { User } from "@prisma/client";
 
 export function generateNewUser(
@@ -38,5 +39,21 @@ export async function postNewUser(
     registerBody: body,
     registerStatus: status,
     newUser,
+  };
+}
+
+export async function loginWithUser(role?: "user" | "admin") {
+  const email = `test@${role}.com`;
+  const reqAgent = agent(app);
+
+  const { body, status } = await reqAgent.post(BASE_URL + "/login").send({
+    email,
+    password: "12345678",
+  });
+
+  return {
+    loginBody: body,
+    loginStatus: status,
+    reqAgent,
   };
 }

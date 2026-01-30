@@ -4,6 +4,8 @@ import { req } from "../../../tests/helpers/commom.helper";
 import { Book } from "@prisma/client";
 import { createBook } from "../../../tests/factories/book.factory";
 import { Decimal } from "@prisma/client/runtime/library";
+import { ICreateBookInput } from "../../books/interface/books.interface";
+import { loginWithUser } from "../../../tests/helpers/auth.helper";
 
 const BASE_URL = "/api/v1/books";
 
@@ -19,6 +21,19 @@ function expectecBookShape(): Book {
     categoryId: expect.toSatisfy((v) => v === null || typeof v === "string"),
     createdAt: expect.anything(),
     deletedAt: expect.toSatisfy((v) => v === null || typeof v === "string"),
+  };
+}
+
+function generateNewBook(overrides?: ICreateBookInput): ICreateBookInput {
+  return {
+    title: "Test Book",
+    description: "Test Book Description",
+    author: "Test Author",
+    price: new Decimal("10.00"),
+    stock: 10,
+    coverUrl: "https://test.com/cover.jpg",
+    categoryId: "1",
+    ...overrides,
   };
 }
 
@@ -91,7 +106,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
   });
 });
 
-describe("GET /books - Filters", () => {
+describe(`GET ${BASE_URL} - Filters`, () => {
   it("should filter books by categoryId", async () => {
     const adventure = await createCategory({
       name: "adventure",
@@ -234,5 +249,38 @@ describe("GET /books - Filters", () => {
       total: 5,
       totalPages: 1,
     });
+  });
+});
+
+describe(`POST ${BASE_URL}`, () => {
+  it("should allow ADMIN to create a book", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const newBook = generateNewBook();
+
+    const { body, status } = await reqAgent.post(BASE_URL).send(newBook);
+
+    expect(status).toBe(201);
+    expect(body).toMatchObject(expectecBookShape());
+    expect(body.title).toBe(newBook.title);
+    expect(body.author).toBe(newBook.author);
+  });
+
+  it("should return status 403 when USER try to create a book", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const newBook = generateNewBook();
+
+    const { body, status } = await reqAgent.post(BASE_URL).send(newBook);
+
+    expect(status).toBe(403);
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 401 when non authenticated try to create a book", async () => {
+    const newBook = generateNewBook();
+
+    const { body, status } = await req.post(BASE_URL).send(newBook);
+
+    expect(status).toBe(401);
+    expect(body).toHaveProperty("message");
   });
 });
