@@ -4,3 +4,8 @@ export interface ICreateUserResponse {
   message: string;
   data: ISafeUser;
 }
+
+export interface ILoginInput {
+  email: string;
+  password: string;
+}

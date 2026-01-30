@@ -9,6 +9,9 @@ import {
 } from "../users/interfaces/user.interface";
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { env } from "../../core/config/env";
+import { ILoginInput } from "./interface/auth.interface";
+import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
+import { generateToken } from "../../shared/secutiry/token.service";
 
 @injectable()
 export class AuthService {
@@ -34,5 +37,22 @@ export class AuthService {
     //eslint-disable-next-line
     const { id, passwordHash, ...safe } = result;
     return safe;
+  }
+
+  async login(data: ILoginInput): Promise<string> {
+    const userExist = await this.usersRepository.findByEmail(data.email);
+    const FAKE_HASH =
+      "$2b$10$D7Y/.IVUm.SFcnYQE4dlb.BPJtVCwmOV/kaehohZrWeodfAEP8qqS";
+    const hashToCompare = userExist ? userExist.passwordHash : FAKE_HASH;
+    const isPassValid = await bcrypt.compare(data.password, hashToCompare);
+
+    if (!userExist || !isPassValid) {
+      throw new UnauthorizedError("Email ou senha inválido!");
+    }
+
+    return generateToken({
+      sid: userExist.id,
+      role: userExist.role,
+    });
   }
 }

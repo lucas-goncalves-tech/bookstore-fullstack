@@ -3,6 +3,7 @@ import { AuthController } from "./auth.controller";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createUserDto } from "./dto/create-user.dto";
+import { loginSchema } from "./dto/login.dto";
 
 @injectable()
 export class AuthRoutes {
@@ -19,6 +20,11 @@ export class AuthRoutes {
       "/register",
       validateMiddleware({ body: createUserDto }),
       this.controller.create,
+    );
+    this.router.post(
+      "/login",
+      validateMiddleware({ body: loginSchema }),
+      this.controller.login,
     );
   }
 
