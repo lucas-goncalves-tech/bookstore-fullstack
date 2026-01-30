@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { postNewUser, req, BASE_URL } from "../../../tests/helpers/auth.helper";
+import { postNewUser, BASE_URL } from "../../../tests/helpers/auth.helper";
+import { req } from "../../../tests/helpers/commom.helper";
 
 describe(`POST ${BASE_URL}/register`, () => {
   it("should return status 201 when body is valid", async () => {

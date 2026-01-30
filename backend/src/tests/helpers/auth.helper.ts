@@ -1,7 +1,5 @@
-import { container } from "tsyringe";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
-import supertest from "supertest";
-import { App } from "../../app";
+import { req } from "../helpers/commom.helper";
 import { User } from "@prisma/client";
 
 export function generateNewUser(
@@ -28,8 +26,6 @@ export function generateFakeUser(override?: Record<string, unknown>): User {
 }
 
 export const BASE_URL = "/api/v1/auth";
-export const app = container.resolve(App).getServer();
-export const req = supertest(app);
 
 export async function postNewUser(
   override?: ICreateUserInput | Record<string, unknown>,

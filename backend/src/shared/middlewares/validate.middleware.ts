@@ -12,13 +12,13 @@ export const validateMiddleware = (schemas: Schemas) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
       if (schemas.body) {
-        schemas.body.parse(req.body);
+        req.safeBody = schemas.body.parse(req.body);
       }
       if (schemas.params) {
-        schemas.params.parse(req.params);
+        req.safeParams = schemas.params.parse(req.params);
       }
       if (schemas.query) {
-        schemas.query.parse(req.query);
+        req.safeQuery = schemas.query.parse(req.query);
       }
       next();
     } catch (err) {

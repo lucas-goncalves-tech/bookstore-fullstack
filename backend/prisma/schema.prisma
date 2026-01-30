@@ -28,3 +28,35 @@ model User {
   @@map("users")
 }
 
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+  description String @db.VarChar(100)
+
+  book Book[]
+
+  @@map("categories")
+}
+
+model Book {
+  id String @id @default(uuid())
+  author String
+  title String
+  description String @db.VarChar(255)
+  price Decimal @db.Decimal(10,2)
+  stock Int @default(0)
+  coverUrl String? @map("cover_url")
+
+  categoryId String? @map("category_id")
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
+
+
+  @@index([title])
+  @@index([author])
+  @@index([categoryId])
+  @@map("books")
+}
+

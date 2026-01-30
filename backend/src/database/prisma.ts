@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 export class PrismaDB extends PrismaClient {
   constructor() {
     super({
-      log: ["query", "info", "warn", "error"],
+      log: ["warn", "error"],
     });
   }
 }

@@ -5,11 +5,15 @@ import { generateOpenAPISpec } from "../docs/openapi.generator";
 import { apiReference } from "@scalar/express-api-reference";
 
 import "../modules/auth/auth.doc";
+import { BookRoutes } from "../modules/books/books.routes";
 
 @injectable()
 export class Routes {
   private router: Router;
-  constructor(@inject(AuthRoutes) private readonly authRoutes: AuthRoutes) {
+  constructor(
+    @inject(AuthRoutes) private readonly authRoutes: AuthRoutes,
+    @inject(BookRoutes) private readonly bookRoutes: BookRoutes,
+  ) {
     this.router = Router();
     this.routes();
   }
@@ -24,6 +28,7 @@ export class Routes {
     );
     this.router.get("/health", (_req, res) => res.json({ message: "OK" }));
     this.router.use("/api/v1/auth", this.authRoutes.routes);
+    this.router.use("/api/v1/books", this.bookRoutes.routes);
 
     // not found
     this.router.use((req, res) => {
