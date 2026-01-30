@@ -9,7 +9,11 @@
     "start": "node dist/core/server.js",
     "test": "docker compose exec api npx vitest",
     "db:migrate": "docker compose exec api npx prisma migrate dev",
-    "db:generate": "docker compose exec api npx prisma generate"
+    "db:generate": "docker compose exec api npx prisma generate",
+    "db:seed": "docker compose exec api npx prisma seed"
+  },
+  "prisma": {
+    "seed": "tsx src/database/seed.ts"
   },
   "keywords": [],
   "author": "",

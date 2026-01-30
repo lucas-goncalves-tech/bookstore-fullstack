@@ -1,8 +1,8 @@
 import { container } from "tsyringe";
-import { User } from "../../database/generated/prisma";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
 import supertest from "supertest";
 import { App } from "../../app";
+import { User } from "@prisma/client";
 
 export function generateNewUser(
   override?: Record<string, unknown>,

@@ -1,4 +1,4 @@
-import { User } from "../../../database/generated/prisma";
+import { User } from "@prisma/client";
 
 export type ICreateUser = Omit<User, "role" | "id">;
 export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
