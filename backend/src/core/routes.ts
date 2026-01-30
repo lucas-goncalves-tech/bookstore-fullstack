@@ -16,7 +16,7 @@ export class Routes {
 
   private routes() {
     this.router.use(
-      "/api-doc",
+      "/api-docs",
       apiReference({
         theme: "deepSpace",
         content: generateOpenAPISpec(),

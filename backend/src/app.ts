@@ -5,6 +5,7 @@ import cors from "cors";
 import { inject, singleton } from "tsyringe";
 import { Routes } from "./core/routes";
 import { errorHandler } from "./shared/middlewares/error-handler.middleware";
+import { env } from "./core/config/env";
 
 @singleton()
 export class App {
@@ -33,7 +34,16 @@ export class App {
         },
       }),
     );
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin:
+          env.NODE_ENV === "production"
+            ? env.ALLOWED_ORIGINS
+            : ["http://localhost:3000"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+      }),
+    );
   }
 
   private setupRoutes() {

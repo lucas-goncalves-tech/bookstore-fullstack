@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { LoginForm } from "@/modules/login/components/login-form";
 
 export default function AuthPage() {

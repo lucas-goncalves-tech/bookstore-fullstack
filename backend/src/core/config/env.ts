@@ -16,6 +16,10 @@ const checkEnv = z.object({
   ADMIN_EMAIL: zodSafeEmail,
   ADMIN_PASSWORD: zodPassword(),
   ADMIN_NAME: zodSafeString.min(2),
+  ALLOWED_ORIGINS: z.preprocess(
+    (val) => (typeof val === "string" ? JSON.parse(val) : val),
+    z.array(z.string()),
+  ),
 });
 
 export const env = checkEnv.parse(process.env);

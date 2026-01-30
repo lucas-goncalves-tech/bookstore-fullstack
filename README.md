@@ -72,7 +72,7 @@ docker compose exec api npx prisma migrate dev
 
 - **Frontend**: [http://localhost:3000](http://localhost:3000)
 - **Backend API**: [http://localhost:3333/api/v1](http://localhost:3333/api/v1)
-- **Scalar API Reference**: [http://localhost:3333/api-doc](http://localhost:3333/api-doc)
+- **Scalar API Reference**: [http://localhost:3333/api-docs](http://localhost:3333/api-docs)
 - **Postgres (Dev)**: `localhost:5432`
 - **Postgres (Test)**: `localhost:5434`
 
