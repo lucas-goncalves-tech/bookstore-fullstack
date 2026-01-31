@@ -78,7 +78,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
     });
   });
 
-  it("should paginate with custom limit", async () => {
+  it("should return paginate books with custom limit", async () => {
     const { body, status } = await req.get(BASE_URL + "?limit=5");
 
     expect(status).toBe(200);
