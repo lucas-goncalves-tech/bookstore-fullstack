@@ -1,6 +1,6 @@
 import { Book } from "@prisma/client";
 
-export type ICreateBookInput = Omit<Book, "id" | "createdAt" | "deletedAt">;
+export type ICreateBookInput = Omit<Book, "id" | "coverUrl" |"createdAt" | "deletedAt">;
 export interface IFindManyQuery {
   search?: string;
   categoryId?: string;

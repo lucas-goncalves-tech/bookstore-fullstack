@@ -53,36 +53,42 @@ describe(`POST ${BASE_URL}/login`, () => {
   it("should login and set cookies with valid credentials", async () => {
     const { newUser } = await postNewUser();
 
-    const { status, headers, body } = await req.post(BASE_URL + "/login").send({
-      email: newUser.email,
-      password: newUser.password,
-    });
+    const { headers, body } = await req
+      .post(BASE_URL + "/login")
+      .send({
+        email: newUser.email,
+        password: newUser.password,
+      })
+      .expect(204);
     const cookies = headers["set-cookie"][0];
 
-    expect(status).toBe(204);
     expect(body).toEqual({});
     expect(cookies).contains("sid");
     expect(cookies).contains("HttpOnly");
   });
 
   it("should return status 401 when credentials is invalid", async () => {
-    const { status, body } = await req.post(BASE_URL + "/login").send({
-      email: "invalid@test.com",
-      password: "12345678",
-    });
+    const { body } = await req
+      .post(BASE_URL + "/login")
+      .send({
+        email: "invalid@test.com",
+        password: "12345678",
+      })
+      .expect(401);
 
-    expect(status).toBe(401);
     expect(body).toHaveProperty("message");
   });
 
   it("should return status 400 when body have invalid fields", async () => {
-    const { status, body } = await req.post(BASE_URL + "/login").send({
-      email: "not-valid-com",
-      password: "123",
-    });
+    const { body } = await req
+      .post(BASE_URL + "/login")
+      .send({
+        email: "not-valid-com",
+        password: "123",
+      })
+      .expect(400);
     const errors = body.errors.map((e: object) => Object.keys(e)[0]);
 
-    expect(status).toBe(400);
     expect(body).toHaveProperty("message");
     expect(errors).toContain("email");
     expect(errors).toContain("password");

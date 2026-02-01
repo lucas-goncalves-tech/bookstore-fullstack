@@ -49,6 +49,7 @@ export class BookRepository implements IBookRepository {
         where,
         skip,
         take: safeLimit,
+        orderBy: { createdAt: "desc" }
       }),
       this.prisma.book.count({ where }),
     ]);
@@ -63,8 +64,10 @@ export class BookRepository implements IBookRepository {
     };
   }
 
-  create(data: ICreateBookInput): Promise<Book> {
-    throw new Error("Method not implemented.");
+  async create(data: ICreateBookInput): Promise<Book> {
+    return await this.prisma.book.create({
+      data,
+    });
   }
 
   update(id: string, data: IUpdateBookInput): Promise<Book> {

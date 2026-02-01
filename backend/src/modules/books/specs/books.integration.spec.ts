@@ -15,7 +15,7 @@ function expectecBookShape(): Book {
     title: expect.any(String),
     description: expect.any(String),
     author: expect.any(String),
-    price: expect.any(Number),
+    price: expect.any(String),
     stock: expect.any(Number),
     coverUrl: expect.toSatisfy((v) => v === null || typeof v === "string"),
     categoryId: expect.toSatisfy((v) => v === null || typeof v === "string"),
@@ -24,17 +24,19 @@ function expectecBookShape(): Book {
   };
 }
 
-function generateNewBook(overrides?: ICreateBookInput): ICreateBookInput {
-  return {
+async function generateNewBook(overrides?: Partial<ICreateBookInput> | Record<string, unknown>): Promise<ICreateBookInput> {
+  const {id} = await createCategory();
+  const payload: ICreateBookInput = {
     title: "Test Book",
     description: "Test Book Description",
     author: "Test Author",
     price: new Decimal("10.00"),
     stock: 10,
-    coverUrl: "https://test.com/cover.jpg",
-    categoryId: "1",
+    categoryId: id,
     ...overrides,
   };
+
+  return payload;
 }
 
 describe(`GET ${BASE_URL} - Pagination`, () => {
@@ -51,9 +53,8 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
   });
 
   it("should return paginated books with default limit", async () => {
-    const { body, status } = await req.get(BASE_URL);
+    const { body } = await req.get(BASE_URL).expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(10);
     expect(body.data[0]).toMatchObject(expectecBookShape());
     expect(body.metadata).toMatchObject({
@@ -65,9 +66,8 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
   });
 
   it("should return remaining items on page 2", async () => {
-    const { body, status } = await req.get(BASE_URL + "?page=2");
+    const { body } = await req.get(BASE_URL + "?page=2").expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(5);
     expect(body.data[0]).toMatchObject(expectecBookShape());
     expect(body.metadata).toMatchObject({
@@ -79,9 +79,8 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
   });
 
   it("should return paginate books with custom limit", async () => {
-    const { body, status } = await req.get(BASE_URL + "?limit=5");
+    const { body } = await req.get(BASE_URL + "?limit=5").expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(5);
     expect(body.data[0]).toMatchObject(expectecBookShape());
     expect(body.metadata).toMatchObject({
@@ -93,9 +92,8 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
   });
 
   it("should return empty array when page exceeds total", async () => {
-    const { body, status } = await req.get(BASE_URL + "?page=5");
+    const { body } = await req.get(BASE_URL + "?page=5").expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(0);
     expect(body.metadata).toMatchObject({
       page: 5,
@@ -126,11 +124,10 @@ describe(`GET ${BASE_URL} - Filters`, () => {
       });
     }
 
-    const { body, status } = await req.get(
-      BASE_URL + "?categoryId=" + adventure.id,
-    );
+    const { body } = await req
+      .get(BASE_URL + "?categoryId=" + adventure.id)
+      .expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(5);
     expect(body.metadata).toMatchObject({
       page: 1,
@@ -151,9 +148,8 @@ describe(`GET ${BASE_URL} - Filters`, () => {
       title,
     });
 
-    const { body, status } = await req.get(BASE_URL + "?search=" + title);
+    const { body } = await req.get(BASE_URL + "?search=" + title).expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(1);
     expect(body.data[0].title).toBe(title);
     expect(body.metadata).toMatchObject({
@@ -179,11 +175,10 @@ describe(`GET ${BASE_URL} - Filters`, () => {
       });
     }
 
-    const { status, body } = await req.get(
-      BASE_URL + "?search=" + title + "&page=2&limit=5",
-    );
+    const { body } = await req
+      .get(BASE_URL + "?search=" + title + "&page=2&limit=5")
+      .expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(5);
     expect(body.metadata).toMatchObject({
       page: 2,
@@ -210,9 +205,8 @@ describe(`GET ${BASE_URL} - Filters`, () => {
       });
     }
 
-    const { body, status } = await req.get(BASE_URL + "?minPrice=20");
+    const { body } = await req.get(BASE_URL + "?minPrice=20").expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(10);
     expect(body.metadata).toMatchObject({
       page: 1,
@@ -239,9 +233,8 @@ describe(`GET ${BASE_URL} - Filters`, () => {
       });
     }
 
-    const { body, status } = await req.get(BASE_URL + "?maxPrice=10");
+    const { body } = await req.get(BASE_URL + "?maxPrice=10").expect(200);
 
-    expect(status).toBe(200);
     expect(body.data).toHaveLength(5);
     expect(body.metadata).toMatchObject({
       page: 1,
@@ -255,32 +248,53 @@ describe(`GET ${BASE_URL} - Filters`, () => {
 describe(`POST ${BASE_URL}`, () => {
   it("should allow ADMIN to create a book", async () => {
     const { reqAgent } = await loginWithUser("admin");
-    const newBook = generateNewBook();
+    const newBook = await generateNewBook();
 
-    const { body, status } = await reqAgent.post(BASE_URL).send(newBook);
+    const { body } = await reqAgent.post(BASE_URL).send(newBook).expect(201)
 
-    expect(status).toBe(201);
-    expect(body).toMatchObject(expectecBookShape());
-    expect(body.title).toBe(newBook.title);
-    expect(body.author).toBe(newBook.author);
+    expect(body).toHaveProperty("message");
+    expect(body.data).toMatchObject(expectecBookShape());
+    expect(body.data.title).toBe(newBook.title);
+    expect(body.data.author).toBe(newBook.author);
+  });
+
+  it("should return status 400 when ADMIN try to create a book with invalid data", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const newBook = await generateNewBook({
+      title: "",
+      description: "",
+      price: new Decimal("0"),
+      stock: 0,
+      categoryId: "invalid-uuid",
+      author: "",
+    });
+
+    const { body } = await reqAgent.post(BASE_URL).send(newBook)
+    const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+
+    expect(body).toHaveProperty("message");
+    expect(errors).toContain("title");
+    expect(errors).toContain("description");
+    expect(errors).toContain("author");
+    expect(errors).toContain("price");
+    expect(errors).toContain("stock");
+    expect(errors).toContain("categoryId");
   });
 
   it("should return status 403 when USER try to create a book", async () => {
     const { reqAgent } = await loginWithUser("user");
     const newBook = generateNewBook();
 
-    const { body, status } = await reqAgent.post(BASE_URL).send(newBook);
+    const { body } = await reqAgent.post(BASE_URL).send(newBook).expect(403);
 
-    expect(status).toBe(403);
     expect(body).toHaveProperty("message");
   });
 
   it("should return status 401 when non authenticated try to create a book", async () => {
     const newBook = generateNewBook();
 
-    const { body, status } = await req.post(BASE_URL).send(newBook);
+    const { body } = await req.post(BASE_URL).send(newBook).expect(401);
 
-    expect(status).toBe(401);
     expect(body).toHaveProperty("message");
   });
 });

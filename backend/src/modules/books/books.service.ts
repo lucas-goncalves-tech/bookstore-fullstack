@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { BookRepository } from "./books.repository";
-import { IFindManyQuery } from "./interface/books.interface";
+import { ICreateBookInput, IFindManyQuery } from "./interface/books.interface";
 
 @injectable()
 export class BookService {
@@ -9,14 +9,10 @@ export class BookService {
   ) {}
 
   async findMany(query: IFindManyQuery) {
-    const result = await this.bookRepository.findMany(query);
-    const data = result.data.map(({ price, ...rest }) => ({
-      ...rest,
-      price: Number(price),
-    }));
-    return {
-      data,
-      metadata: result.metadata,
-    };
+    return await this.bookRepository.findMany(query);
+  }
+
+  async create(data: ICreateBookInput) {
+    return await this.bookRepository.create(data);
   }
 }

@@ -3,6 +3,9 @@ import { BookController } from "./books.controller";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { bookQueryDto } from "./dtos/book-query.dto";
+import { createBookDto } from "./dtos/create-book.dto";
+import { authMiddleware } from "../../shared/middlewares/auth.middleware";
+import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middleware";
 
 @injectable()
 export class BookRoutes {
@@ -20,6 +23,7 @@ export class BookRoutes {
       validateMiddleware({ query: bookQueryDto }),
       this.controller.findMany,
     );
+    this.router.post("/", authMiddleware, adminOnlyMiddleware, validateMiddleware({ body: createBookDto }), this.controller.create);
   }
 
   get routes() {

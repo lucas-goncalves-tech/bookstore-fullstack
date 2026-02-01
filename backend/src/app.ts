@@ -6,6 +6,7 @@ import { inject, singleton } from "tsyringe";
 import { Routes } from "./core/routes";
 import { errorHandler } from "./shared/middlewares/error-handler.middleware";
 import { env } from "./core/config/env";
+import cookieParser from "cookie-parser";
 
 @singleton()
 export class App {
@@ -22,6 +23,7 @@ export class App {
 
   private middlewares() {
     this.app.use(express.json());
+    this.app.use(cookieParser())
     this.app.use(
       helmet({
         contentSecurityPolicy: {
