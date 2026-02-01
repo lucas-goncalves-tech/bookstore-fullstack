@@ -11,8 +11,8 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3333
-      - API_URL=http://api:3333
+      - NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1
+      - API_URL=http://api:3333/api/v1
     ports:
       - "3000:3000"
     depends_on:

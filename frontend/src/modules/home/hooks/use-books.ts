@@ -10,9 +10,16 @@ async function fetchBooks(params?: BookQueryParams): Promise<BooksResponse> {
   return data;
 }
 
-export function useBooks(params?: BookQueryParams) {
+interface UseBooksOptions {
+  params?: BookQueryParams;
+  initialData?: BooksResponse | null;
+}
+
+export function useBooks({ params, initialData }: UseBooksOptions = {}) {
   return useQuery({
     queryKey: homeQueryKeys.books.list(params),
     queryFn: () => fetchBooks(params),
+    initialData: initialData ?? undefined,
   });
 }
+

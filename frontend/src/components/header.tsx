@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, ShoppingCart } from "lucide-react";
+import { useTheme } from "next-themes";
+import { BookOpen, Moon, ShoppingCart, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,12 @@ const navLinks = [
 ];
 
 export function Header() {
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 shadow-sm backdrop-blur-sm">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
@@ -31,31 +38,42 @@ export function Header() {
         {/* Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <Link
+            <Button
               key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                link.active
-                  ? "border-b-2 border-primary pb-0.5 font-bold text-primary"
-                  : "text-muted-foreground"
-              )}
+              variant="ghost"
+              size="sm"
+              asChild
+              className={cn(link.active ? "font-bold text-primary" : "text-muted-foreground")}
             >
-              {link.label}
-            </Link>
+              <Link href={link.href}>{link.label}</Link>
+            </Button>
           ))}
         </nav>
 
         {/* User Actions */}
         <div className="flex items-center gap-4">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
+            aria-label="Alternar tema"
+          >
+            <Sun className="size-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute left-2 top-2 size-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+
           {/* Cart */}
-          <button
-            className="relative p-2 text-muted-foreground transition-colors hover:text-primary"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
             aria-label="Carrinho de compras"
           >
             <ShoppingCart className="size-5" />
             <span className="absolute right-0 top-1 size-2 rounded-full bg-primary" />
-          </button>
+          </Button>
 
           {/* Auth Buttons or User Profile */}
           <div className="flex items-center gap-3 border-l border-border pl-4">

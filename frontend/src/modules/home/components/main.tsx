@@ -8,32 +8,22 @@ import { BookGrid } from "./book-grid";
 import { Footer } from "./footer";
 import { useBooks } from "../hooks/use-books";
 import { useCategories } from "../hooks/use-categories";
-import type { BookQueryParams } from "../schemas/book.schema";
+import type { BookQueryParams, BooksResponse } from "../schemas/book.schema";
 import type { Book } from "../schemas/book.schema";
 
-// Debounce para evitar muitas requisições
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useMemo(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
+interface HomeMainProps {
+  initialBooks?: BooksResponse | null;
 }
 
-export function HomeMain() {
+export function HomeMain({ initialBooks }: HomeMainProps) {
   const [filters, setFilters] = useState<BookQueryParams>({});
-  const debouncedFilters = useDebounce(filters, 300);
 
-  const { data: booksResponse, isLoading: isLoadingBooks } =
-    useBooks(debouncedFilters);
+  // Passa initialData apenas quando não há filtros aplicados
+  const hasFilters = Object.keys(filters).length > 0;
+  const { data: booksResponse, isLoading: isLoadingBooks } = useBooks({
+    params: filters,
+    initialData: hasFilters ? undefined : initialBooks,
+  });
   const { data: categories = [] } = useCategories();
 
   const books = useMemo(() => {

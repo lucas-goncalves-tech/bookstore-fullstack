@@ -24,6 +24,9 @@ This is a modern web application frontend built with **Next.js 15** and **React 
 
 ### Architecture
 
+> [!IMPORTANT]
+> **SSR Data Fetching:** Para páginas que necessitam de dados pré-carregados (SEO), faça o fetch no Server Component usando `process.env.API_URL` (server-side) e passe como `initialData` para o hook do TanStack Query. Exemplo: `page.tsx` faz fetch SSR e passa para `HomeMain` que repassa ao `useBooks({ initialData })`.
+
 The project follows the standard Next.js App Router directory structure within the `src` folder, with additional folders for organization:
 
 - `ai-files`: Contains file to use as context for the AI agent to create pages and components.

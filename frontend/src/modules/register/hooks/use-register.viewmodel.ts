@@ -16,7 +16,7 @@ export function useRegisterViewModel() {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: RegisterFormData) => {
       const response = await api.post(
-        process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/register",
+        process.env.NEXT_PUBLIC_API_URL + "/auth/register",
         data,
       );
       return registerResponseSchema.parse(response.data);

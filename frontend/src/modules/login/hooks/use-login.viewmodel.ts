@@ -15,7 +15,7 @@ export function useLoginViewModel() {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: LoginFormData) => {
       await api.post(
-        process.env.NEXT_PUBLIC_API_URL + "/api/v1/auth/login",
+        process.env.NEXT_PUBLIC_API_URL + "/auth/login",
         data,
       );
     },

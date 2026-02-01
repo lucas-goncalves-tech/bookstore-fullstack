@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -12,6 +12,8 @@ interface BookFilterProps {
   onFilterChange: (filters: BookQueryParams) => void;
   initialValues?: Partial<BookQueryParams>;
 }
+
+const DEBOUNCE_DELAY = 400;
 
 export function BookFilter({
   categories,
@@ -25,45 +27,27 @@ export function BookFilter({
     initialValues?.maxPrice ?? 500,
   ]);
 
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearch(value);
+  const isFirstRender = useRef(true);
+
+  // Debounce: só chama onFilterChange após parar de interagir
+  useEffect(() => {
+    // Skip first render to avoid calling onFilterChange with initial values
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const handler = setTimeout(() => {
       onFilterChange({
-        search: value || undefined,
+        search: search || undefined,
         categoryId: categoryId || undefined,
         minPrice: priceRange[0] || undefined,
         maxPrice: priceRange[1] || undefined,
       });
-    },
-    [categoryId, priceRange, onFilterChange]
-  );
+    }, DEBOUNCE_DELAY);
 
-  const handleCategoryChange = useCallback(
-    (value: string) => {
-      setCategoryId(value);
-      onFilterChange({
-        search: search || undefined,
-        categoryId: value || undefined,
-        minPrice: priceRange[0] || undefined,
-        maxPrice: priceRange[1] || undefined,
-      });
-    },
-    [search, priceRange, onFilterChange]
-  );
-
-  const handlePriceChange = useCallback(
-    (value: number[]) => {
-      const range: [number, number] = [value[0], value[1]];
-      setPriceRange(range);
-      onFilterChange({
-        search: search || undefined,
-        categoryId: categoryId || undefined,
-        minPrice: range[0] || undefined,
-        maxPrice: range[1] || undefined,
-      });
-    },
-    [search, categoryId, onFilterChange]
-  );
+    return () => clearTimeout(handler);
+  }, [search, categoryId, priceRange, onFilterChange]);
 
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -85,7 +69,7 @@ export function BookFilter({
                 type="text"
                 placeholder="Buscar livro, autor..."
                 value={search}
-                onChange={(e) => handleSearchChange(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
                 className="h-12 pr-12"
               />
               <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary">
@@ -102,7 +86,7 @@ export function BookFilter({
             <div className="relative">
               <select
                 value={categoryId}
-                onChange={(e) => handleCategoryChange(e.target.value)}
+                onChange={(e) => setCategoryId(e.target.value)}
                 className="h-12 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background px-4 pr-10 text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-ring"
               >
                 <option value="">Todas as categorias</option>
@@ -131,7 +115,7 @@ export function BookFilter({
             <div className="flex h-12 items-center">
               <Slider
                 value={priceRange}
-                onValueChange={handlePriceChange}
+                onValueChange={(value) => setPriceRange([value[0], value[1]])}
                 min={0}
                 max={500}
                 step={10}

@@ -3,6 +3,7 @@
 import { ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Book } from "../schemas/book.schema";
+import { Button } from "@/components/ui/button";
 
 interface BookCardProps {
   book: Book;
@@ -36,14 +37,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
           )}
         </div>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={() => onAddToCart?.(book)}
-          className="absolute bottom-3 right-3 flex size-10 items-center justify-center rounded-full bg-white/90 text-primary shadow-lg backdrop-blur transition-colors hover:bg-primary hover:text-white"
-          aria-label={`Adicionar ${book.title} ao carrinho`}
-        >
-          <ShoppingCart className="size-5" />
-        </button>
+        
       </div>
 
       {/* Content */}
@@ -71,6 +65,16 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
               {book.category.name}
             </span>
           )}
+
+          {/* Add to Cart Button */}
+          <Button
+            onClick={() => onAddToCart?.(book)}
+            className="rounded-lg flex items-center gap-2"
+            aria-label={`Adicionar ${book.title} ao carrinho`}
+          >
+            <ShoppingCart className="size-5" />
+            Carrinho
+          </Button>
         </div>
       </div>
     </div>
