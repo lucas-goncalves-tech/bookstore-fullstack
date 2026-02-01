@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book Details - Harry Potter e a Pedra Filosofal</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col text-[#181411]">
+<!-- Navigation Bar -->
+<header class="bg-white border-b border-[#f4f2f0] sticky top-0 z-50">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-10 py-3">
+<div class="flex items-center justify-between flex-wrap gap-4">
+<!-- Logo & Search -->
+<div class="flex items-center gap-8 flex-1 min-w-0">
+<div class="flex items-center gap-4 text-[#181411] shrink-0">
+<div class="size-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"></path>
+</svg>
+</div>
+<h2 class="text-[#181411] text-xl font-bold leading-tight tracking-[-0.015em] hidden sm:block">Livraria Moderna</h2>
+</div>
+<label class="flex flex-col flex-1 max-w-[400px]">
+<div class="flex w-full items-stretch rounded-lg h-10 bg-[#f4f2f0]">
+<div class="text-[#887563] flex items-center justify-center pl-4 pr-2">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-[#181411] placeholder:text-[#887563] focus:ring-0 text-sm px-0" placeholder="Buscar por título, autor ou ISBN"/>
+</div>
+</label>
+</div>
+<!-- Links & Actions -->
+<div class="flex items-center gap-6 shrink-0">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-[#181411] text-sm font-medium hover:text-primary transition-colors" href="#">Categorias</a>
+<a class="text-[#181411] text-sm font-medium hover:text-primary transition-colors" href="#">Mais Vendidos</a>
+<a class="text-[#181411] text-sm font-medium hover:text-primary transition-colors" href="#">Lançamentos</a>
+</nav>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-10 px-5 border border-[#e5e0dc] text-[#181411] text-sm font-bold hover:bg-[#f4f2f0] transition-colors">
+                            Entrar
+                        </button>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-[#b06213] transition-colors gap-2">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+<span class="hidden sm:inline">Carrinho</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow">
+<div class="max-w-[1120px] mx-auto px-4 sm:px-8 py-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm mb-8 overflow-x-auto whitespace-nowrap pb-2">
+<a class="text-[#887563] hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[#887563] text-[16px]">chevron_right</span>
+<a class="text-[#887563] hover:text-primary transition-colors" href="#">Livros</a>
+<span class="material-symbols-outlined text-[#887563] text-[16px]">chevron_right</span>
+<a class="text-[#887563] hover:text-primary transition-colors" href="#">Fantasia</a>
+<span class="material-symbols-outlined text-[#887563] text-[16px]">chevron_right</span>
+<span class="text-[#181411] font-medium">Harry Potter e a Pedra Filosofal</span>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+<!-- Left Column: Visuals -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="w-full aspect-[2/3] relative rounded-lg shadow-lg overflow-hidden bg-[#f4f2f0]">
+<div class="w-full h-full bg-cover bg-center" data-alt="High quality book cover of Harry Potter and the Sorcerer's Stone" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQT-A3XqaJY7_oH7kb8IgC-7VBUjhZb0HHUzTv5TrOb2mBTpJ9ejikepZ1DSRQLXncuToQgs6VLGAhYth3U9sDKPdaPzC9KG008Cg9Vjnb8J5TBxxI08Zh7J5mnYZpa9Ysfb3i9RFcbCPRglMsSeObg7KnXikzBYxPxjt1PEFl5icF5OuzemHAor1BmkZENpF6d5CtD1s6NUUZzsJADynEad-7kiH12RbA2mTSdEGqltWlQnBIPpqO7ZSTjAQ3TXRHzKdEVF4PonTI');"></div>
+</div>
+<div class="grid grid-cols-4 gap-3">
+<button class="aspect-[2/3] rounded-md overflow-hidden border-2 border-primary cursor-pointer">
+<div class="w-full h-full bg-cover bg-center" data-alt="Front view thumbnail of the book" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAb3tLwItZc8DABs40zAsLD2__NnKXfcgEeect55ti2QFnlRccQtKCOzbFFMej9gbCYNea1vZKQPNGrUqlGI3p0bxwYwDJv11mQEkgPFHf0oqqa3QnUXwjH4HO-1TB8xwNCRp_XqI-NdM7WOvKa9B4jR-qKWMAMw8282cuUyTiyPO8QRP8QG4l-8yGnAiTsgE7eQfOb4EmMkHGDYetfy_CorPo-0YrZZLkCApn-sRM_NLaGR870HCdtbQgkislwgbxRgVOB8UYaHZ1P');"></div>
+</button>
+<button class="aspect-[2/3] rounded-md overflow-hidden border border-transparent hover:border-[#cf7317]/50 cursor-pointer">
+<div class="w-full h-full bg-cover bg-center" data-alt="Back cover view thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAd3WVgDws0wrlL04dXcHre2ENDJUQ9mW2ma1jHDCDuNTokld5CEQR-dQduS_AOu8FErAgn6P7AGbErTzicf0FjLBfMxfQV2Gk4mjC2u_hK-MRWVVS3LXX1UC9sqH3drPzzYNqoIco6_4wsMfZKApTubtO34KCiIQ_PYj_ACkMQy8-UyMyUFgm40nMd0o-jaHAcxJuLrkGWrl7OUzolcXjx9bC1Ofg3-VMW6zMRdSAqLbArdP05x1-xVIdMbiL0oDlMarpV2vc19z53');"></div>
+</button>
+<button class="aspect-[2/3] rounded-md overflow-hidden border border-transparent hover:border-[#cf7317]/50 cursor-pointer">
+<div class="w-full h-full bg-cover bg-center" data-alt="Open book pages detail thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqOAfFrQTCgg1yv_-uFFqTAxIYk78QoEnO2tonPPPy_A2IQvt75B4jjqpJCvbT_fWzXga1aSAwoVPBQcYzFVe0r6vJc_lY6Y-VNz6Ch_12Bm3QzmtxOhGEXNPxgTVlXVJ9LdZcCUCGy2KZzcxHdOGbwupxzbFGFRD9hC8H0d25PS77e-usX2vxEnfu7Q8vWPzkX9m73N3M6mekP3mr0OZDDNLlFj1MTddsPZQ5r7tp13fiMJXk1ZY1L6ckquvbQS-cNrTbUSD0xxeR');"></div>
+</button>
+<button class="aspect-[2/3] rounded-md overflow-hidden border border-transparent hover:border-[#cf7317]/50 cursor-pointer bg-[#f4f2f0] flex items-center justify-center text-[#887563]">
+<span class="material-symbols-outlined text-2xl">videocam</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Details -->
+<div class="lg:col-span-7 flex flex-col h-full">
+<!-- Category Badge -->
+<div class="mb-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-[#e8e4e0] text-[#5c4d3f] text-xs font-bold uppercase tracking-wider">
+                            Fantasia
+                        </span>
+</div>
+<!-- Title & Author -->
+<h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#181411] leading-tight mb-2">
+                        Harry Potter e a Pedra Filosofal
+                    </h1>
+<div class="text-lg text-[#5c4d3f] mb-4">
+                        por <a class="underline decoration-1 underline-offset-4 hover:text-primary" href="#">J.K. Rowling</a>
+</div>
+<!-- Ratings -->
+<div class="flex items-center gap-2 mb-6">
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star_half</span>
+</div>
+<span class="text-base font-bold text-[#181411]">4.8</span>
+<span class="text-sm text-[#887563]">(124 avaliações)</span>
+</div>
+<!-- Price -->
+<div class="mb-8 p-6 bg-white rounded-xl border border-[#f4f2f0] shadow-sm">
+<div class="flex items-end gap-3 mb-2">
+<span class="text-4xl font-bold text-primary">R$ 99,10</span>
+<span class="text-lg text-[#887563] line-through mb-1">R$ 119,90</span>
+<span class="text-sm font-bold text-green-700 mb-2 px-2 py-0.5 bg-green-100 rounded">-17%</span>
+</div>
+<p class="text-sm text-[#5c4d3f] mb-6">Em até 3x de R$ 33,03 sem juros no cartão.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="flex-1 h-12 rounded-lg bg-primary hover:bg-[#b06213] text-white font-bold text-base shadow-md transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">shopping_bag</span>
+                                Adicionar ao Carrinho
+                            </button>
+<button class="flex-1 h-12 rounded-lg border-2 border-[#e5e0dc] hover:border-primary text-[#181411] hover:text-primary font-bold text-base transition-all bg-transparent">
+                                Comprar Agora
+                            </button>
+</div>
+<div class="flex items-center gap-2 mt-4 text-xs text-[#5c4d3f]">
+<span class="material-symbols-outlined text-[16px] text-green-600">check_circle</span>
+<span>Em estoque. Entregue por <span class="font-bold">Livraria Moderna</span>.</span>
+</div>
+</div>
+<!-- Short Description -->
+<div class="prose prose-stone text-[#5c4d3f] mb-6">
+<p>
+                            Harry Potter é um garoto comum que vive num armário debaixo da escada da casa de seus tios. Sua vida muda quando ele é resgatado por uma coruja e levado para a Escola de Magia e Bruxaria de Hogwarts. Lá ele descobre um mundo mágico que jamais imaginou, vivendo aventuras incríveis e perigosas.
+                        </p>
+</div>
+<!-- Social Share (Optional, small) -->
+<div class="flex gap-4 mt-auto pt-6 border-t border-[#f4f2f0]">
+<span class="text-sm font-medium text-[#887563]">Compartilhar:</span>
+<div class="flex gap-3">
+<a class="text-[#887563] hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">share</span></a>
+<a class="text-[#887563] hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">favorite</span></a>
+</div>
+</div>
+</div>
+</div>
+<!-- Tabbed Content Section -->
+<div class="mt-20">
+<div class="border-b border-[#e5e0dc]">
+<nav aria-label="Tabs" class="flex gap-8">
+<button class="border-b-2 border-primary py-4 px-1 text-base font-bold text-[#181411] hover:text-primary">
+                            Descrição
+                        </button>
+<button class="border-b-2 border-transparent py-4 px-1 text-base font-medium text-[#5c4d3f] hover:text-primary hover:border-[#e5e0dc]">
+                            Detalhes Técnicos
+                        </button>
+<button class="border-b-2 border-transparent py-4 px-1 text-base font-medium text-[#5c4d3f] hover:text-primary hover:border-[#e5e0dc]">
+                            Sobre o Autor
+                        </button>
+</nav>
+</div>
+<div class="py-8 text-[#5c4d3f] leading-relaxed max-w-4xl">
+<p class="mb-4">
+                        A vida do menino Harry Potter não tem um pingo de magia. Ele vive com os tios Dursley e o primo Duda, que o maltratam o tempo todo. Seu quarto é um armário apertado debaixo da escada, e ele nunca comemorou um aniversário sequer.
+                    </p>
+<p class="mb-4">
+                        Quando ele completa onze anos, porém, coisas muito estranhas começam a acontecer. Corujas mensageiras, cartas misteriosas e um gigante chamado Hagrid aparecem para mudar tudo. Harry descobre que é um bruxo e foi aceito na Escola de Magia e Bruxaria de Hogwarts.
+                    </p>
+<p>
+                        Nesta edição especial de colecionador, reviva a magia do primeiro ano de Harry em Hogwarts com capa dura exclusiva e ilustrações inéditas.
+                    </p>
+</div>
+</div>
+<!-- Reviews Section -->
+<div class="mt-12 mb-12">
+<h3 class="text-2xl font-bold text-[#181411] mb-8">Avaliações de Clientes</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Review Card 1 -->
+<div class="bg-white p-6 rounded-xl border border-[#f4f2f0] shadow-sm">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#f4f2f0] flex items-center justify-center text-[#887563] font-bold">
+                                    AS
+                                </div>
+<div>
+<p class="text-sm font-bold text-[#181411]">Ana Silva</p>
+<p class="text-xs text-[#887563]">12 de Março, 2023</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+</div>
+</div>
+<h4 class="font-bold text-[#181411] mb-2">Edição Maravilhosa!</h4>
+<p class="text-sm text-[#5c4d3f]">
+                            O livro é lindo, a capa dura é muito resistente e o acabamento é impecável. A entrega foi super rápida, chegou antes do prazo. Recomendo muito para quem quer colecionar.
+                        </p>
+</div>
+<!-- Review Card 2 -->
+<div class="bg-white p-6 rounded-xl border border-[#f4f2f0] shadow-sm">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#f4f2f0] flex items-center justify-center text-[#887563] font-bold">
+                                    CM
+                                </div>
+<div>
+<p class="text-sm font-bold text-[#181411]">Carlos Mendes</p>
+<p class="text-xs text-[#887563]">05 de Fevereiro, 2023</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] text-[#e5e0dc]">star</span>
+</div>
+</div>
+<h4 class="font-bold text-[#181411] mb-2">Bom, mas cuidado com a entrega</h4>
+<p class="text-sm text-[#5c4d3f]">
+                            O conteúdo do livro dispensa comentários, Harry Potter é clássico. Dei 4 estrelas porque a caixa chegou um pouco amassada no canto, mas felizmente não estragou o livro.
+                        </p>
+</div>
+<!-- Review Card 3 -->
+<div class="bg-white p-6 rounded-xl border border-[#f4f2f0] shadow-sm">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#f4f2f0] flex items-center justify-center text-[#887563] font-bold">
+                                    MJ
+                                </div>
+<div>
+<p class="text-sm font-bold text-[#181411]">Mariana Jones</p>
+<p class="text-xs text-[#887563]">28 de Janeiro, 2023</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+<span class="material-symbols-outlined text-[16px] fill-current">star</span>
+</div>
+</div>
+<h4 class="font-bold text-[#181411] mb-2">Presente perfeito</h4>
+<p class="text-sm text-[#5c4d3f]">
+                            Comprei para dar de presente para meu sobrinho e ele amou. A diagramação está ótima para leitura.
+                        </p>
+</div>
+<!-- Review Card 4 -->
+<div class="bg-white p-6 rounded-xl border border-[#f4f2f0] shadow-sm flex items-center justify-center cursor-pointer hover:bg-[#f9f8f7] transition-colors group">
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-[#cf7317] mb-2 group-hover:scale-110 transition-transform">add_circle</span>
+<p class="font-bold text-[#cf7317]">Ver todas as 124 avaliações</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="bg-white border-t border-[#f4f2f0] py-10 mt-auto">
+<div class="max-w-[1120px] mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-[#181411]">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"></path>
+</svg>
+</div>
+<span class="font-bold text-lg">Livraria Moderna</span>
+</div>
+<p class="text-[#887563] text-sm">© 2023 Livraria Moderna. Todos os direitos reservados.</p>
+</div>
+</footer>
+</body></html>

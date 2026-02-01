@@ -1,16 +1,20 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import type { Category } from "../schemas/category.schema";
 import type { BookQueryParams } from "../schemas/book.schema";
 
+export type PriceSortOrder = "none" | "asc" | "desc";
+
 interface BookFilterProps {
   categories: Category[];
   onFilterChange: (filters: BookQueryParams) => void;
+  onSortChange: (order: PriceSortOrder) => void;
   initialValues?: Partial<BookQueryParams>;
+  sortOrder?: PriceSortOrder;
 }
 
 const DEBOUNCE_DELAY = 400;
@@ -18,7 +22,9 @@ const DEBOUNCE_DELAY = 400;
 export function BookFilter({
   categories,
   onFilterChange,
+  onSortChange,
   initialValues,
+  sortOrder = "none",
 }: BookFilterProps) {
   const [search, setSearch] = useState(initialValues?.search ?? "");
   const [categoryId, setCategoryId] = useState(initialValues?.categoryId ?? "");
@@ -98,6 +104,27 @@ export function BookFilter({
               </select>
               <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                 <ChevronDown className="size-5" />
+              </div>
+            </div>
+          </div>
+
+          {/* Price Sort */}
+          <div className="w-full lg:w-auto">
+            <label className="mb-2 block text-sm font-bold text-muted-foreground">
+              Ordenar
+            </label>
+            <div className="relative">
+              <select
+                value={sortOrder}
+                onChange={(e) => onSortChange(e.target.value as PriceSortOrder)}
+                className="h-12 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background px-4 pr-10 text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-ring lg:w-44"
+              >
+                <option value="none">Sem ordenar</option>
+                <option value="asc">Menor preço</option>
+                <option value="desc">Maior preço</option>
+              </select>
+              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <ArrowUpDown className="size-5" />
               </div>
             </div>
           </div>
