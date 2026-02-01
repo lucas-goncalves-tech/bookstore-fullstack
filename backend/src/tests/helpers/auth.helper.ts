@@ -42,7 +42,7 @@ export async function postNewUser(
   };
 }
 
-export async function loginWithUser(role?: "user" | "admin") {
+export async function loginWithUser(role: "user" | "admin") {
   const email = `test@${role}.com`;
   const reqAgent = agent(app);
 

@@ -70,11 +70,19 @@ export class BookRepository implements IBookRepository {
     });
   }
 
-  update(id: string, data: IUpdateBookInput): Promise<Book> {
-    throw new Error("Method not implemented.");
+  async update(id: string, data: IUpdateBookInput): Promise<Book> {
+    return await this.prisma.book.update({
+      where: { id },
+      data,
+    });
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<void> {
+    await this.prisma.book.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }

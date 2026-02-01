@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import { container } from "tsyringe";
+import "./config/container"; // <-- Registra o StorageProvider ANTES de resolver App
 import { env } from "./config/env";
 import { App } from "../app";
 

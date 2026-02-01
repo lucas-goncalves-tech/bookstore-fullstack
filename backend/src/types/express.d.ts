@@ -1,4 +1,4 @@
-import { UserPayload } from "../shared/secutiry/token.service";
+import { UserPayload } from "../services/token.service";
 
 declare global {
   namespace Express {

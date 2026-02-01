@@ -8,7 +8,7 @@ export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
 
 export type ISafeUser = Omit<User, "passwordHash" | "id">;
 
-export interface IUsersRepository {
-  create(data: ICreateUser): Promise<User>;
-  findByEmail(email: string): Promise<User | null>;
+export abstract class IUsersRepository {
+  abstract create(data: ICreateUser): Promise<User>;
+  abstract findByEmail(email: string): Promise<User | null>;
 }

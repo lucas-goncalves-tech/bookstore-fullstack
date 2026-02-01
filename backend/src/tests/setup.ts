@@ -17,6 +17,17 @@ export const prisma_test = new PrismaClient({
 
 container.registerInstance(PrismaDB, prisma_test);
 
+// Mock do StorageProvider para testes (evita chamadas reais ao Cloudinary)
+container.register("StorageProvider", {
+  useValue: {
+    uploadCover: async () => ({
+      fullUrl: "https://mock.cloudinary.com/full.webp",
+      thumbUrl: "https://mock.cloudinary.com/thumb.webp",
+    }),
+    deleteFile: async () => undefined,
+  },
+});
+
 const passwordHash = bcrypt.hashSync("12345678", 5);
 
 const user = {

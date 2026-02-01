@@ -20,6 +20,9 @@ const checkEnv = z.object({
     (val) => (typeof val === "string" ? JSON.parse(val) : val),
     z.array(z.string()),
   ),
+  CLOUDINARY_CLOUD_NAME: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
 });
 
 export const env = checkEnv.parse(process.env);

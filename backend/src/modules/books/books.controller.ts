@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { BookService } from "./books.service";
 import { Request, Response } from "express";
 import { BookQueryDTO } from "./dtos/book-query.dto";
-import { CreateBookDto } from "./dtos/create-book.dto";
+import { CreateBookDto, UpdateBookDto } from "./dtos/book.dto";
 import { BookParamsDto } from "./dtos/book-params";
 
 @injectable()
@@ -30,6 +30,37 @@ export class BookController {
     res.status(201).json({
       message: `Livro ${result.title} criado com sucesso`,
       data: result,
+    });
+  };
+
+  uploadCover = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    const file = req.file;
+    const urls = await this.bookService.uploadCover(id, file);
+
+    res.status(201).json({
+      message: `Capa do livro enviada com sucesso`,
+      data: urls,
+    });
+  };
+
+  update = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    const data = req.safeBody as UpdateBookDto;
+    const result = await this.bookService.update(id, data);
+
+    res.json({
+      message: `Livro ${result.title} atualizado com sucesso`,
+      data: result,
+    });
+  };
+
+  delete = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    await this.bookService.delete(id);
+
+    res.json({
+      message: `Livro ${id} deletado com sucesso`,
     });
   };
 }

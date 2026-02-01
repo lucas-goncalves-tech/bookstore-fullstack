@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { SID_COOKIE } from "../contants/sid-cookie";
 import { UnauthorizedError } from "../errors/unauthorized.error";
-import { verifyToken } from "../secutiry/token.service";
+import { verifyToken } from "../../services/token.service";
 
 export function authMiddleware(req: Request, _res: Response, next: NextFunction) {
     try{

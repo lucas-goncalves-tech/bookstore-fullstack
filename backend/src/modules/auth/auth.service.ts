@@ -11,7 +11,7 @@ import { ConflictError } from "../../shared/errors/conflict.error";
 import { env } from "../../core/config/env";
 import { ILoginInput } from "./interface/auth.interface";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
-import { generateToken } from "../../shared/secutiry/token.service";
+import { generateToken } from "../../services/token.service";
 
 @injectable()
 export class AuthService {

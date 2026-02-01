@@ -6,6 +6,7 @@ import { createBook } from "../../../tests/factories/book.factory";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ICreateBookInput } from "../../books/interface/books.interface";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
+import path from "node:path";
 
 const BASE_URL = "/api/v1/books";
 
@@ -18,6 +19,7 @@ function expectecBookShape(): Book {
     price: expect.any(String),
     stock: expect.any(Number),
     coverUrl: expect.toSatisfy((v) => v === null || typeof v === "string"),
+    coverThumbUrl: expect.toSatisfy((v) => v === null || typeof v === "string"),
     categoryId: expect.toSatisfy((v) => v === null || typeof v === "string"),
     createdAt: expect.anything(),
     deletedAt: expect.toSatisfy((v) => v === null || typeof v === "string"),
@@ -323,3 +325,66 @@ describe(`POST ${BASE_URL}`, () => {
     expect(body).toHaveProperty("message");
   });
 });
+
+describe(`POST ${BASE_URL}/:id/cover`, () => {
+  
+  it("should allow ADMIN to upload a cover image to book", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+    const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
+
+    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(201)
+
+    expect(body).toHaveProperty("message");
+    expect(body.data).toMatchObject(expectecBookShape());
+  });
+
+  it("should return status 400 when don't attach file", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+
+    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").expect(400);
+
+    expect(body).toHaveProperty("message");
+    expect(body).toHaveProperty("errors");
+  })
+
+  it("should return status 400 when file type is invalid (only jpeg, jpg, png, webp)", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+    const coverPath = path.resolve(__dirname, "fixtures/invalid-type.gif");
+
+    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(400);
+
+    expect(body).toHaveProperty("message");
+    expect(body).toHaveProperty("errors");
+  })
+
+  it("should return status 404 when book not found", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const UUID = crypto.randomUUID();
+
+    const { body } = await reqAgent.post(BASE_URL + "/" + UUID + "/cover").expect(404);
+
+    expect(body).toHaveProperty("message");
+  })
+
+  it("should return status 403 when USER try to upload", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const book = await createBook();
+    const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
+
+    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(403);
+
+    expect(body).toHaveProperty("message");
+  })
+
+  it("should return status 401 when non authenticated try to upload", async () => {
+    const book = await createBook();
+    const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
+
+    const { body } = await req.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(401);
+
+    expect(body).toHaveProperty("message");
+  })
+})

@@ -49,6 +49,7 @@ async function main() {
       email: adminEmail,
       name: adminName,
       passwordHash: hash,
+      role: "ADMIN",
     },
   });
 
