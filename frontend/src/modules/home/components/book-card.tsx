@@ -3,6 +3,7 @@ import { ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Book } from "../schemas/book.schema";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface BookCardProps {
   book: Book;
@@ -19,20 +20,24 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
     <div className="group flex flex-col rounded-lg border border-transparent bg-card p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-xl">
       <Link href={`/${book.id}`} className="flex flex-1 flex-col">
         {/* Cover Image */}
-        <div className="relative mb-4 aspect-2/3 w-full overflow-hidden rounded-md shadow-md">
+        <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-md shadow-md">
           <div
             className={cn(
               "absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110",
-              !book.coverUrl && "bg-muted flex items-center justify-center"
+              !book.coverThumbUrl && "bg-muted flex items-center justify-center"
             )}
             style={
-              book.coverUrl
-                ? { backgroundImage: `url("${book.coverUrl}")` }
+              book.coverThumbUrl
+                ? { backgroundImage: `url("${book.coverThumbUrl}")` }
                 : undefined
             }
             aria-label={`Capa do livro: ${book.title}`}
           >
-            {!book.coverUrl && (
+            {book.coverThumbUrl ? <Image
+              src={book.coverThumbUrl}
+              alt={book.title}
+              fill
+            /> : (
               <span className="text-4xl text-muted-foreground">📚</span>
             )}
           </div>

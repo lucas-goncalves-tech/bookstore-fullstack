@@ -22,6 +22,7 @@ export const bookSchema = z.object({
   price: z.coerce.number(),
   stock: z.number().int(),
   coverUrl: z.string().nullable(),
+  coverThumbUrl: z.string().nullable(),
   categoryId: z.string().uuid().nullable(),
   category: z
     .object({
