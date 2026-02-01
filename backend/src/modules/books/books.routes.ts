@@ -6,6 +6,7 @@ import { bookQueryDto } from "./dtos/book-query.dto";
 import { createBookDto } from "./dtos/create-book.dto";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middleware";
+import { bookParamsDto } from "./dtos/book-params";
 
 @injectable()
 export class BookRoutes {
@@ -22,6 +23,13 @@ export class BookRoutes {
       "/",
       validateMiddleware({ query: bookQueryDto }),
       this.controller.findMany,
+    );
+
+
+    this.router.get(
+      "/:id",
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.findById,
     );
     this.router.post("/", authMiddleware, adminOnlyMiddleware, validateMiddleware({ body: createBookDto }), this.controller.create);
   }

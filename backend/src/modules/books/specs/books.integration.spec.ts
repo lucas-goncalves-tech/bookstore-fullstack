@@ -245,6 +245,31 @@ describe(`GET ${BASE_URL} - Filters`, () => {
   });
 });
 
+describe(`GET ${BASE_URL}/:id`, () => {
+  it("should return book by id", async () => {
+    const book = await createBook();
+    const { body } = await req.get(BASE_URL + "/" + book.id).expect(200);
+
+    expect(body).toMatchObject(expectecBookShape());
+    expect(body.id).toBe(book.id);
+  });
+
+  it("should return status 404 when book not found", async () => {
+    const UUID = crypto.randomUUID();
+    const { body } = await req.get(BASE_URL + "/" + UUID).expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 400 when id is invalid", async () => {
+    const { body } = await req.get(BASE_URL + "/invalid-uuid").expect(400);
+    const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+
+    expect(body).toHaveProperty("message");
+    expect(errors).toContain("id");
+  });
+});
+
 describe(`POST ${BASE_URL}`, () => {
   it("should allow ADMIN to create a book", async () => {
     const { reqAgent } = await loginWithUser("admin");
