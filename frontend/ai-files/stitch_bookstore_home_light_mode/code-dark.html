@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BookStore Home Dark Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#9f8060",
+              "background-light": "#f7f7f6",
+              "background-dark": "#2c211d",
+              "surface-dark": "#3e302b",
+              "text-secondary": "#bcaaa4",
+            },
+            fontFamily: {
+              "display": ["Noto Serif", "serif"],
+              "body": ["Noto Serif", "serif"],
+            },
+            borderRadius: {
+              "DEFAULT": "0.375rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Noto Serif', serif;
+      }
+      /* Custom scrollbar for dark mode feeling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #2c211d; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #3e302b; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9f8060; 
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white overflow-x-hidden min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#4a3b36] bg-[#2c211d]/90 backdrop-blur-md px-10 py-4">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined !text-3xl">menu_book</span>
+</div>
+<h2 class="text-white text-2xl font-bold leading-tight tracking-tight">BookStore</h2>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex flex-1 justify-center items-center gap-10">
+<a class="text-white hover:text-primary text-base font-medium leading-normal transition-colors" href="#">Home</a>
+<a class="text-text-secondary hover:text-primary text-base font-medium leading-normal transition-colors" href="#">Categories</a>
+<a class="text-text-secondary hover:text-primary text-base font-medium leading-normal transition-colors" href="#">Best Sellers</a>
+<a class="text-text-secondary hover:text-primary text-base font-medium leading-normal transition-colors" href="#">Blog</a>
+</nav>
+<div class="flex items-center justify-end gap-6">
+<button class="text-white hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-white hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">2</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary cursor-pointer hover:opacity-80 transition-opacity" data-alt="User avatar profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuACfENgz8WJ9s53U0XDpA04mua_dwe0eDOEU2IdxbrKvcm4MldOa6RSab1tM6kjYyKkIR0coXu5RWsE0J6Z08ISD9G1yLrV01PnEioo0NVcgzbpRmM8BaWqdqfxX8jFH-mRoJysHJl6H2zUDOgb0P3J4M5_I9IV9AbcFxaK2tfFQFfCXK1zDt6_hKRZM7Hk3Qhmyrf9emudvvlkwTUrkPPnR6kRdwH4WItUrcSevM0QW7tqn78xqBsF9WUue1lgjOVGpV3sr4LZ5SSl");'></div>
+</div>
+</header>
+<!-- Main Layout Container -->
+<div class="flex flex-col flex-1 max-w-[1440px] mx-auto w-full px-6 md:px-10 py-8 gap-10">
+<!-- Hero Section -->
+<div class="w-full rounded-2xl overflow-hidden relative min-h-[400px] md:min-h-[500px] flex items-center">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Moody library atmosphere with open book and coffee" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFZTqOpUFi9EjaPJ1FlwQB8S1G3gs2mbcsofXeE_9B7RDetaTCDdgv_3vkkDvg-lDY9QSzcsral8A1g9Vye3V7FRToA9BKQH_pKL_qvE_VyHrlrCECz0dtgZx895WRvn9o8xaGPtX3cFBpXrZPaPcEyPBw3d5GTE9EyAcBPjN4AfRj2dXATv0G_l7VRv9zJ-2QsBuDeFMOtDzIKlg_JAXysxkQdQT2crawMtusA_G874P7Rqrfch5oks8r_YJz3Y1r8Iu7MtSLo4SM");'></div>
+<!-- Overlay gradient -->
+<div class="absolute inset-0 bg-gradient-to-r from-[#2c211d] via-[#2c211d]/80 to-transparent"></div>
+<div class="relative z-10 p-8 md:p-16 max-w-2xl flex flex-col gap-6">
+<span class="text-primary font-bold tracking-wider uppercase text-sm">Welcome to your sanctuary</span>
+<h1 class="text-white text-4xl md:text-6xl font-black leading-tight tracking-[-0.02em] font-display">
+                    Discover Your Next <br/> <span class="text-primary">Great Adventure</span>
+</h1>
+<p class="text-gray-300 text-lg md:text-xl font-normal leading-relaxed max-w-lg">
+                    Explore our curated collection of timeless classics and modern masterpieces designed to ignite your imagination.
+                </p>
+<button class="mt-4 flex w-fit cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary hover:bg-[#8e7254] transition-colors text-white text-base font-bold leading-normal tracking-wide shadow-lg shadow-black/20">
+<span>Shop Now</span>
+</button>
+</div>
+</div>
+<!-- Filter & Search Bar -->
+<div class="bg-surface-dark rounded-xl p-6 shadow-lg border border-[#4a3b36]">
+<div class="flex flex-col lg:flex-row gap-6 items-center justify-between">
+<!-- Search & Category -->
+<div class="flex flex-1 w-full gap-4 flex-col sm:flex-row">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-[#2c211d] border border-[#4a3b36] rounded-lg text-white placeholder:text-text-secondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-display" placeholder="Search by title..."/>
+</div>
+<div class="relative w-full sm:w-48">
+<select class="w-full h-12 pl-4 pr-10 bg-[#2c211d] border border-[#4a3b36] rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer font-display">
+<option>All Categories</option>
+<option>Fiction</option>
+<option>Non-Fiction</option>
+<option>Mystery</option>
+<option>Sci-Fi</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Price Range Slider -->
+<div class="flex flex-col gap-3 w-full lg:w-1/3 min-w-[280px]">
+<div class="flex justify-between items-center text-sm font-medium text-text-secondary">
+<span>Price Range</span>
+<span class="text-primary">R$ 20 - R$ 200</span>
+</div>
+<div class="relative h-2 bg-[#2c211d] rounded-full">
+<div class="absolute left-[10%] right-[30%] top-0 bottom-0 bg-primary rounded-full"></div>
+<div class="absolute left-[10%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"></div>
+<div class="absolute right-[30%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Book Grid -->
+<div>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-bold text-white">Trending Books</h3>
+<a class="text-primary text-sm font-medium hover:underline flex items-center gap-1" href="#">
+                    View all <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+<!-- Book Card Template (Repeated 10 times) -->
+<!-- Card 1 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDc2nBT5F5I6SIikzgKVblsRaukt1uV-kuWM1HMFTtsSF5ljIP0VEeQ7QFTr63oAoh2JMjwX7266HiSVlkLlF2cIV2sR-Oxp0DLEggjuLeJ-Mwpm146zdk1RWcEv1h_mwmhBGeglPDtejre1Dy9JSwtMlveO_Vhj7fstH_riOvoWOMXkAwVURD9alqOuHoJ_KVcdvYH4YZtQxzdX6u2D4J9gqkBg6zHFytfNrBd14MavhTx4Jqga_CYr-tHWFVsEHH5KFYkwjVBwTva");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMZxSdohPF3f8M0fe2TYFyp2CZ-Ptx-2ELSJDQxLnlh99ZmsAtIi0EpT8Whn4osoQmNXUSLN8BNdYoIhFVgQuhqmrb8TIb5xxPHOeMO1Y4XLQSyMcWdt08Us-j1pVgf00MyRxSN9_ZiTUkPjc343wpwhUeEfgoSwujvEodbAcGnRtgfF8J7xAKcNlYbcOiAJsTotFnCbW0zYkczNL4KGDTiC-hnj3mvIROCxMdimnQQJUsK_E0yF1ZB9oOYalrCQe22eCRwdTWgnvr");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAhonew0Mws40pYF0uLz-H1RHPrLNvani8QeAl54uHACbHhM8plg4wJi9UXmpzh3p__2vdqHpZaESP8953Lea1It8vW-rsrcCVIvxlKpbglOhH_lZpTtrgdRCtq0Jyp6iWfYeBqJpOAP5eKbn71nxQYN4lvNWw-7NLjHYG_BvgmEx8HTiXijPXA_-fxQ_Exh3TvEWO7PAmJIQog5D8O_qC0uKzvzG2DQltwHvv7pTFExkhPdm5WYC9bNIQtmU0iKtAppTdduwNGITEF");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAhtUOFGZqE8VAwszK1hpK7BwKoAlbxg0XorlAyuV6U1Xx6vKviKkRBF1stlYFWC7vC-Lk0GdAXB5l7oASnQTXRKgwBtvypmcUA65W-LwxiwpJOAGUKHJ1hs18ox92yZAOzs9gt7ucHyUcJMIjSCX9L_nuG0qfl04ISA9oYrS7Pk-fSXWuOQLe2ehuWJn8A02CWkm9NpQr-4dAUnkYBOihFEB9bkm81ayHF_zA9I6PjqEqu3PPTcED3ksKfnYw7V-Q8oyeTsdLcgHwX");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWJq8kAHWpp7hQbopTDZ5-dslmoj3gUfIigYd4aaBW66hxItEr2Gv4_6IyrcRHoEzn2acht2L2iPGtPGfVMtI6AHFm4SsdnZp7t801QjD45pTcvDGaPo2et4voOcbHaOn4d7uuD-o-Wu_kJzfbKUDsAvvHyy7syE5gGZZbwGETW6Pyw9kViIsf-Oa-fNq5l3q-hDwcqDUkKtQ-YhLHnUWkxrFtfcQCJ1oj1j5gzf-45mhjuBVQSJWAMOwx_N2QpB6gzFCb_u-IJE6i");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnzghDQ5rRp48tf29kyLOSp_9edo0JjyWHD-Rpj-xjYB8zZx5ZlHZJdSeYauNPXjCu6Vm8nzhgbTUSEEtqB8uKMPBDgKiaLvFqVTQ72fcAp04IfxAlTTs0Eysr8KfSKkXr9OoHz2IXu7316GbitTy3Chpr0onKrBGYICxiDC_IrDRSrut5bGRNOw23uWpl9mWXnbonl2pFEMr_mCdYGLiZTePoAQMS1S6849FVCrT838X9Hds1_DFhJXE7RAEa7MYpzfwmLYVrpWrT");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 7 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtx4g8P_m_O5lAbb9oiJRbBij_QydPeBrOzGi0fhjEfcNdynNnAXCkEwRMQpodqp7Vf4F0V2WEDlGjcW405odgdX5aAHg6wuleOADpEQhEp0U8ZISScx2F_b5EiIlbbmwMJ2aZR8FFzd35xzOfYTkd9QPrTeTuv01SiXMoC8ljxf1Y0_2iHnf4zQuDhMyn_69jtYyaEBo-CiznU_958pkE4Fkdb5t6-xfJTxdLO4c6jaYWmo-1Y10jmcEM0ousvkIm1hSwwWCobOiZ");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 8 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDiI3Aml2UwDd1VUTRVCKLL8BXY435yx0veAbXI11THVd2BnXy_XSHZzAKOYFUCtEbmk_65NVRrjPLCz2Uwo14JY86jfYmWaQrJ-3SR3vsYpPtOXWWROiURvZa9FWbyuEM_rhnRQkM9Z82JBTd9cvnwK32DKJSGd9Hg1K8ktq_9aMaWRRoTUZ6KuMdJ6eKeQ1ZE188WbaPxhbhreNw0IIdgIbxytxFCKKzeOaEwx9iTC1mzIjoX-K95FRonIu50V6lrWEPC2AYEem0v");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 9 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCg2LY-lxS4zDAiSRgXp5i4NnXFuBT7qHF91qSRERG-O12W4Ic7ULYu7a0BBybmq5v-CGqFrKa2WX86Kij3vcnCbsUVElAE8AwMHyCdrbQn34uIYtbhyNxXOgRwIe7mjaKiwLg9BVwatWFU5rBqpluwlrPFz2n7B0bZaX3izkM23KQwidcgHi5VRMYnKe5lP2DMXIawzRKw2iECwD0f4kFT_KiDsJOnyj0guh3gNzZB5Wm1E42tbQTyFj1pBgMDi_HIhHKVI1zu5OLy");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+<!-- Card 10 -->
+<div class="group flex flex-col gap-3 bg-surface-dark p-3 rounded-xl hover:shadow-xl transition-all duration-300 border border-transparent hover:border-[#4a3b36]">
+<div class="relative w-full aspect-[2/3] overflow-hidden rounded-lg bg-[#2c211d]">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Book cover of Harry Potter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADMOtLopjYkMDjYFtTB76t6oAOegqK6Z4L8TLbdPeXaKdaprTagzg0eGQhoOWRlqNOur3Zao69-OHImD3-QtbYpHEw4Eyckv8s-CEFIT8fM1S0TUqD0FM5Ei32OkE1WMMuZEB32outF1AbGzh9-0ui9OmsYv4ddTs9e6dIBwdT2gnJe5LA6tMIYbUXYMY9kDAZ8N87u2IpGNhoYSkG_KFrgy-BioXEoQn7lx2LahMBegBtWwuTohPAmF-sIh_sxH-0EHVkGRa-rhvj");'></div>
+<button class="absolute top-2 right-2 p-2 bg-[#2c211d]/80 backdrop-blur-sm rounded-full text-white hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">favorite</span>
+</button>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+<button class="bg-primary hover:bg-[#8e7254] text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">
+                               Add to Cart
+                           </button>
+</div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h4 class="text-white text-lg font-bold leading-tight line-clamp-1">Harry Potter</h4>
+<span class="text-primary text-sm font-bold bg-primary/10 px-2 py-0.5 rounded ml-2 whitespace-nowrap">R$ 99,10</span>
+</div>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider">J.K Rowling</p>
+<p class="text-[#8d7f7a] text-sm font-normal leading-relaxed line-clamp-2 mt-1">Ficção e ação, magia e mistério em um mundo fantástico.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto border-t border-[#4a3b36] py-8 bg-[#221a17]">
+<div class="flex flex-col items-center justify-center gap-4 text-center px-4">
+<div class="flex items-center gap-2 text-white opacity-80 mb-2">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-lg font-bold">BookStore</span>
+</div>
+<div class="flex gap-6 text-text-secondary text-sm">
+<a class="hover:text-primary transition-colors" href="#">About Us</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+</div>
+<p class="text-[#8d7f7a] text-xs mt-4">© 2023 BookStore. Todos os direitos reservados.</p>
+</div>
+</footer>
+</body></html>
