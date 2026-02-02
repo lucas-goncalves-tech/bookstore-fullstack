@@ -26,8 +26,10 @@ function expectecBookShape(): Book {
   };
 }
 
-async function generateNewBook(overrides?: Partial<ICreateBookInput> | Record<string, unknown>): Promise<ICreateBookInput> {
-  const {id} = await createCategory();
+async function generateNewBook(
+  overrides?: Partial<ICreateBookInput> | Record<string, unknown>,
+): Promise<ICreateBookInput> {
+  const { id } = await createCategory();
   const payload: ICreateBookInput = {
     title: "Test Book",
     description: "Test Book Description",
@@ -277,7 +279,7 @@ describe(`POST ${BASE_URL}`, () => {
     const { reqAgent } = await loginWithUser("admin");
     const newBook = await generateNewBook();
 
-    const { body } = await reqAgent.post(BASE_URL).send(newBook).expect(201)
+    const { body } = await reqAgent.post(BASE_URL).send(newBook).expect(201);
 
     expect(body).toHaveProperty("message");
     expect(body.data).toMatchObject(expectecBookShape());
@@ -296,7 +298,7 @@ describe(`POST ${BASE_URL}`, () => {
       author: "",
     });
 
-    const { body } = await reqAgent.post(BASE_URL).send(newBook)
+    const { body } = await reqAgent.post(BASE_URL).send(newBook);
     const errors = body.errors.map((e: object) => Object.keys(e)[0]);
 
     expect(body).toHaveProperty("message");
@@ -327,13 +329,15 @@ describe(`POST ${BASE_URL}`, () => {
 });
 
 describe(`POST ${BASE_URL}/:id/cover`, () => {
-  
   it("should allow ADMIN to upload a cover image to book", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
 
-    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(201)
+    const { body } = await reqAgent
+      .post(BASE_URL + "/" + book.id + "/cover")
+      .attach("cover", coverPath)
+      .expect(201);
 
     expect(body).toHaveProperty("message");
     expect(body.data).toMatchObject(expectecBookShape());
@@ -343,48 +347,153 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
 
-    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").expect(400);
+    const { body } = await reqAgent
+      .post(BASE_URL + "/" + book.id + "/cover")
+      .expect(400);
 
     expect(body).toHaveProperty("message");
     expect(body).toHaveProperty("errors");
-  })
+  });
 
   it("should return status 400 when file type is invalid (only jpeg, jpg, png, webp)", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/invalid-type.gif");
 
-    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(400);
+    const { body } = await reqAgent
+      .post(BASE_URL + "/" + book.id + "/cover")
+      .attach("cover", coverPath)
+      .expect(400);
 
     expect(body).toHaveProperty("message");
     expect(body).toHaveProperty("errors");
-  })
+  });
 
   it("should return status 404 when book not found", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const UUID = crypto.randomUUID();
+    const file = path.resolve(__dirname, "fixtures/valid-size.jpg");
 
-    const { body } = await reqAgent.post(BASE_URL + "/" + UUID + "/cover").expect(404);
+    const { body } = await reqAgent
+      .post(BASE_URL + "/" + UUID + "/cover")
+      .attach("cover", file)
+      .expect(404);
 
     expect(body).toHaveProperty("message");
-  })
+  });
 
   it("should return status 403 when USER try to upload", async () => {
     const { reqAgent } = await loginWithUser("user");
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
 
-    const { body } = await reqAgent.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(403);
+    const { body } = await reqAgent
+      .post(BASE_URL + "/" + book.id + "/cover")
+      .attach("cover", coverPath)
+      .expect(403);
 
     expect(body).toHaveProperty("message");
-  })
+  });
 
   it("should return status 401 when non authenticated try to upload", async () => {
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
 
-    const { body } = await req.post(BASE_URL + "/" + book.id + "/cover").attach("cover", coverPath).expect(401);
+    const { body } = await req
+      .post(BASE_URL + "/" + book.id + "/cover")
+      .attach("cover", coverPath)
+      .expect(401);
 
     expect(body).toHaveProperty("message");
-  })
-})
+  });
+});
+
+describe(`PUT ${BASE_URL}/:id`, () => {
+  it("should allow ADMIN to update a book", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+    const updatedBook = await generateNewBook({
+      title: "Novo titulo",
+      author: "Novo autor",
+      description: "Nova descricao",
+    });
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + book.id)
+      .send(updatedBook)
+      .expect(200);
+
+    expect(body).toHaveProperty("message");
+    expect(body.data).toMatchObject(expectecBookShape());
+    expect(body.data.title).toBe(updatedBook.title);
+    expect(body.data.author).toBe(updatedBook.author);
+  });
+
+  it("should return status 400 when ADMIN try to update a book with invalid data", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+    const updatedBook = await generateNewBook({
+      title: "",
+      description: "",
+      author: "",
+      price: new Decimal("0"),
+      stock: 0,
+      categoryId: "invalid-uuid",
+    });
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + book.id)
+      .send(updatedBook)
+      .expect(400);
+
+    const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+
+    expect(body).toHaveProperty("message");
+    expect(errors).toContain("title");
+    expect(errors).toContain("description");
+    expect(errors).toContain("author");
+    expect(errors).toContain("price");
+    expect(errors).toContain("stock");
+    expect(errors).toContain("categoryId");
+  });
+
+  it("should return status 404 when ADMIN try to update a book that not exists", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const UUID = crypto.randomUUID();
+    const updatedBook = await generateNewBook({
+      title: "Novo titulo",
+      author: "Novo autor",
+      description: "Nova descricao",
+    });
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + UUID)
+      .send(updatedBook)
+      .expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 403 when USER try to update a book", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const book = await createBook();
+    const updatedBook = await generateNewBook({
+      title: "Novo titulo",
+      author: "Novo autor",
+      description: "Nova descricao",
+    });
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + book.id)
+      .send(updatedBook)
+      .expect(403);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 401 when non authenticated try to update a book", async () => {
+    const { body } = await req.put(BASE_URL + "/" + "invalid-uuid").expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});

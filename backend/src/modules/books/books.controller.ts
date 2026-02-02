@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { BookQueryDTO } from "./dtos/book-query.dto";
 import { CreateBookDto, UpdateBookDto } from "./dtos/book.dto";
 import { BookParamsDto } from "./dtos/book-params";
+import { BadRequestError } from "../../shared/errors/bad-request.error";
 
 @injectable()
 export class BookController {
@@ -35,8 +36,12 @@ export class BookController {
 
   uploadCover = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const file = req.file!;
+    const file = req.file;
+
+    if (!file) {
+      throw new BadRequestError("Arquivo não enviado");
+    }
+
     const urls = await this.bookService.uploadCover(id, file);
 
     res.status(201).json({

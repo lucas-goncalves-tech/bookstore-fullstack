@@ -1,7 +1,13 @@
 import { Book } from "@prisma/client";
 
-export type ICreateBookInput = Omit<Book, "id" | "coverUrl" | "coverThumbUrl" |"createdAt" | "deletedAt">;
-export type IUpdateBookInput = Partial<ICreateBookInput> & Pick<Book, "coverUrl" | "coverThumbUrl">;
+export type ICreateBookInput = Omit<
+  Book,
+  "id" | "coverUrl" | "coverThumbUrl" | "createdAt" | "deletedAt"
+>;
+export type IUpdateBookInput = Partial<ICreateBookInput> & {
+  coverUrl?: string;
+  coverThumbUrl?: string;
+};
 
 export interface IFindManyQuery {
   search?: string;
@@ -21,7 +27,6 @@ export interface IFindMany {
     totalPages: number;
   };
 }
-
 
 export abstract class IBookRepository {
   abstract create(data: ICreateBookInput): Promise<Book>;
