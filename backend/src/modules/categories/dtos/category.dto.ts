@@ -11,4 +11,7 @@ export const createCategoryDto = z.strictObject({
   ),
 });
 
+export const updateCategoryDto = createCategoryDto.partial();
+
 export type CreateCategoryDto = z.infer<typeof createCategoryDto>;
+export type UpdateCategoryDto = z.infer<typeof updateCategoryDto>;

@@ -89,3 +89,68 @@ describe(`POST ${BASE_URL}`, () => {
     expect(body).toHaveProperty("message");
   });
 });
+
+describe(`PUT ${BASE_URL}/:id`, () => {
+  it("should allow ADMIN to update a category", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const category = await createCategory();
+    const newCategory = generateCategory();
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + category.id)
+      .send(newCategory)
+      .expect(200);
+
+    expect(body).toHaveProperty("message");
+    expect(body.data).toMatchObject(expectedCategoryShape());
+    expect(body.data.name).toBe(newCategory.name);
+    expect(body.data.slug).toBe(newCategory.slug);
+    expect(body.data.description).toBe(newCategory.description);
+  });
+
+  it("should return status 400 when ADMIN try to update a category with invalid fields", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const category = await createCategory();
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + category.id)
+      .send({
+        name: "",
+        slug: "AAAAA",
+        description: "",
+      })
+      .expect(400);
+    const errors = body.errors.map((err: object) => Object.keys(err)[0]);
+
+    expect(body).toHaveProperty("message");
+    expect(errors).toContain("name");
+    expect(errors).toContain("slug");
+    expect(errors).toContain("description");
+  });
+
+  it("should return 404 when ADMIN try to update a non existing category", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const newCategory = generateCategory();
+    const UUID = crypto.randomUUID();
+
+    const { body } = await reqAgent
+      .put(BASE_URL + "/" + UUID)
+      .send(newCategory)
+      .expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return 403 when USER try to update a category", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const { body } = await reqAgent.put(BASE_URL + "/1234").expect(403);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return 401 when non authenticated try to update a category", async () => {
+    const { body } = await req.put(BASE_URL + "/1234").expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});

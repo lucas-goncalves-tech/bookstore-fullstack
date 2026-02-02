@@ -1,6 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { CategoriesRepository } from "./categories.repository";
-import { ICreateCategoryInput } from "./interface/categories.interface";
+import {
+  ICreateCategoryInput,
+  IUpdateCategoryInput,
+} from "./interface/categories.interface";
+import { NotFoundError } from "../../shared/errors/not-found-error";
 
 @injectable()
 export class CategoriesService {
@@ -15,5 +19,13 @@ export class CategoriesService {
 
   async create(data: ICreateCategoryInput) {
     return await this.repository.create(data);
+  }
+
+  async update(id: string, data: IUpdateCategoryInput) {
+    const categoryExists = await this.repository.findById(id);
+    if (!categoryExists) {
+      throw new NotFoundError("Categoria não encontrada");
+    }
+    return await this.repository.update(id, data);
   }
 }
