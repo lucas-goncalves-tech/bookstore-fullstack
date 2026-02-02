@@ -34,3 +34,7 @@ export const zodPassword = (typeMessage = "Senha") =>
     .max(56, `${typeMessage} deve conter no máximo 56 caracteres`);
 
 export const zodSafeSlug = zodSafeString.regex(/^[a-z0-9-]+$/);
+
+export const zodCoerceNumber = z.coerce
+  .number(`Campo deve ser um numero`)
+  .nonnegative();

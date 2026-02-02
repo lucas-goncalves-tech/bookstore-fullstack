@@ -27,7 +27,9 @@ export function BookFilter({
   sortOrder = "none",
 }: BookFilterProps) {
   const [search, setSearch] = useState(initialValues?.search ?? "");
-  const [categoryId, setCategoryId] = useState(initialValues?.categoryId ?? "");
+  const [categorySlug, setCategorySlug] = useState(
+    initialValues?.categorySlug ?? "",
+  );
   const [priceRange, setPriceRange] = useState<[number, number]>([
     initialValues?.minPrice ?? 0,
     initialValues?.maxPrice ?? 500,
@@ -46,14 +48,14 @@ export function BookFilter({
     const handler = setTimeout(() => {
       onFilterChange({
         search: search || undefined,
-        categoryId: categoryId || undefined,
+        categorySlug: categorySlug || undefined,
         minPrice: priceRange[0] || undefined,
         maxPrice: priceRange[1] || undefined,
       });
     }, DEBOUNCE_DELAY);
 
     return () => clearTimeout(handler);
-  }, [search, categoryId, priceRange, onFilterChange]);
+  }, [search, categorySlug, priceRange, onFilterChange]);
 
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -91,13 +93,13 @@ export function BookFilter({
             </label>
             <div className="relative">
               <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
+                value={categorySlug}
+                onChange={(e) => setCategorySlug(e.target.value)}
                 className="h-12 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background px-4 pr-10 text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-ring"
               >
                 <option value="">Todas as categorias</option>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option key={category.slug} value={category.slug}>
                     {category.name}
                   </option>
                 ))}

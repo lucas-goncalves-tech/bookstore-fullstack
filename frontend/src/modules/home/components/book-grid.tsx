@@ -1,7 +1,6 @@
 "use client";
 
-import { Sparkles, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { BookCard } from "./book-card";
 import type { Book } from "../schemas/book.schema";
 
@@ -45,14 +44,6 @@ export function BookGrid({ books, isLoading, onAddToCart }: BookGridProps) {
             <Sparkles className="size-6 text-primary" />
             Destaques Mágicos
           </h3>
-
-          <Link
-            href="/livros"
-            className="flex items-center gap-1 text-sm font-bold text-primary hover:underline"
-          >
-            Ver todos
-            <ArrowRight className="size-4" />
-          </Link>
         </div>
 
         {/* Grid */}

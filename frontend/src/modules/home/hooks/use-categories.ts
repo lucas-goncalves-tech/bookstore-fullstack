@@ -14,9 +14,6 @@ export function useCategories() {
   return useQuery({
     queryKey: homeQueryKeys.categories.list(),
     queryFn: fetchCategories,
-    // Retorna array vazio em caso de erro (endpoint não existe ainda)
     retry: false,
-    // Fallback em caso de erro
-    placeholderData: [],
   });
 }

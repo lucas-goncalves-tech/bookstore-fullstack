@@ -1,13 +1,17 @@
 import z from "zod";
-import { zodSafeString } from "@/validators/zod.validators";
+import {
+  zodCoerceNumber,
+  zodSafeSlug,
+  zodSafeString,
+} from "@/validators/zod.validators";
 
 export const bookQuerySchema = z.object({
   search: zodSafeString.optional(),
-  limit: z.coerce.number().int().optional(),
-  page: z.coerce.number().int().optional(),
-  categoryId: z.uuid().optional(),
-  minPrice: z.coerce.number().optional(),
-  maxPrice: z.coerce.number().optional(),
+  limit: zodCoerceNumber.int().optional(),
+  page: zodCoerceNumber.int().optional(),
+  categorySlug: zodSafeSlug.optional(),
+  minPrice: zodCoerceNumber.optional(),
+  maxPrice: zodCoerceNumber.optional(),
 });
 
 export type BookQueryParams = z.infer<typeof bookQuerySchema>;
@@ -24,9 +28,7 @@ export const bookSchema = z.object({
   categoryId: z.uuid().nullable(),
   category: z
     .object({
-      id: z.uuid(),
       name: z.string(),
-      description: z.string(),
     })
     .nullable()
     .optional(),

@@ -3,6 +3,7 @@ import { ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Book } from "../schemas/book.schema";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 
 interface BookCardProps {
@@ -24,7 +25,8 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
           <div
             className={cn(
               "absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110",
-              !book.coverThumbUrl && "bg-muted flex items-center justify-center"
+              !book.coverThumbUrl &&
+                "bg-muted flex items-center justify-center",
             )}
             style={
               book.coverThumbUrl
@@ -33,11 +35,14 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
             }
             aria-label={`Capa do livro: ${book.title}`}
           >
-            {book.coverThumbUrl ? <Image
-              src={book.coverThumbUrl}
-              alt={book.title}
-              fill
-            /> : (
+            {book.coverThumbUrl ? (
+              <Image
+                src={book.coverThumbUrl}
+                alt={book.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            ) : (
               <span className="text-4xl text-muted-foreground">📚</span>
             )}
           </div>
@@ -67,9 +72,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
           </span>
 
           {book.category && (
-            <span className="rounded bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-              {book.category.name}
-            </span>
+            <Badge variant="secondary">{book.category.name}</Badge>
           )}
         </div>
 

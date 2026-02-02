@@ -1,7 +1,8 @@
 "use client";
 
-import { BookOpen, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export function HeroSection() {
   return (
@@ -9,22 +10,20 @@ export function HeroSection() {
       <div className="mx-auto max-w-7xl">
         <div className="group relative h-[500px] w-full overflow-hidden rounded-xl shadow-lg">
           {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-            style={{
-              backgroundImage: `url("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80")`,
-            }}
-            aria-label="Cantinho aconchegante de leitura com livro e café"
-          />
+          <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
+            <Image
+              src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=2000"
+              alt="Muitos livros sobre a mesa"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1280px"
+            />
+          </div>
 
           {/* Overlay */}
           <div className="absolute inset-0 flex items-center bg-linear-to-r from-black/70 to-transparent">
             <div className="max-w-2xl px-10 text-white md:px-16">
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/90 px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                <BookOpen className="size-3" />
-                Em destaque
-              </span>
-
               <h2 className="mb-4 text-4xl font-black leading-tight drop-shadow-sm md:text-5xl lg:text-6xl">
                 Encontre sua próxima grande aventura
               </h2>

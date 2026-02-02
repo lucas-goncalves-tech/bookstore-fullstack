@@ -22,7 +22,7 @@ import { useUpdateCategory } from "../hooks/use-update-category";
 import { Category } from "@/modules/home/schemas/category.schema";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import { transformToSlug } from "@/utils";
+import { transformToSlug } from "@/utils/transform-to-slug";
 
 interface CategoryFormProps {
   initialData?: Category | null;
