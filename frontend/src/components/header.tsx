@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { BookOpen, LogOut, Moon, ShoppingCart, Sun } from "lucide-react";
+import {
+  BookOpen,
+  LayoutDashboard,
+  LogOut,
+  Moon,
+  ShoppingCart,
+  Sun,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/use-user";
@@ -65,6 +72,21 @@ export function Header() {
 
         {/* User Actions */}
         <div className="flex items-center gap-4">
+          {/* Admin Link */}
+          {isAuthenticated && user?.role === "ADMIN" && (
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
+              aria-label="Painel Administrativo"
+            >
+              <Link href="/admin">
+                <LayoutDashboard className="size-5" />
+              </Link>
+            </Button>
+          )}
+
           {/* Theme Toggle */}
           <Button
             variant="ghost"
@@ -91,7 +113,7 @@ export function Header() {
           {/* Auth Buttons or User Profile */}
           <div className="flex items-center gap-3 border-l border-border pl-4">
             {isAuthenticated && user ? (
-              <div className="flex items-center gap-2 space-y-1 text-left">
+              <div className="flex items-center gap-2 space-y-1 text-right">
                 <div>
                   <p className="text-sm font-medium leading-none">
                     {user.name}
