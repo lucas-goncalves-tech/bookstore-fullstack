@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bookstore Admin - User Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "background-light": "#f9f5f0", 
+                        "background-dark": "#211911",
+                        "stone-border": "#e5e0dc",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Libre Baskerville", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-[#181411] font-display h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-white border-r border-[#f4f2f0] flex-shrink-0 flex flex-col h-full hidden md:flex">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shadow-sm" data-alt="Bookstore logo with an open book icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCbflnfwOAJjwMsNnvVSoAMT6pd-5SGi4OtJujRer_xIC24oG63X8ycwV8LaPKhwEYNj1-6dzFFJ5qXJt-fuWxUiLAVl97-xnXNMDZ9DALppfinQCZbshl-OmKoTqLRkLv3P9eM4sJqJF9XqvyGAXb33oqTCE87bcZiDxq3kPBxcGrRwOBBQfZmq8K5EKc7UMglvFZKDigisV9y7hda26zXhAW8JuIn3Xcn-NcKyejoSe0zvl-nPFaJHZ8pg6aF5lZZ56mFMrsGTHSw");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#181411] text-base font-bold leading-normal font-serif">Livraria Admin</h1>
+<p class="text-[#887563] text-xs font-normal leading-normal">Management Console</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#574f49] hover:bg-[#f4f2f0] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#887563] group-hover:text-[#181411]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#574f49] hover:bg-[#f4f2f0] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#887563] group-hover:text-[#181411]">book</span>
+<span class="text-sm font-medium">Books</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#574f49] hover:bg-[#f4f2f0] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#887563] group-hover:text-[#181411]">shopping_cart</span>
+<span class="text-sm font-medium">Orders</span>
+</a>
+<!-- Active Item -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined icon-filled text-primary">group</span>
+<span class="text-sm font-bold">Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#574f49] hover:bg-[#f4f2f0] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#887563] group-hover:text-[#181411]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-[#f4f2f0]">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#574f49] hover:bg-[#f4f2f0] transition-colors" href="#">
+<span class="material-symbols-outlined text-[#887563]">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 bg-background-light">
+<!-- Header -->
+<header class="bg-white border-b border-[#f4f2f0] px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-10">
+<!-- Mobile Menu Button (Visible on small screens) -->
+<button class="md:hidden p-2 text-[#574f49] hover:bg-[#f4f2f0] rounded-lg">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search Bar -->
+<div class="hidden md:flex items-center flex-1 max-w-md mx-4">
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[#887563] text-lg">search</span>
+</span>
+<input class="block w-full pl-10 pr-3 py-2 border border-[#e5e0dc] rounded-lg leading-5 bg-[#f9f5f0] placeholder-[#887563] focus:outline-none focus:bg-white focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition duration-150 ease-in-out" placeholder="Search..." type="text"/>
+</div>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#574f49] hover:bg-[#f4f2f0] rounded-full relative transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+</button>
+<div class="h-8 w-px bg-[#e5e0dc]"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium text-[#181411]">Maria Admin</p>
+<p class="text-xs text-[#887563]">Super Admin</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 border border-[#e5e0dc]" data-alt="Portrait of a smiling woman in glasses" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDyMPhZ3LO5mAIei44oU3m4PDGjhtj5DPGYECI8UPwy_vmRM26cNU3x6lFhn7LaxkA57X7Z4ZOdH8xOFFtWOvL9Y0VqQKymgVoZ8RidvgXcYu66a4Xws96mvc_vGwhw7kFtcnOmbt7ja79r48oD9M15oXb-o7LoDE0obICKvg_0vC7GQqKo312SOk_rwJY1S45sT10CKvKMPFxSMVeNQSmixjqHLfPCa0nnVI-Ud3ZJcILt_1HZ_aCt5w6IgTTvWHp2GyhYp9QZxcYF");'></div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Breadcrumbs & Title -->
+<div class="flex flex-col gap-1">
+<nav class="flex items-center text-sm text-[#887563]">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="mx-2">/</span>
+<span class="font-medium text-[#181411]">Users</span>
+</nav>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+<h2 class="text-3xl font-bold text-[#181411] font-serif tracking-tight">Gerenciar Usuários</h2>
+<button class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-[#b06010] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all">
+<span class="material-symbols-outlined mr-2 text-lg">add</span>
+                            Adicionar Usuário
+                        </button>
+</div>
+</div>
+<!-- Filters & Toolbar -->
+<div class="bg-white p-4 rounded-xl border border-[#e5e0dc] shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+<div class="relative w-full md:w-96">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[#887563]">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border border-[#e5e0dc] rounded-lg leading-5 bg-white placeholder-[#887563] focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm" placeholder="Find users by name or email..." type="text"/>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<div class="relative inline-block text-left w-full md:w-auto">
+<button class="inline-flex justify-center w-full rounded-lg border border-[#e5e0dc] shadow-sm px-4 py-2.5 bg-white text-sm font-medium text-[#574f49] hover:bg-[#f9f5f0] focus:outline-none" type="button">
+<span class="material-symbols-outlined mr-2 text-lg text-[#887563]">filter_list</span>
+                                Filter by Role
+                                <span class="material-symbols-outlined ml-2 text-lg text-[#887563]">expand_more</span>
+</button>
+</div>
+<button class="inline-flex items-center justify-center px-4 py-2.5 border border-[#e5e0dc] shadow-sm text-sm font-medium rounded-lg text-[#574f49] bg-white hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined mr-2 text-lg">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<!-- Users Table -->
+<div class="bg-white rounded-xl border border-[#e5e0dc] shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-[#f4f2f0]">
+<thead class="bg-[#f9f5f0]">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#887563] uppercase tracking-wider" scope="col">
+                                        Usuário
+                                    </th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#887563] uppercase tracking-wider" scope="col">
+                                        Role
+                                    </th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#887563] uppercase tracking-wider" scope="col">
+                                        Status
+                                    </th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#887563] uppercase tracking-wider" scope="col">
+                                        Joined
+                                    </th>
+<th class="relative px-6 py-4" scope="col">
+<span class="sr-only">Actions</span>
+</th>
+</tr>
+</thead>
+<tbody class="bg-white divide-y divide-[#f4f2f0]">
+<!-- User 1 -->
+<tr class="hover:bg-[#fcfbf9] transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Portrait of a man with a beard" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2_sVwULEInmKZXESCXYoaUZGfcrNvv2dpE2KOiQ2UWhsiF8HggqvQUlk2dnQLP0OXF8JZ4QkupX4taaJxJBt84oBbQymwHmTMfyRandKclckQrxKpQlJywQcYdgFC2Wt2ctMU9vmrDN1Ltj6TCFOQUhAIh4QIXe2SgW6SPU4EnCib5NWq2iMDTOTxrF72eTfbtEr4L0fVXNINuZl1mqSmHxoy5mQbhs90fR9K1cwQaSkWg1rpLLkvzT5Z_pP9gd2L9cMchXKsVDd0");'></div>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-[#181411]">Ricardo Mendes</div>
+<div class="text-sm text-[#887563]">ricardo@livraria.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                            ADMIN
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                            Active
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#574f49]">
+                                        Jan 12, 2023
+                                    </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#887563] hover:text-primary transition-colors p-2 rounded-full hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User 2 -->
+<tr class="hover:bg-[#fcfbf9] transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-purple-100 rounded-full text-purple-600 font-bold">
+                                                JS
+                                            </div>
+<div class="ml-4">
+<div class="text-sm font-medium text-[#181411]">Julia Silva</div>
+<div class="text-sm text-[#887563]">julia.silva@email.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f4f2f0] text-[#574f49] border border-[#e5e0dc]">
+                                            USER
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                            Active
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#574f49]">
+                                        Mar 04, 2023
+                                    </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#887563] hover:text-primary transition-colors p-2 rounded-full hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User 3 -->
+<tr class="hover:bg-[#fcfbf9] transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Portrait of a smiling man outdoors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBw1gKmohVWSsHkUSKhPCWAskpBthsDPrlW08svir1ueEc7exiFu9le7233KOEqjtsZdyDOua-jS44IiPlvb0HF_TL3G2HfXgn7KRkqeAKm9-1alcaODHRlLnCxsIzIWDlbR7WaSdt6G8tqPXbbeQbwzX7KWEfUiZOCPFPPv1Vwwz6wb4MRBIJ7kLlRjAUOdNJ2i5_VuIhLCpZCU_crCD-j66ZBNSJXk9BodIFwHzIswUvy8A0pawawuUoTIxOO0xNG92uNDsWq3PA1");'></div>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-[#181411]">Carlos Oliveira</div>
+<div class="text-sm text-[#887563]">carlos.o@livraria.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f4f2f0] text-[#574f49] border border-[#e5e0dc]">
+                                            USER
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#574f49]">
+                                        Oct 21, 2023
+                                    </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#887563] hover:text-primary transition-colors p-2 rounded-full hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User 4 -->
+<tr class="hover:bg-[#fcfbf9] transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Portrait of a young woman looking confident" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAgTAXIolque5Z5QNbSsmyGvlfPUcdhScs2GL-UtNHkfn-FKo57l2fI4JZj0FgmEG9rSDf8jd2emCIZD0u57w322bOZ4mvLPESjimtcRO2_nrsxKPOdeSIGQCjTJ35R57t4QLfMsuu_B0Rr3VzyOq6k9dFvtRvGQnmiEV1k1eF_A461xb_crJCsS2yUSkDW95L8bCvrdBig56nlhMwmGJVCdHMZnlnyj407LqbdR2bUbMg-h5YnS9LYG7QwveG5NqWgLSATeZHd5xir");'></div>
+</div>
+<div class="ml-4">
+<div class="text-sm font-medium text-[#181411]">Ana Costa</div>
+<div class="text-sm text-[#887563]">ana.costa@example.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f4f2f0] text-[#574f49] border border-[#e5e0dc]">
+                                            USER
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                                            Inactive
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#574f49]">
+                                        Nov 12, 2023
+                                    </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#887563] hover:text-primary transition-colors p-2 rounded-full hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User 5 -->
+<tr class="hover:bg-[#fcfbf9] transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-blue-100 rounded-full text-blue-600 font-bold">
+                                                FL
+                                            </div>
+<div class="ml-4">
+<div class="text-sm font-medium text-[#181411]">Felipe Lima</div>
+<div class="text-sm text-[#887563]">felipe.lima@livraria.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                            ADMIN
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                            Active
+                                        </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#574f49]">
+                                        Dec 01, 2023
+                                    </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#887563] hover:text-primary transition-colors p-2 rounded-full hover:bg-[#f9f5f0]">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-white px-4 py-3 flex items-center justify-between border-t border-[#f4f2f0] sm:px-6">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-[#574f49]">
+                                    Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">24</span> results
+                                </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-[#e5e0dc] bg-white text-sm font-medium text-[#574f49] hover:bg-[#f9f5f0]" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</a>
+<a aria-current="page" class="relative inline-flex items-center px-4 py-2 border border-[#e5e0dc] bg-[#f9f5f0] text-sm font-medium text-primary hover:bg-[#f4f2f0]" href="#">
+                                        1
+                                    </a>
+<a class="relative inline-flex items-center px-4 py-2 border border-[#e5e0dc] bg-white text-sm font-medium text-[#574f49] hover:bg-[#f9f5f0]" href="#">
+                                        2
+                                    </a>
+<a class="relative inline-flex items-center px-4 py-2 border border-[#e5e0dc] bg-white text-sm font-medium text-[#574f49] hover:bg-[#f9f5f0]" href="#">
+                                        3
+                                    </a>
+<span class="relative inline-flex items-center px-4 py-2 border border-[#e5e0dc] bg-white text-sm font-medium text-[#574f49]">
+                                        ...
+                                    </span>
+<a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-[#e5e0dc] bg-white text-sm font-medium text-[#574f49] hover:bg-[#f9f5f0]" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

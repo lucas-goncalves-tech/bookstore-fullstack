@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Books List</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a77d52",
+                        "primary-dark": "#8a6642",
+                        "background-light": "#f7f7f6",
+                        "background-dark": "#1c1916",
+                        "surface": "#ffffff",
+                        "surface-accent": "#f3f2f1",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "title": ["Libre Baskerville", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "sm": "0.125rem", "lg": "0.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-[#161413] font-display antialiased overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<aside class="w-64 flex flex-col border-r border-[#e3e0de] bg-surface h-full flex-shrink-0 z-20 shadow-sm">
+<div class="p-6 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-fill">auto_stories</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-[#161413] font-title">Livraria</h1>
+<p class="text-xs text-[#7e756d]">Admin Panel</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-4 gap-2 flex flex-col">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-surface-accent text-[#7e756d] transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#161413]">dashboard</span>
+<span class="text-sm font-medium group-hover:text-[#161413]">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-primary/10 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl icon-fill">book_2</span>
+<span class="text-sm font-bold">Livros</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-surface-accent text-[#7e756d] transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#161413]">shopping_bag</span>
+<span class="text-sm font-medium group-hover:text-[#161413]">Pedidos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-surface-accent text-[#7e756d] transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#161413]">group</span>
+<span class="text-sm font-medium group-hover:text-[#161413]">Clientes</span>
+</a>
+<div class="my-2 border-t border-[#e3e0de]"></div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-surface-accent text-[#7e756d] transition-colors group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#161413]">settings</span>
+<span class="text-sm font-medium group-hover:text-[#161413]">Configurações</span>
+</a>
+</nav>
+<div class="p-4 border-t border-[#e3e0de]">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-cover bg-center bg-gray-200" data-alt="User avatar of the admin" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCn0WYflVg3KyJq0ryF9myYpMHt1-I15TkbvmOEytgMurnON-6rtwXDX22xBA8GumwP1YAURawhbOShFSxSm3df_iQ1f35hJXsfUU1a2zw11KiSJDjSzuY0eQtAp0ZbQ7tPEpWt4WlFa5Sx8u9ZaHhQCZbvY_6ffJuAy2qLlcyvi6ZEKs-EfjtGeVhIWT2Rv2nQ2TuCzMzxsZPn4cq1j4CoZ1EFqIK3TXtchhPVyZ5rUipqP4Lhl0QaYyN63HOhgBymUoaPDbHMy5YO');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-[#161413]">Admin User</span>
+<span class="text-xs text-[#7e756d]">admin@livraria.com</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light relative">
+<!-- Top Scrollable Area -->
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-[1200px] mx-auto p-8 flex flex-col gap-6">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm text-[#7e756d]">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Admin</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-[#161413] font-medium">Gerenciar Livros</span>
+</div>
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h1 class="font-title text-3xl font-bold text-[#161413] leading-tight">Gerenciar Livros</h1>
+<p class="text-[#7e756d] text-base mt-1 font-display">Visualize e gerencie o catálogo da sua livraria.</p>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded text-sm font-bold flex items-center gap-2 transition-colors shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Novo Livro
+                    </button>
+</div>
+<!-- Filters & Search -->
+<div class="bg-white p-4 rounded-lg border border-[#e3e0de] shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#7e756d]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-accent/50 border border-[#e3e0de] rounded text-sm text-[#161413] focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-[#9ca3af]" placeholder="Buscar por título, autor ou ISBN..." type="text"/>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="px-4 py-2 border border-[#e3e0de] rounded text-sm font-medium text-[#161413] hover:bg-surface-accent flex items-center gap-2 bg-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                            Filtros
+                        </button>
+<button class="px-4 py-2 border border-[#e3e0de] rounded text-sm font-medium text-[#161413] hover:bg-surface-accent flex items-center gap-2 bg-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">download</span>
+                            Exportar
+                        </button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="bg-white rounded-lg border border-[#e3e0de] shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-accent/30 border-b border-[#e3e0de]">
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d] w-20">Capa</th>
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d]">Título</th>
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d]">Autor</th>
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d]">Estoque</th>
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d]">Preço</th>
+<th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#7e756d] text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#e3e0de]">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-accent/20 transition-colors group">
+<td class="py-3 px-6">
+<div class="h-16 w-12 rounded bg-gray-200 overflow-hidden border border-[#e3e0de] shadow-sm relative">
+<img alt="Book cover of Dom Casmurro" class="h-full w-full object-cover" data-alt="Book cover of Dom Casmurro" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6SY7HBbiugV0LChuYWyT2vju0Xc2gF2jsZ5p5YBuCqhiah6wM8YntfPfBtUjRA6QN-4GubbBneGYjLuiBaLwGB6fPMvF-k2bpfde7V3Sq69i033tvTM0SLy2cK2MsNkXg36NsDYUGckceCkqRHH18sAPGJt_eUOW5FPwtKphbunBDLcrPPXJ1dRACCe-Hd6ij1Sw5zm1t9dhaA0IP-aDzUSTy3yqy0RlUzhV-aIEQJongRpvENHenGTv3aYsDL4dMl-qp9XwjQY93"/>
+</div>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-bold text-sm">Dom Casmurro</p>
+<p class="text-[#7e756d] text-xs">ISBN: 978-8535914849</p>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] text-sm">Machado de Assis</p>
+</td>
+<td class="py-3 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f0fdf4] text-[#166534] border border-[#dcfce7]">
+                                            12 un.
+                                        </span>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-medium text-sm">R$ 39,90</p>
+</td>
+<td class="py-3 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-[#7e756d] hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer" title="Editar">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+<button class="p-1.5 rounded text-[#7e756d] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Excluir">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-accent/20 transition-colors group">
+<td class="py-3 px-6">
+<div class="h-16 w-12 rounded bg-gray-200 overflow-hidden border border-[#e3e0de] shadow-sm relative">
+<img alt="Book cover of O Alquimista" class="h-full w-full object-cover" data-alt="Book cover of O Alquimista" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Q3U4QlCqtRCwexbkcgL2sPH6aud1GGYPJTH-Kl7DQr1R_Rv8iMc-dTsWUWsnE_D-xoxNmYC1OII_t7h38ozPB6VIfBNHI2BsF0psLceuOu-_6eMG3wLTB6Z0SXeMZUTgcJuwBgxPsyBn2w8j1h8eIAyuRmf3AsBBuA22yp3mdge-4ZGq-Ep_jCOW_nJC68qhHnd-IzFJKp2Wi_-J5kKE2hLygHtj1gKq5Y1xFj4enn4Pf15rRkt-H7rKl1678-xvA699YhRwYTUD"/>
+</div>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-bold text-sm">O Alquimista</p>
+<p class="text-[#7e756d] text-xs">ISBN: 978-0062315007</p>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] text-sm">Paulo Coelho</p>
+</td>
+<td class="py-3 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#ecfccb] text-[#3f6212] border border-[#d9f99d]">
+                                            45 un.
+                                        </span>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-medium text-sm">R$ 42,00</p>
+</td>
+<td class="py-3 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-[#7e756d] hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer" title="Editar">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+<button class="p-1.5 rounded text-[#7e756d] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Excluir">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 3 -->
+<tr class="hover:bg-surface-accent/20 transition-colors group">
+<td class="py-3 px-6">
+<div class="h-16 w-12 rounded bg-gray-200 overflow-hidden border border-[#e3e0de] shadow-sm relative">
+<img alt="Book cover of 1984" class="h-full w-full object-cover" data-alt="Book cover of 1984" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi5x-z8HeCfR1L5eNyq-qXxFZAsiYl8fT1Afqn1NEiO3pbxzOFPfg3r4OSHlzxNn9Pu0ph0tNXIj-Gs7vSFvsn9mKjnJzUMpjlymxXrKt7EoAYHnN1nOWiTz3si3nv5EmCYjJkO_vcXyUGu5Xpyz_QV4vS7iTdTeOKUh5XtWeG19Nkrj0_L0xSXwn287ikhiFOP9TIJJZLs-Z6mPGga-P7ODN5BYt9rXQ4_RUUZltBedTd-KLeqcmy6PP_2_VVQlLuqm6zajxhp-8i"/>
+</div>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-bold text-sm">1984</p>
+<p class="text-[#7e756d] text-xs">ISBN: 978-0451524935</p>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] text-sm">George Orwell</p>
+</td>
+<td class="py-3 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#fef2f2] text-[#991b1b] border border-[#fecaca]">
+                                            3 un.
+                                        </span>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-medium text-sm">R$ 35,50</p>
+</td>
+<td class="py-3 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-[#7e756d] hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer" title="Editar">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+<button class="p-1.5 rounded text-[#7e756d] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Excluir">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 4 -->
+<tr class="hover:bg-surface-accent/20 transition-colors group">
+<td class="py-3 px-6">
+<div class="h-16 w-12 rounded bg-gray-200 overflow-hidden border border-[#e3e0de] shadow-sm relative">
+<img alt="Book cover of A Hora da Estrela" class="h-full w-full object-cover" data-alt="Book cover of A Hora da Estrela" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS4O27hK6TGXJknpHGlHWfHgWyoeRF3JL5kgt1UAZQk1wUY2YhiowqO0A6UzBXQ3kOIWNNkDlaCUGB_yCr6V2MuaaQzTmpK9R_Of9N3sObaybpW4Gr8R01frEqI5XfnOln9pwaREuP6YHO6-0nIAiKPCeIOQUsoj84Px3bE1RZZYgQ7FhOVk_Lw1evxckTcilEKU2IP__WePLorkIRxrPe6LZ81NWWzs1hQIEGvWGi7oq9xE1NNIfHTUfagYja4PYb0kLOv1N7ZMVM"/>
+</div>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-bold text-sm">A Hora da Estrela</p>
+<p class="text-[#7e756d] text-xs">ISBN: 978-8532531333</p>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] text-sm">Clarice Lispector</p>
+</td>
+<td class="py-3 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f0fdf4] text-[#166534] border border-[#dcfce7]">
+                                            23 un.
+                                        </span>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-medium text-sm">R$ 29,90</p>
+</td>
+<td class="py-3 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-[#7e756d] hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer" title="Editar">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+<button class="p-1.5 rounded text-[#7e756d] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Excluir">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Item 5 -->
+<tr class="hover:bg-surface-accent/20 transition-colors group">
+<td class="py-3 px-6">
+<div class="h-16 w-12 rounded bg-gray-200 overflow-hidden border border-[#e3e0de] shadow-sm relative">
+<img alt="Book cover of Grande Sertão: Veredas" class="h-full w-full object-cover" data-alt="Book cover of Grande Sertão: Veredas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8pyTg8-uV4ft2ScKiSnQ7IUhwWcGHX6j_tgaz_I5Agig8zVGuBwjkjcH1rzmsFWqmGhmJQlnUm9EDwYdqsIRfP3H6-gm2ElIaEng2dFoVsetUorc2y4dGon9bRDr7lswwXF_r9kN9Gr-U2NmTmEP1VkXZOdw4eQy2RenKYX4h3RQNuyq-T2jO2XMSBav09qtNrxXA4YXIdjRm4KLSCdb3Pm8Df4afq7PboMvr_9eRD5EGPYTMMDNJJMl5QVJB4tskJYp-58g8NQ72"/>
+</div>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-bold text-sm">Grande Sertão: Veredas</p>
+<p class="text-[#7e756d] text-xs">ISBN: 978-8520902279</p>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] text-sm">Guimarães Rosa</p>
+</td>
+<td class="py-3 px-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#fefce8] text-[#854d0e] border border-[#fef08a]">
+                                            5 un.
+                                        </span>
+</td>
+<td class="py-3 px-6">
+<p class="text-[#161413] font-medium text-sm">R$ 89,90</p>
+</td>
+<td class="py-3 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-[#7e756d] hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer" title="Editar">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+<button class="p-1.5 rounded text-[#7e756d] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Excluir">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-6 py-4 border-t border-[#e3e0de] bg-surface-accent/10">
+<div class="text-sm text-[#7e756d]">
+                            Mostrando <span class="font-medium text-[#161413]">1</span> a <span class="font-medium text-[#161413]">5</span> de <span class="font-medium text-[#161413]">42</span> resultados
+                        </div>
+<div class="flex gap-1">
+<button class="px-3 py-1 rounded border border-[#e3e0de] bg-white text-[#7e756d] text-sm hover:bg-surface-accent disabled:opacity-50 cursor-pointer" disabled="">Anterior</button>
+<button class="px-3 py-1 rounded border border-primary bg-primary text-white text-sm font-medium shadow-sm cursor-pointer">1</button>
+<button class="px-3 py-1 rounded border border-[#e3e0de] bg-white text-[#161413] text-sm hover:bg-surface-accent hover:text-primary transition-colors cursor-pointer">2</button>
+<button class="px-3 py-1 rounded border border-[#e3e0de] bg-white text-[#161413] text-sm hover:bg-surface-accent hover:text-primary transition-colors cursor-pointer">3</button>
+<span class="px-2 py-1 text-[#7e756d]">...</span>
+<button class="px-3 py-1 rounded border border-[#e3e0de] bg-white text-[#161413] text-sm hover:bg-surface-accent hover:text-primary transition-colors cursor-pointer">8</button>
+<button class="px-3 py-1 rounded border border-[#e3e0de] bg-white text-[#161413] text-sm hover:bg-surface-accent hover:text-primary transition-colors cursor-pointer">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

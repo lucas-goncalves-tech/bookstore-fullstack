@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livraria Admin Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;family=Noto+Serif:ital,wght@0,100..900;1,100..900&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                        "stone": {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "heading": ["Libre Baskerville", "serif"],
+                        "sans": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Noto Serif", serif;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: "Libre Baskerville", serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+    </style>
+</head>
+<body class="bg-[#ede9da] text-stone-800 antialiased overflow-hidden h-screen flex">
+<!-- Sidebar -->
+<aside class="w-64 bg-white/80 backdrop-blur-sm border-r border-stone-200 flex flex-col h-full flex-shrink-0 z-20 shadow-sm">
+<div class="p-6 flex items-center gap-3 border-b border-stone-100">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+</div>
+<div class="flex flex-col">
+<h1 class="font-heading text-lg font-bold text-stone-900 leading-tight">Livraria</h1>
+<span class="text-xs text-stone-500 font-sans uppercase tracking-wider">Admin</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-2">
+<!-- Active Item -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary group transition-colors" href="#">
+<span class="material-symbols-outlined fill-1">dashboard</span>
+<span class="text-sm font-bold font-sans">Dashboard</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-stone-800">book_2</span>
+<span class="text-sm font-medium font-sans">Livros</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-stone-800">category</span>
+<span class="text-sm font-medium font-sans">Categorias</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-stone-800">group</span>
+<span class="text-sm font-medium font-sans">Usuários</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-stone-800">shopping_bag</span>
+<span class="text-sm font-medium font-sans">Pedidos</span>
+</a>
+</nav>
+<div class="p-4 border-t border-stone-100">
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-stone-50 border border-stone-200">
+<div class="size-8 rounded-full bg-stone-200 bg-cover bg-center" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOFUWt-EBofSSBm1CQlCMigTdDhNfl9Y-O4nCqKEi_KJoPEHzDotbYpw0vP2ugM0NXdOskeUvaENxSN-cGKEbsctvBrEJch9pkL9xaAFEQj3Mj9D9ANmeWQ7sTCKZ712At-5ek0gaJclzFgpO-McH4xmOf135jMTspmjn7eugzNps15ZlVTlFTwpZLlstCNpJ0aLmZuU-3mNx4stS50QCiKlkvs2MNK4vcikQFTkUYaC-QSAXtm_z7WHIGmCmsdI_MLkzeR-w4DqF9');"></div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold text-stone-900 truncate">Admin User</span>
+<span class="text-xs text-stone-500 truncate">admin@livraria.com</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Header -->
+<header class="h-16 flex items-center justify-between px-8 py-4 bg-[#ede9da] sticky top-0 z-10">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-sm font-sans">
+<a class="text-stone-500 hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-stone-400">/</span>
+<span class="text-stone-800 font-semibold">Dashboard</span>
+</div>
+<!-- Header Actions -->
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-stone-500 hover:text-stone-800 transition-colors rounded-full hover:bg-white/50">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border border-[#ede9da]"></span>
+</button>
+<div class="h-8 w-px bg-stone-300"></div>
+<div class="flex items-center gap-2">
+<div class="size-9 rounded-full bg-white border-2 border-white shadow-sm overflow-hidden" data-alt="Current user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAR0nyTQ5hwx4FI2ZAKSH7Y6mpxRBUN3MwvU4BcWj9-zuKQjZ4iQB5AUVx9U795svvPrWBBBlHxgUrouX3HKC5dNMvYecmeWdyAhsHQ7w-EvosExCsujhBhhuSudomZ86KJDDHHUQMAKBrY10FAi7sc0tmcLC2CUxwaxUKPKm6ktS6pjkiB_d0MF2UjZJVqBtSNqybr0Js8yblxTn7F19_Mp8YoFuRDXNfA9aUESjNnMyyaZUQaR42pPWEQrUUV_h5dO4iSRrmIlRtX'); background-size: cover;"></div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-8 pb-8">
+<div class="max-w-6xl mx-auto flex flex-col gap-8">
+<!-- Page Title & Primary Action -->
+<div class="flex flex-wrap items-end justify-between gap-4 pt-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-3xl font-heading font-bold text-stone-900">Bom dia, Admin</h2>
+<p class="text-stone-600 font-sans">Aqui está o que está acontecendo na sua livraria hoje.</p>
+</div>
+<button class="flex items-center justify-center gap-2 h-10 px-5 bg-primary hover:bg-primary/90 text-white rounded-lg shadow-sm transition-all text-sm font-bold font-sans tracking-wide">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Adicionar Livro</span>
+</button>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Metric Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] border border-stone-100 flex flex-col gap-4 group hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-stone-50 rounded-lg text-primary group-hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined">library_books</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +2.5%
+                            </span>
+</div>
+<div>
+<p class="text-stone-500 text-sm font-medium font-sans">Total de Livros</p>
+<h3 class="text-3xl font-heading font-bold text-stone-900 mt-1">1,240</h3>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] border border-stone-100 flex flex-col gap-4 group hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-stone-50 rounded-lg text-primary group-hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined">attach_money</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+                            </span>
+</div>
+<div>
+<p class="text-stone-500 text-sm font-medium font-sans">Vendas Mensais</p>
+<h3 class="text-3xl font-heading font-bold text-stone-900 mt-1">R$ 12.500</h3>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-white p-6 rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] border border-stone-100 flex flex-col gap-4 group hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-stone-50 rounded-lg text-primary group-hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +45
+                            </span>
+</div>
+<div>
+<p class="text-stone-500 text-sm font-medium font-sans">Novos Usuários</p>
+<h3 class="text-3xl font-heading font-bold text-stone-900 mt-1">854</h3>
+</div>
+</div>
+</div>
+<!-- Recent Activity Section -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-heading font-bold text-stone-900">Últimas Vendas</h3>
+<a class="text-primary text-sm font-bold font-sans hover:underline" href="#">Ver todos</a>
+</div>
+<div class="bg-white rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] border border-stone-100 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-stone-100 bg-stone-50/50">
+<th class="py-4 px-6 text-xs font-bold font-sans text-stone-500 uppercase tracking-wider">Livro</th>
+<th class="py-4 px-6 text-xs font-bold font-sans text-stone-500 uppercase tracking-wider">Cliente</th>
+<th class="py-4 px-6 text-xs font-bold font-sans text-stone-500 uppercase tracking-wider">Data</th>
+<th class="py-4 px-6 text-xs font-bold font-sans text-stone-500 uppercase tracking-wider">Status</th>
+<th class="py-4 px-6 text-xs font-bold font-sans text-stone-500 uppercase tracking-wider text-right">Valor</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-stone-100">
+<tr class="group hover:bg-stone-50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-12 w-9 rounded bg-stone-200 bg-cover bg-center shadow-sm" data-alt="Book cover for Dom Casmurro" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCX9YpzNTmdwKb6yUKv1Uk09Krkx5_x8TGMMGyHwcPvv0nNmMJPCKWad4kVjMlS_ECzl49LbN1yEUFpKdEdVcmCDFEY6uIajDM56P0GSklUImsAUWqFVLHlQg23L6XfwwQpZ_6B0Fmb8COJvbVkCL-i5btnFUjSZ259JI3TnS1OA8mrmcNU4dGBGPs4XliPkzcjOJ58681CoM7UH31VYHeZlOaywmfIPxOwxPrKQwZY4CA7e36sA7fPqM1sMp1mJEQHSFUMg6GY92sf');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-stone-900">Dom Casmurro</span>
+<span class="text-xs text-stone-500">Machado de Assis</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-stone-200 bg-cover" data-alt="Avatar of customer Maria Silva" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD_F-v8kV4tefh_WCu_lC48HMWr7gIUNWlgznYW-lKvwXwjfGBkVSNC-OAwZDxxCk8hgPwxh-72br9TRwLNoXbh_YTdma52sI3h2Xbcrpkgoz7oU0Uf1LRM7QDIFU6NlsQw__zM42pS2JmI5oF9gE9nzZrI-dpcbvkMfYYOLR1PLf2TlOpyo3XO5rQc7ZNjAdHjdrMn19Vl5saDwJABZR_SJujRjZI4i9t0tZ1IMxuSsjiDnhQkHIQV3XpW5P0OwnZ_-1T8a6MAS0WF');"></div>
+<span class="text-sm text-stone-700 font-medium">Maria Silva</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-stone-600 font-sans">Hoje, 10:30</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                                Concluído
+                                            </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-stone-900 text-right">R$ 45,90</td>
+</tr>
+<tr class="group hover:bg-stone-50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-12 w-9 rounded bg-stone-200 bg-cover bg-center shadow-sm" data-alt="Book cover for 1984" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAIp0grRjt5G0BnrnLOotC2rTF1wr7x9ChU7_0JEwv61H4uVb8AwcQ3YDEHJd-F2L0DqzWKARXdCmpA9KbjVWapy5SOazm4FvrOp9fpiErnT6Efg83iNRF7U5WQN6Rck5ubYO5vspkznCTK4FRehU7B0s4BIjtykdm4642J9TmwVqY-cjHGlDlirXE9DWYJie32zH_t87Pw8Sj2D2adGsWjOV4Oo2eemzLb9Sp-zXxA2TdIEC2ATRYNQ36ONbdAlyHqaN4mi0oMuaZ');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-stone-900">1984</span>
+<span class="text-xs text-stone-500">George Orwell</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-stone-200 bg-cover" data-alt="Avatar of customer João Souza" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDCkqyv1CMWxOOdJy2cIrPJ9gHLMLTqKu0qzoOAso-Z60_3aWr1BoXcaaBG2JlYIUrnlHqz8DcVz-dJy-q4tdPU8XjX_5Np4IqWznnSIiq0x81EJumO0xOj5K847eg5J9nSpIzWVvlOIO5RLNXN4D3mz0llhPClB8I0bjdtxiCipdniLMhniWjQd0T7iPhIE6uNLhYA5RF_hsyIyRYnN4G-P_bwqXOAnwAp0ijWCWudNIdJE4ixUCVCKBiPfZSetLJrt6MMexgNDTQn');"></div>
+<span class="text-sm text-stone-700 font-medium">João Souza</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-stone-600 font-sans">Ontem, 16:15</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+<span class="size-1.5 rounded-full bg-amber-500"></span>
+                                                Pendente
+                                            </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-stone-900 text-right">R$ 39,90</td>
+</tr>
+<tr class="group hover:bg-stone-50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-12 w-9 rounded bg-stone-200 bg-cover bg-center shadow-sm" data-alt="Book cover for O Pequeno Príncipe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCiqW7jKZFjTcvlZRfc30pgzwZYZ_QZm2GdUkQ7xKvulHdDqLRKVGohVu8uVp39Tn7fpp0Fq0fxPLk90jG1mm1_WUMhGbIXcpbBoEHRANuj62cV6CNe52upLEzvViuOftItM10DWpvbgRRjFMXuRIHozUhBEnyDuvq-h6lCVNy9eLlZAyNDwo39MX9HNlxpoh8epsytf_-p6pc5NHFtT5hqct6rpF1pyIjmD-tG4HV1yn7MaFXJxne1R1_pbJ4xnpw7ZVpc4UUzKDkO');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-stone-900">O Pequeno Príncipe</span>
+<span class="text-xs text-stone-500">Antoine de Saint-Exupéry</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-stone-200 bg-cover" data-alt="Avatar of customer Ana Clara" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLOOX0r9sA_tgjcdnkPYTxEF5YJGvo7eyXXeJLSpj1xGn3LMemtZFgDUhWYS2zp675uSxOw-ZsP3k362BGub3KfKcousYeJJ_HG6UlVY1kRFlVblsWyVNA9hTXKkD7uINfqKntjsVUVvfp8h7TyMpBAGJz0yymgLLESYjZzIbQ1HkmoLm1izrTL9MOA2_d8CRf0UE0V0XTamZOBQVwowPtHGlb3CA78E3P1_x8xoYtBcRZiqEhqb0TqdG6EwPFwralhnDv3h4T3qbw');"></div>
+<span class="text-sm text-stone-700 font-medium">Ana Clara</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-stone-600 font-sans">Ontem, 14:00</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                                Concluído
+                                            </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-stone-900 text-right">R$ 29,90</td>
+</tr>
+<tr class="group hover:bg-stone-50 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-12 w-9 rounded bg-stone-200 bg-cover bg-center shadow-sm" data-alt="Book cover for A Menina que Roubava Livros" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBt1VNktt_3F_xJ83IjMQy2izmqTO8IwEdzapZMTYhJy0qHLj-VSAIC5gs7aVDmNoDVXomvyUr1bokVWcgf9m8r0jLmwOSihqKPolidqcoWwLfFdA55xNhPxC0i9qPxdb5wsNRuNA2UmoKa8QpYmsYdD3S7i_-FCn4WCkfXELKB9lBvti50uwT51k0pw7cBjBOA0ldzv2rQpd-E5Tfyvj0jsTZILhqEP7sKSlmNODJtfynbzNQ2w0HEi0xOS_cz49EJWvWObtAIjGx8');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-stone-900">A Menina que Roubava...</span>
+<span class="text-xs text-stone-500">Markus Zusak</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-stone-200 bg-cover" data-alt="Avatar of customer Pedro Henrique" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_1lnouPmuyFlUVJUGnsoj6644NERRytWkeIs5Rk3rFMYFLnIFx7TEVuoB4oVdBEpB7X91GKSuW8Tho4DkWBqMvBieLWXwjbX5uDBGfeSsWLfk8bn2NDxhwy7rajZMdbDePuGPmP1KE1e8CckA_SPDS8WX7xH5nixpdV03lZOOgB5GprZmHQBz50yJbHrGWH7_qpgGV5WtoqLyBpIQBZY6HarB1wiXw_WvHNqg4lyWvKZyFyh45D03CuWIqENHFpXqTUVR2E0w_qCG');"></div>
+<span class="text-sm text-stone-700 font-medium">Pedro Henrique</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-stone-600 font-sans">15 de Out, 09:12</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                                Concluído
+                                            </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-stone-900 text-right">R$ 55,00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-stone-100 bg-stone-50 flex justify-center">
+<button class="text-xs font-bold text-stone-500 uppercase hover:text-primary transition-colors">Carregar mais</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

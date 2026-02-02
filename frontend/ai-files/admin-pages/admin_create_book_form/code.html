@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Create Book Form</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "primary-hover": "#b06213",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                        "text-main": "#181411",
+                        "text-secondary": "#887563",
+                        "border-color": "#e5e0dc",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Noto Serif", serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cf7317;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b06213;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-white px-6 py-3 lg:px-10 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+<span class="text-base font-medium hidden sm:block">Voltar para lista</span>
+</a>
+<div class="h-6 w-px bg-border-color mx-2 hidden sm:block"></div>
+<div class="flex items-center gap-2">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-lg font-bold leading-tight tracking-tight">Livraria Admin</h2>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 bg-background-light hover:bg-gray-100 transition-colors text-text-main relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border border-white"></span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border border-border-color shadow-sm cursor-pointer" data-alt="User profile avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvibU0lJBY7PAWQPVX6dpWps5FPlw51_U2tDJqqgnM0lFSTdMEa0gRu1NYTleT6IdtUbTWKkrHzITHHazn2vB5HhQiqT6DPIQ247JpGhznrB9fpLla77Dsd3s4tqpyXJPqV-iSH5GTeUGIeIYVs_JdsSrsBvqJl6THG5H28TgRjYLalM3vfvY6urqEd_3C0nCJQ2bVsZ-IJBYPh2jzO4P-HqmoEoF-CKt_s3wyK_SnGW4vcbgTbfetXkW5usOLWI66IXl_zby8oTK7");'>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex justify-center py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto">
+<div class="w-full max-w-[800px] flex flex-col gap-6">
+<!-- Breadcrumbs & Heading -->
+<div class="flex flex-col gap-2">
+<nav class="flex items-center gap-2 text-sm text-text-secondary">
+<a class="hover:text-primary transition-colors" href="#">Livros</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-text-main font-medium">Novo Livro</span>
+</nav>
+<h1 class="text-3xl font-bold text-text-main font-display">Adicionar Novo Livro</h1>
+<p class="text-text-secondary text-base">Preencha as informações abaixo para adicionar um novo título ao catálogo.</p>
+</div>
+<!-- Form Card -->
+<form class="bg-white rounded-xl shadow-sm border border-border-color p-6 md:p-8 flex flex-col gap-8">
+<!-- Section 1: Basic Information -->
+<div class="space-y-6">
+<h3 class="text-lg font-bold text-text-main border-b border-border-color pb-2">Informações Básicas</h3>
+<div class="grid grid-cols-1 gap-6">
+<!-- Title -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Título do Livro</span>
+<input class="form-input w-full rounded-lg border-border-color bg-white px-4 py-3 text-base text-text-main placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="Ex: Dom Casmurro" type="text"/>
+</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Author -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Autor</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">person</span>
+<input class="form-input w-full rounded-lg border-border-color bg-white pl-10 pr-4 py-3 text-base text-text-main placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="Ex: Machado de Assis" type="text"/>
+</div>
+</label>
+<!-- Category -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Categoria</span>
+<div class="relative">
+<select class="form-select w-full rounded-lg border-border-color bg-white px-4 py-3 text-base text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer">
+<option disabled="" selected="" value="">Selecione uma categoria</option>
+<option value="ficcao">Ficção</option>
+<option value="nao-ficcao">Não-Ficção</option>
+<option value="biografia">Biografia</option>
+<option value="tecnologia">Tecnologia</option>
+<option value="historia">História</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">expand_more</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Section 2: Details -->
+<div class="space-y-6">
+<h3 class="text-lg font-bold text-text-main border-b border-border-color pb-2">Detalhes de Venda</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Price -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Preço</span>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-text-secondary font-medium z-10">R$</span>
+<input class="form-input w-full rounded-lg border-border-color bg-white pl-10 pr-4 py-3 text-base text-text-main placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</label>
+<!-- Stock -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Estoque</span>
+<input class="form-input w-full rounded-lg border-border-color bg-white px-4 py-3 text-base text-text-main placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="0" type="number"/>
+</label>
+</div>
+<!-- Description -->
+<label class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Descrição / Sinopse</span>
+<textarea class="form-textarea w-full rounded-lg border-border-color bg-white px-4 py-3 text-base text-text-main placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow min-h-[120px] resize-y" placeholder="Escreva um breve resumo sobre o livro..."></textarea>
+</label>
+</div>
+<!-- Section 3: Media Upload -->
+<div class="space-y-6">
+<h3 class="text-lg font-bold text-text-main border-b border-border-color pb-2">Mídia</h3>
+<div class="flex flex-col gap-2">
+<span class="text-text-main text-base font-medium">Capa do Livro</span>
+<div class="group relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-border-color rounded-xl bg-background-light hover:bg-[#f0ece9] hover:border-primary/50 transition-all cursor-pointer">
+<input accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" type="file"/>
+<div class="flex flex-col items-center gap-3 text-center p-6 transition-transform group-hover:scale-105">
+<div class="bg-white p-3 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-3xl text-primary">cloud_upload</span>
+</div>
+<div>
+<p class="text-base font-medium text-text-main">Clique para fazer upload</p>
+<p class="text-sm text-text-secondary">ou arraste e solte a imagem aqui</p>
+</div>
+<p class="text-xs text-text-secondary mt-2">PNG, JPG ou WEBP (Max. 2MB)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Form Actions -->
+<div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-4 border-t border-border-color mt-2">
+<button class="w-full sm:w-auto px-6 py-3 rounded-lg border border-border-color text-text-main font-medium hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-gray-200 focus:outline-none" type="button">
+                        Cancelar
+                    </button>
+<button class="w-full sm:w-auto px-8 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-xl">save</span>
+                        Salvar Livro
+                    </button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer decoration (Optional subtle pattern) -->
+<div class="h-2 w-full bg-gradient-to-r from-background-light via-border-color to-background-light opacity-30"></div>
+</body></html>
