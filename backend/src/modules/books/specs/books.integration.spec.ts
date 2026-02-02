@@ -112,6 +112,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
   it("should filter books by categoryId", async () => {
     const adventure = await createCategory({
       name: "adventure",
+      slug: "adventure",
     });
     for (let i = 1; i <= 5; i++) {
       await createBook({
@@ -121,6 +122,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
 
     const action = await createCategory({
       name: "action",
+      slug: "action",
     });
     for (let i = 1; i <= 5; i++) {
       await createBook({

@@ -6,6 +6,7 @@ export async function createCategory(override?: Partial<Category>) {
     data: {
       name: "Ação",
       description: "Muita ação",
+      slug: "acao",
       ...override,
     },
   });

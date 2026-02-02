@@ -31,10 +31,12 @@ model User {
 model Category {
   id          String @id @default(uuid())
   name        String @unique
+  slug        String @unique
   description String @db.VarChar(100)
 
   book Book[]
 
+  @@index([slug])
   @@map("categories")
 }
 
