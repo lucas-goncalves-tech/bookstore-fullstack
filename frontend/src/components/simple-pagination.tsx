@@ -16,7 +16,6 @@ export function SimplePagination({
   return (
     <div className="flex items-center justify-end space-x-2 py-4">
       <Button
-        variant="outline"
         size="sm"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1 || isLoading}
@@ -27,7 +26,6 @@ export function SimplePagination({
         Página {currentPage} de {totalPages || 1}
       </span>
       <Button
-        variant="outline"
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages || isLoading}

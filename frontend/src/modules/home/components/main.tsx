@@ -87,7 +87,7 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
       />
 
       {!isLoadingBooks && books.length > 0 && (
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto p-4 max-w-7xl flex items-center justify-center">
           <SimplePagination
             currentPage={page}
             totalPages={totalPages}
