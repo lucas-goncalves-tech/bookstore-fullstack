@@ -28,4 +28,12 @@ export class CategoriesService {
     }
     return await this.repository.update(id, data);
   }
+
+  async delete(id: string) {
+    const categoryExists = await this.repository.findById(id);
+    if (!categoryExists) {
+      throw new NotFoundError("Categoria não encontrada");
+    }
+    return await this.repository.delete(id);
+  }
 }

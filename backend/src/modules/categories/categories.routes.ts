@@ -33,6 +33,13 @@ export class CategoriesRoutes {
       }),
       this.controller.update,
     );
+    this.router.delete(
+      "/:id",
+      authMiddleware,
+      adminOnlyMiddleware,
+      validateMiddleware({ params: categoryParamsDto }),
+      this.controller.delete,
+    );
   }
 
   get routes() {

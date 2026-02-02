@@ -154,3 +154,34 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 });
+
+describe(`DELETE ${BASE_URL}/:id`, () => {
+  it("should allow ADMIN to delete a category", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const category = await createCategory();
+
+    await reqAgent.delete(BASE_URL + "/" + category.id).expect(204);
+  });
+
+  it("should return status 404 when ADMIN try to delete a non existing category", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const UUID = crypto.randomUUID();
+
+    const { body } = await reqAgent.delete(BASE_URL + "/" + UUID).expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 403 when USER try to delete a category", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 401 when non authenticated try to delete a category", async () => {
+    const { body } = await req.delete(BASE_URL + "/1234").expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});

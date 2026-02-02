@@ -36,4 +36,11 @@ export class CategoriesController {
       data: category,
     });
   };
+
+  delete = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as CategoryParamsDto;
+    await this.service.delete(id);
+
+    return res.status(204).end();
+  };
 }
