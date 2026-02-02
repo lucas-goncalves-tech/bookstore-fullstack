@@ -18,7 +18,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
 
   return (
     <div className="group flex flex-col rounded-lg border border-transparent bg-card p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-xl">
-      <Link href={`/${book.id}`} className="flex flex-1 flex-col">
+      <Link href={`/books/${book.id}`} className="flex flex-1 flex-col">
         {/* Cover Image */}
         <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-md shadow-md">
           <div

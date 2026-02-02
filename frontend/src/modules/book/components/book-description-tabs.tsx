@@ -28,7 +28,7 @@ export function BookDescriptionTabs({
   const [activeTab, setActiveTab] = useState<TabKey>("description");
 
   return (
-    <div className="mt-20">
+    <div className="">
       {/* Tab Navigation */}
       <div className="border-b border-border">
         <nav aria-label="Tabs" className="flex gap-8">

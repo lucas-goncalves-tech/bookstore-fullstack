@@ -10,6 +10,7 @@ interface BookDetailsProps {
   categoryName?: string | null;
   rating?: number;
   reviewCount?: number;
+  children?: React.ReactNode;
 }
 
 function RatingStars({ rating = 0 }: { rating: number }) {
@@ -37,6 +38,7 @@ export function BookDetails({
   categoryName,
   rating = 0,
   reviewCount = 0,
+  children,
 }: BookDetailsProps) {
   return (
     <div className="flex h-full flex-col">
@@ -73,6 +75,8 @@ export function BookDetails({
           </span>
         </div>
       )}
+
+      {children}
 
       {/* Descrição curta */}
       <div className="prose prose-stone mb-6 text-muted-foreground dark:prose-invert">
