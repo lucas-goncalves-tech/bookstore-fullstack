@@ -35,7 +35,8 @@ export class BookController {
 
   uploadCover = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
-    const file = req.file;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const file = req.file!;
     const urls = await this.bookService.uploadCover(id, file);
 
     res.status(201).json({

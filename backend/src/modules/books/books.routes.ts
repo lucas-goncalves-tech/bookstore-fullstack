@@ -8,6 +8,7 @@ import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middleware";
 import { bookParamsDto } from "./dtos/book-params";
 import { uploadMiddleware } from "../../shared/middlewares/upload.middleware";
+import { fileTypeMiddleware } from "../../shared/middlewares/file-type.middleware";
 
 @injectable()
 export class BookRoutes {
@@ -30,10 +31,29 @@ export class BookRoutes {
       validateMiddleware({ params: bookParamsDto }),
       this.controller.findById,
     );
-    this.router.post("/", authMiddleware, adminOnlyMiddleware, validateMiddleware({ body: createBookDto }), this.controller.create);
-    this.router.post("/:id/cover", authMiddleware, adminOnlyMiddleware, validateMiddleware({ params: bookParamsDto }), uploadMiddleware.single("cover"), this.controller.uploadCover);
-    this.router.put("/:id", authMiddleware, adminOnlyMiddleware, validateMiddleware({ params: bookParamsDto, body: updateBookDto }), this.controller.update);
-    
+    this.router.post(
+      "/",
+      authMiddleware,
+      adminOnlyMiddleware,
+      validateMiddleware({ body: createBookDto }),
+      this.controller.create,
+    );
+    this.router.post(
+      "/:id/cover",
+      authMiddleware,
+      adminOnlyMiddleware,
+      validateMiddleware({ params: bookParamsDto }),
+      uploadMiddleware.single("cover"),
+      fileTypeMiddleware,
+      this.controller.uploadCover,
+    );
+    this.router.put(
+      "/:id",
+      authMiddleware,
+      adminOnlyMiddleware,
+      validateMiddleware({ params: bookParamsDto, body: updateBookDto }),
+      this.controller.update,
+    );
   }
 
   get routes() {
