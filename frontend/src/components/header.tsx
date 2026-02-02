@@ -2,16 +2,24 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { BookOpen, Moon, ShoppingCart, Sun } from "lucide-react";
+import { BookOpen, LogOut, Moon, ShoppingCart, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-// Placeholder: usuário não logado por enquanto
-const isLoggedIn = false;
+import { useUser } from "@/hooks/use-user";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 const navLinks = [
   { href: "/", label: "Home", active: true },
-  { href: "/livros", label: "Livros" },
   { href: "/autores", label: "Autores" },
   { href: "/editoras", label: "Editoras" },
   { href: "/contato", label: "Contato" },
@@ -19,6 +27,7 @@ const navLinks = [
 
 export function Header() {
   const { theme, setTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useUser();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -43,7 +52,11 @@ export function Header() {
               variant="ghost"
               size="sm"
               asChild
-              className={cn(link.active ? "font-bold text-primary" : "text-muted-foreground")}
+              className={cn(
+                link.active
+                  ? "font-bold text-primary"
+                  : "text-muted-foreground",
+              )}
             >
               <Link href={link.href}>{link.label}</Link>
             </Button>
@@ -77,19 +90,43 @@ export function Header() {
 
           {/* Auth Buttons or User Profile */}
           <div className="flex items-center gap-3 border-l border-border pl-4">
-            {isLoggedIn ? (
-              <>
-                <span className="hidden text-sm font-bold text-foreground lg:block">
-                  John Doe
-                </span>
-                <div
-                  className="size-10 cursor-pointer rounded-full border-2 border-white bg-cover bg-center shadow-md transition-colors hover:border-primary"
-                  style={{
-                    backgroundImage: `url("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop")`,
-                  }}
-                  aria-label="Avatar do usuário"
-                />
-              </>
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-2 space-y-1 text-left">
+                <div>
+                  <p className="text-sm font-medium leading-none">
+                    {user.name}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user.email}
+                  </p>
+                </div>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                      aria-label="Sair"
+                    >
+                      <LogOut className="size-5" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Sair</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Tem certeza que deseja sair?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => logout()}>
+                        Sair
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>

@@ -4,6 +4,7 @@ import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createUserDto } from "./dto/create-user.dto";
 import { loginDto } from "./dto/login.dto";
+import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 
 @injectable()
 export class AuthRoutes {
@@ -26,6 +27,8 @@ export class AuthRoutes {
       validateMiddleware({ body: loginDto }),
       this.controller.login,
     );
+
+    this.router.get("/logout", authMiddleware, this.controller.logout);
   }
 
   get routes() {

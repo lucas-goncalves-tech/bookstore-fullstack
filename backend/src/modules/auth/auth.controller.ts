@@ -30,4 +30,9 @@ export class AuthController {
     res.cookie(SID_COOKIE, token, SID_COOKIE_OPTIONS());
     res.status(204).end();
   };
+
+  logout = async (_req: Request, res: Response) => {
+    res.clearCookie(SID_COOKIE, SID_COOKIE_OPTIONS());
+    res.status(204).end();
+  };
 }
