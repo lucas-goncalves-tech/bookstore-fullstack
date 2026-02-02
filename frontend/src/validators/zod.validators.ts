@@ -32,3 +32,5 @@ export const zodPassword = (typeMessage = "Senha") =>
     .string()
     .min(8, `${typeMessage} deve conter no minimo 8 caracteres`)
     .max(56, `${typeMessage} deve conter no máximo 56 caracteres`);
+
+export const zodSafeSlug = zodSafeString.regex(/^[a-z0-9-]+$/);

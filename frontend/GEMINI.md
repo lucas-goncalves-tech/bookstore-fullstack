@@ -100,12 +100,12 @@ The project uses `npm` for dependency management and script execution. Turbopack
 ## Development Conventions
 
 - **Language & Localization:** The application is localized to Brazilian Portuguese (`pt-br`). All UI strings, toast messages, and validation errors should be in Portuguese.
-- **Feature-based Modularization:** Organize business logic and feature-specific components within `src/modules`. Each module should follow an MVVM-like pattern where hooks act as ViewModels.
+- **Feature-based Modularization:** Organize business logic and feature-specific components within `src/modules`. Each module should follow an MVVM-like pattern where hooks act as ViewModels. **Strictly separate View (Components) from Logic (Hooks).**
 - **Component Composition:** Prefer using Shadcn UI components from `@/components/ui` as building blocks for complex interfaces.
 - **Styling:** Use Tailwind CSS utility classes. Avoid writing custom CSS in `globals.css` unless absolutely necessary.
 - **Class Merging:** Always use the `cn(...)` utility function (imported from `@/lib/utils`) when combining conditional class names to ensure Tailwind classes are merged correctly (resolving conflicts via `tailwind-merge`).
 - **Type Safety:** Ensure all components and functions are strictly typed.
-- **Forms:** Use `react-hook-form` coupled with `zod` for schema validation for all form implementations. @../backend/src/modules/\*\*/dto have files to copy and use on front end. never create schemas from scratch.
+- **Forms:** **MANDATORY:** Use `react-hook-form` coupled with `zod` for ALL forms. **NEVER** manage form state with `useState` and manual `onChange` handlers. Use Shadcn `Form`, `FormControl`, `FormField` components.
 - **Data Fetching:** Use TanStack Query (React Query) via the `QueryProvider` for all server-state management.
 - **Validation:** Utilize reusable validators from `src/validators/zod.validators.ts` (e.g., `zodSafeString`, `zodSafeEmail`) to ensure consistency and security.
 - **Notifications:** Use the `toast` function from `sonner` for user feedback.
