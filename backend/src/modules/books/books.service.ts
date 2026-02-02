@@ -65,7 +65,10 @@ export class BookService {
     if (oldCoverUrl && oldCoverThumbUrl) {
       this.cleanupOldCover(oldCoverUrl, oldCoverThumbUrl).catch((error) => {
         //eslint-disable-next-line no-console
-        console.error("Error ao deletar imagem antiga:", error);
+        console.error(
+          "Error ao deletar imagens antigas durante upload:",
+          error,
+        );
       });
     }
 
@@ -88,6 +91,19 @@ export class BookService {
     if (!bookExist) {
       throw new NotFoundError("Livro não encontrado");
     }
+
+    if (bookExist.coverUrl && bookExist.coverThumbUrl) {
+      this.cleanupOldCover(bookExist.coverUrl, bookExist.coverThumbUrl).catch(
+        (error) => {
+          //eslint-disable-next-line no-console
+          console.error(
+            "Error ao deletar imagens durante deleção do livro:",
+            error,
+          );
+        },
+      );
+    }
+
     await this.bookRepository.delete(id);
   }
 }
