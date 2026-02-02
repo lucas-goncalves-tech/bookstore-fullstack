@@ -65,8 +65,6 @@ export class BookController {
     const { id } = req.safeParams as BookParamsDto;
     await this.bookService.delete(id);
 
-    res.json({
-      message: `Livro ${id} deletado com sucesso`,
-    });
+    res.status(204).end();
   };
 }

@@ -384,24 +384,17 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
 
   it("should return status 403 when USER try to upload", async () => {
     const { reqAgent } = await loginWithUser("user");
-    const book = await createBook();
-    const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
 
     const { body } = await reqAgent
-      .post(BASE_URL + "/" + book.id + "/cover")
-      .attach("cover", coverPath)
+      .post(BASE_URL + "/" + "invalid-uuid" + "/cover")
       .expect(403);
 
     expect(body).toHaveProperty("message");
   });
 
   it("should return status 401 when non authenticated try to upload", async () => {
-    const book = await createBook();
-    const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
-
     const { body } = await req
-      .post(BASE_URL + "/" + book.id + "/cover")
-      .attach("cover", coverPath)
+      .post(BASE_URL + "/" + "invalid-uuid" + "/cover")
       .expect(401);
 
     expect(body).toHaveProperty("message");
@@ -492,7 +485,52 @@ describe(`PUT ${BASE_URL}/:id`, () => {
   });
 
   it("should return status 401 when non authenticated try to update a book", async () => {
-    const { body } = await req.put(BASE_URL + "/" + "invalid-uuid").expect(401);
+    const { body } = await req.put(BASE_URL + "/1234").expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});
+
+describe(`DELETE ${BASE_URL}/:id`, () => {
+  it("should allow ADMIN to delete a book", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const book = await createBook();
+
+    await reqAgent.delete(BASE_URL + "/" + book.id).expect(204);
+  });
+
+  it("should return status 400 when ADMIN try to delete a book with invalid UUID", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+
+    const { body } = await reqAgent
+      .delete(BASE_URL + "/invalid-uuid")
+      .expect(400);
+
+    expect(body).toHaveProperty("message");
+    expect(body).toHaveProperty("errors");
+  });
+
+  it("should return status 404 when ADMIN try to delete a book that not exists", async () => {
+    const { reqAgent } = await loginWithUser("admin");
+    const UUID = crypto.randomUUID();
+
+    const { body } = await reqAgent.delete(BASE_URL + "/" + UUID).expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 403 when USER try to delete a book", async () => {
+    const { reqAgent } = await loginWithUser("user");
+
+    const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return status 401 when non authenticated try to delete a book", async () => {
+    const { body } = await req
+      .delete(BASE_URL + "/" + "invalid-uuid")
+      .expect(401);
 
     expect(body).toHaveProperty("message");
   });

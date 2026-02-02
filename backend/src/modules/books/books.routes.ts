@@ -54,6 +54,13 @@ export class BookRoutes {
       validateMiddleware({ params: bookParamsDto, body: updateBookDto }),
       this.controller.update,
     );
+    this.router.delete(
+      "/:id",
+      authMiddleware,
+      adminOnlyMiddleware,
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.delete,
+    );
   }
 
   get routes() {

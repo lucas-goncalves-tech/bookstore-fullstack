@@ -92,6 +92,8 @@ export class BookService {
       throw new NotFoundError("Livro não encontrado");
     }
 
+    await this.bookRepository.delete(id);
+
     if (bookExist.coverUrl && bookExist.coverThumbUrl) {
       this.cleanupOldCover(bookExist.coverUrl, bookExist.coverThumbUrl).catch(
         (error) => {
@@ -103,7 +105,5 @@ export class BookService {
         },
       );
     }
-
-    await this.bookRepository.delete(id);
   }
 }
