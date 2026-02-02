@@ -131,7 +131,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
     }
 
     const { body } = await req
-      .get(BASE_URL + "?categoryId=" + adventure.id)
+      .get(BASE_URL + "?categorySlug=" + adventure.slug)
       .expect(200);
 
     expect(body.data).toHaveLength(5);

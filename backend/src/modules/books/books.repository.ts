@@ -22,7 +22,7 @@ export class BookRepository implements IBookRepository {
   async findMany({
     page = 1,
     limit = 10,
-    categoryId,
+    categorySlug,
     search,
     minPrice,
     maxPrice,
@@ -32,7 +32,7 @@ export class BookRepository implements IBookRepository {
     const where: Prisma.BookWhereInput = {};
 
     where.deletedAt = null;
-    if (categoryId) where.categoryId = categoryId;
+    if (categorySlug) where.category = { slug: categorySlug };
     if (search)
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },
@@ -49,7 +49,7 @@ export class BookRepository implements IBookRepository {
         where,
         skip,
         take: safeLimit,
-        orderBy: { createdAt: "desc" }
+        orderBy: { createdAt: "desc" },
       }),
       this.prisma.book.count({ where }),
     ]);

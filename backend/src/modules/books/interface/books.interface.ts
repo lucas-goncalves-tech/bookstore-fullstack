@@ -11,7 +11,7 @@ export type IUpdateBookInput = Partial<ICreateBookInput> & {
 
 export interface IFindManyQuery {
   search?: string;
-  categoryId?: string;
+  categorySlug?: string;
   page?: number;
   limit?: number;
   minPrice?: number;
