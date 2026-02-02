@@ -63,6 +63,7 @@ export function BooksTable({ onEdit }: BooksTableProps) {
               <TableHead className="w-[80px]">Capa</TableHead>
               <TableHead>Título</TableHead>
               <TableHead>Autor</TableHead>
+              <TableHead>Categoria</TableHead>
               <TableHead>Preço</TableHead>
               <TableHead>Estoque</TableHead>
               <TableHead className="text-right">Ações</TableHead>
@@ -84,6 +85,7 @@ export function BooksTable({ onEdit }: BooksTableProps) {
                 </TableCell>
                 <TableCell className="font-medium">{book.title}</TableCell>
                 <TableCell>{book.author}</TableCell>
+                <TableCell>{book.category?.name ?? "Sem categoria"}</TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
