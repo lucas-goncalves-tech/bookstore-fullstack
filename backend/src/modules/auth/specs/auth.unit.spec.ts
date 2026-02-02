@@ -10,7 +10,7 @@ import {
 describe("AuthService UNIT", () => {
   const mockUsersRepository: Mocked<IUsersRepository> = {
     create: vi.fn(),
-    findByEmail: vi.fn(),
+    findByKey: vi.fn(),
   };
 
   const service = new AuthService(mockUsersRepository);
@@ -25,11 +25,14 @@ describe("AuthService UNIT", () => {
       email: newUser.email,
       name: newUser.name,
     });
-    mockUsersRepository.findByEmail.mockResolvedValue(null);
+    mockUsersRepository.findByKey.mockResolvedValue(null);
     mockUsersRepository.create.mockResolvedValue(fakeUser);
     const result = await service.create(newUser);
 
-    expect(mockUsersRepository.findByEmail).toHaveBeenCalledWith(newUser.email);
+    expect(mockUsersRepository.findByKey).toHaveBeenCalledWith(
+      "email",
+      newUser.email,
+    );
     expect(mockUsersRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
         email: newUser.email,
@@ -47,9 +50,12 @@ describe("AuthService UNIT", () => {
     const newUser = generateNewUser();
     const fakeUser = generateFakeUser();
 
-    mockUsersRepository.findByEmail.mockResolvedValue(fakeUser);
+    mockUsersRepository.findByKey.mockResolvedValue(fakeUser);
 
     await expect(service.create(newUser)).rejects.toThrow(ConflictError);
-    expect(mockUsersRepository.findByEmail).toHaveBeenCalledWith(newUser.email);
+    expect(mockUsersRepository.findByKey).toHaveBeenCalledWith(
+      "email",
+      newUser.email,
+    );
   });
 });

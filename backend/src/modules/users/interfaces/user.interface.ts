@@ -10,5 +10,5 @@ export type ISafeUser = Omit<User, "passwordHash" | "id">;
 
 export abstract class IUsersRepository {
   abstract create(data: ICreateUser): Promise<User>;
-  abstract findByEmail(email: string): Promise<User | null>;
+  abstract findByKey(key: "id" | "email", value: string): Promise<User | null>;
 }

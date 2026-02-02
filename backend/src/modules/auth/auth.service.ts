@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async create(data: ICreateUserInput): Promise<ISafeUser> {
-    const userExist = await this.usersRepository.findByEmail(data.email);
+    const userExist = await this.usersRepository.findByKey("email", data.email);
     if (userExist) {
       throw new ConflictError("Email já cadastrado");
     }
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async login(data: ILoginInput): Promise<string> {
-    const userExist = await this.usersRepository.findByEmail(data.email);
+    const userExist = await this.usersRepository.findByKey("email", data.email);
     const FAKE_HASH =
       "$2b$10$D7Y/.IVUm.SFcnYQE4dlb.BPJtVCwmOV/kaehohZrWeodfAEP8qqS";
     const hashToCompare = userExist ? userExist.passwordHash : FAKE_HASH;

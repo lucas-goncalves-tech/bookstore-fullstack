@@ -7,11 +7,15 @@ import { User } from "@prisma/client";
 export class UsersRepository implements IUsersRepository {
   constructor(@inject(PrismaDB) private readonly prisma: PrismaDB) {}
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByKey(key: "id" | "email", value: string): Promise<User | null> {
+    if (key === "email") {
+      return await this.prisma.user.findUnique({
+        where: { email: value },
+      });
+    }
+
     return await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { id: value },
     });
   }
 
