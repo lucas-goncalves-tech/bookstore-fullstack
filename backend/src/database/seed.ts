@@ -225,6 +225,19 @@ async function main() {
     },
   });
 
+  const hashUser = await bcrypt.hash("123123123", env.SALT);
+
+  await prisma_seed.user.upsert({
+    where: { email: "user@user.com" },
+    update: {},
+    create: {
+      email: "user@user.com",
+      name: "User",
+      passwordHash: hashUser,
+      role: "USER",
+    },
+  });
+
   //eslint-disable-next-line
   console.log(`Usuário Admin ${adminName} criado com sucesso!`);
 

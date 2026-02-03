@@ -6,7 +6,7 @@ import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 
 // Delete book
 const deleteBook = async (id: string): Promise<void> => {
-  await api.delete(`/admin/books/${id}`);
+  await api.delete(`/books/${id}`);
 };
 
 export function useDeleteBook() {

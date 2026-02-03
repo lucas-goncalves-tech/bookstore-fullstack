@@ -11,7 +11,7 @@ const createBook = async (data: BookFormValues): Promise<Book> => {
   const { coverImage, ...bookData } = data;
 
   // 1. Create book with JSON data
-  const { data: createdBook } = await api.post<Book>("/admin/books", bookData);
+  const { data: createdBook } = await api.post<Book>("/books", bookData);
 
   // 2. Upload cover image if exists
   if (coverImage && coverImage.length > 0) {
