@@ -18,12 +18,19 @@ enum Role {
   ADMIN
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+}
+
 model User {
   id           String @id @default(uuid())
   email        String @unique
   name         String
   passwordHash String @map("password_hash")
   role         Role   @default(USER)
+
+  order Order[]
 
   @@map("users")
 }
@@ -56,8 +63,42 @@ model Book {
   createdAt DateTime  @default(now()) @map("created_at")
   deletedAt DateTime? @map("deleted_at")
 
+  orderItems OrderItems[]
+
   @@index([title])
   @@index([author])
   @@index([categoryId])
   @@map("books")
+}
+
+model Order {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  total     Int
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  orderItems OrderItems[]
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderItems {
+  id String @id
+
+  orderId String @map("order_id")
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  bookId String @map("book_id")
+  book   Book   @relation(fields: [bookId], references: [id])
+
+  quantity    Int
+  priceAtTime Decimal  @map("price_at_time") @db.Decimal(10, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("order_items")
 }
