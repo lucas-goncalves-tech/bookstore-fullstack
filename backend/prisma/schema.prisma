@@ -63,7 +63,7 @@ model Book {
   createdAt DateTime  @default(now()) @map("created_at")
   deletedAt DateTime? @map("deleted_at")
 
-  orderItems OrderItems[]
+  orderItems OrderItem[]
 
   @@index([title])
   @@index([author])
@@ -77,18 +77,18 @@ model Order {
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id])
 
-  total     Int
+  total     Decimal     @db.Decimal(10, 2)
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now()) @map("created_at")
 
-  orderItems OrderItems[]
+  orderItem OrderItem[]
 
   @@index([userId])
   @@map("orders")
 }
 
-model OrderItems {
-  id String @id
+model OrderItem {
+  id String @id @default(uuid())
 
   orderId String @map("order_id")
   order   Order  @relation(fields: [orderId], references: [id])
