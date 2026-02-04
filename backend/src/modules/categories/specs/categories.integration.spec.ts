@@ -24,7 +24,7 @@ function generateCategory(): ICreateCategoryInput {
 }
 
 describe(`GET ${BASE_URL}`, () => {
-  it("should return all categories", async () => {
+  it("should return 200 and list all categories when categories exist", async () => {
     for (let i = 1; i <= 3; i++) {
       await createCategory({
         name: `Categoria ${i}`,
@@ -37,14 +37,14 @@ describe(`GET ${BASE_URL}`, () => {
     expect(body[0]).toMatchObject(expectedCategoryShape());
   });
 
-  it("should return empty array when no categories are created", async () => {
+  it("should return 200 and empty array when no categories exist", async () => {
     const { body } = await req.get(BASE_URL).expect(200);
     expect(body).toHaveLength(0);
   });
 });
 
 describe(`POST ${BASE_URL}`, () => {
-  it("should allow ADMIN to create a category", async () => {
+  it("should return 201 and create category when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const newCategory = generateCategory();
 
@@ -57,7 +57,7 @@ describe(`POST ${BASE_URL}`, () => {
     expect(body.data).toMatchObject(expectedCategoryShape());
   });
 
-  it("should return status 400 when ADMIN try to create a category with invalid fields", async () => {
+  it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
     const { reqAgent } = await loginWithUser("admin");
 
     const { body } = await reqAgent
@@ -76,14 +76,14 @@ describe(`POST ${BASE_URL}`, () => {
     expect(errors).toContain("description");
   });
 
-  it("should return status 403 when USER try to create a category", async () => {
+  it("should return 403 Forbidden when USER tries to create a category", async () => {
     const { reqAgent } = await loginWithUser("user");
     const { body } = await reqAgent.post(BASE_URL).expect(403);
 
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to create a category", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to create a category", async () => {
     const { body } = await req.post(BASE_URL).expect(401);
 
     expect(body).toHaveProperty("message");
@@ -91,7 +91,7 @@ describe(`POST ${BASE_URL}`, () => {
 });
 
 describe(`PUT ${BASE_URL}/:id`, () => {
-  it("should allow ADMIN to update a category", async () => {
+  it("should return 200 and update category when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const category = await createCategory();
     const newCategory = generateCategory();
@@ -108,7 +108,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body.data.description).toBe(newCategory.description);
   });
 
-  it("should return status 400 when ADMIN try to update a category with invalid fields", async () => {
+  it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const category = await createCategory();
 
@@ -128,7 +128,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(errors).toContain("description");
   });
 
-  it("should return status 404 when ADMIN try to update a non existing category", async () => {
+  it("should return 404 NotFound when ADMIN tries to update non-existent category", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const newCategory = generateCategory();
     const UUID = crypto.randomUUID();
@@ -141,14 +141,14 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 403 when USER try to update a category", async () => {
+  it("should return 403 Forbidden when USER tries to update a category", async () => {
     const { reqAgent } = await loginWithUser("user");
     const { body } = await reqAgent.put(BASE_URL + "/1234").expect(403);
 
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to update a category", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to update a category", async () => {
     const { body } = await req.put(BASE_URL + "/1234").expect(401);
 
     expect(body).toHaveProperty("message");
@@ -156,14 +156,14 @@ describe(`PUT ${BASE_URL}/:id`, () => {
 });
 
 describe(`DELETE ${BASE_URL}/:id`, () => {
-  it("should allow ADMIN to delete a category", async () => {
+  it("should return 204 and delete category when ADMIN sends valid ID", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const category = await createCategory();
 
     await reqAgent.delete(BASE_URL + "/" + category.id).expect(204);
   });
 
-  it("should return status 404 when ADMIN try to delete a non existing category", async () => {
+  it("should return 404 NotFound when ADMIN tries to delete non-existent category", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const UUID = crypto.randomUUID();
 
@@ -172,14 +172,14 @@ describe(`DELETE ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 403 when USER try to delete a category", async () => {
+  it("should return 403 Forbidden when USER tries to delete a category", async () => {
     const { reqAgent } = await loginWithUser("user");
     const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
 
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to delete a category", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to delete a category", async () => {
     const { body } = await req.delete(BASE_URL + "/1234").expect(401);
 
     expect(body).toHaveProperty("message");

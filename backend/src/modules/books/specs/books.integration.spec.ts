@@ -56,7 +56,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
     );
   });
 
-  it("should return paginated books with default limit", async () => {
+  it("should return 200 and paginated books with default limit of 10", async () => {
     const { body } = await req.get(BASE_URL).expect(200);
 
     expect(body.data).toHaveLength(10);
@@ -69,7 +69,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
     });
   });
 
-  it("should return remaining items on page 2", async () => {
+  it("should return 200 and remaining items when requesting page 2", async () => {
     const { body } = await req.get(BASE_URL + "?page=2").expect(200);
 
     expect(body.data).toHaveLength(5);
@@ -82,7 +82,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
     });
   });
 
-  it("should return paginate books with custom limit", async () => {
+  it("should return 200 and paginated books when custom limit is provided", async () => {
     const { body } = await req.get(BASE_URL + "?limit=5").expect(200);
 
     expect(body.data).toHaveLength(5);
@@ -95,7 +95,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
     });
   });
 
-  it("should return empty array when page exceeds total", async () => {
+  it("should return 200 and empty array when page exceeds total pages", async () => {
     const { body } = await req.get(BASE_URL + "?page=5").expect(200);
 
     expect(body.data).toHaveLength(0);
@@ -109,7 +109,7 @@ describe(`GET ${BASE_URL} - Pagination`, () => {
 });
 
 describe(`GET ${BASE_URL} - Filters`, () => {
-  it("should filter books by categoryId", async () => {
+  it("should return 200 and filtered books when categorySlug is provided", async () => {
     const adventure = await createCategory({
       name: "adventure",
       slug: "adventure",
@@ -143,7 +143,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
     });
   });
 
-  it("should search books by title", async () => {
+  it("should return 200 and filtered books when search query matches title", async () => {
     const title = "Lord of the ring";
 
     await createBook({
@@ -167,7 +167,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
   });
 
   // ✅ 1 teste de combinação
-  it("should combine filters with pagination", async () => {
+  it("should return 200 and filtered paginated books when combining search with pagination", async () => {
     const title = "Lord of the ring";
     for (let i = 1; i <= 15; i++) {
       await createBook({
@@ -194,7 +194,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
     });
   });
 
-  it("should filter books by min price", async () => {
+  it("should return 200 and filtered books when minPrice is provided", async () => {
     for (let i = 1; i <= 5; i++) {
       await createBook({
         price: new Decimal("10.00"),
@@ -222,7 +222,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
     });
   });
 
-  it("should filter books by max price", async () => {
+  it("should return 200 and filtered books when maxPrice is provided", async () => {
     for (let i = 1; i <= 5; i++) {
       await createBook({
         price: new Decimal("10.00"),
@@ -252,7 +252,7 @@ describe(`GET ${BASE_URL} - Filters`, () => {
 });
 
 describe(`GET ${BASE_URL}/:id`, () => {
-  it("should return book by id", async () => {
+  it("should return 200 and book data when valid ID is provided", async () => {
     const book = await createBook();
     const { body } = await req.get(BASE_URL + "/" + book.id).expect(200);
 
@@ -260,14 +260,14 @@ describe(`GET ${BASE_URL}/:id`, () => {
     expect(body.id).toBe(book.id);
   });
 
-  it("should return status 404 when book not found", async () => {
+  it("should return 404 NotFound when book ID does not exist", async () => {
     const UUID = crypto.randomUUID();
     const { body } = await req.get(BASE_URL + "/" + UUID).expect(404);
 
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 400 when id is invalid", async () => {
+  it("should return 400 BadRequest when ID is not a valid UUID", async () => {
     const { body } = await req.get(BASE_URL + "/invalid-uuid").expect(400);
     const errors = body.errors.map((e: object) => Object.keys(e)[0]);
 
@@ -277,7 +277,7 @@ describe(`GET ${BASE_URL}/:id`, () => {
 });
 
 describe(`POST ${BASE_URL}`, () => {
-  it("should allow ADMIN to create a book", async () => {
+  it("should return 201 and create book when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const newBook = await generateNewBook();
 
@@ -289,7 +289,7 @@ describe(`POST ${BASE_URL}`, () => {
     expect(body.data.author).toBe(newBook.author);
   });
 
-  it("should return status 400 when ADMIN try to create a book with invalid data", async () => {
+  it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const newBook = await generateNewBook({
       title: "",
@@ -312,7 +312,7 @@ describe(`POST ${BASE_URL}`, () => {
     expect(errors).toContain("categoryId");
   });
 
-  it("should return status 403 when USER try to create a book", async () => {
+  it("should return 403 Forbidden when USER tries to create a book", async () => {
     const { reqAgent } = await loginWithUser("user");
     const newBook = generateNewBook();
 
@@ -321,7 +321,7 @@ describe(`POST ${BASE_URL}`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to create a book", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to create a book", async () => {
     const newBook = generateNewBook();
 
     const { body } = await req.post(BASE_URL).send(newBook).expect(401);
@@ -331,7 +331,7 @@ describe(`POST ${BASE_URL}`, () => {
 });
 
 describe(`POST ${BASE_URL}/:id/cover`, () => {
-  it("should allow ADMIN to upload a cover image to book", async () => {
+  it("should return 201 and upload cover when ADMIN attaches valid image", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/valid-size.jpg");
@@ -345,7 +345,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     expect(body.data).toMatchObject(expectecBookShape());
   });
 
-  it("should return status 400 when don't attach file", async () => {
+  it("should return 400 BadRequest when no file is attached", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
 
@@ -357,7 +357,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     expect(body).toHaveProperty("errors");
   });
 
-  it("should return status 400 when file type is invalid (only jpeg, jpg, png, webp)", async () => {
+  it("should return 400 BadRequest when file type is not allowed (only jpeg, jpg, png, webp)", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const coverPath = path.resolve(__dirname, "fixtures/invalid-type.gif");
@@ -371,7 +371,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     expect(body).toHaveProperty("errors");
   });
 
-  it("should return status 404 when book not found", async () => {
+  it("should return 404 NotFound when book ID does not exist", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const UUID = crypto.randomUUID();
     const file = path.resolve(__dirname, "fixtures/valid-size.jpg");
@@ -384,7 +384,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 403 when USER try to upload", async () => {
+  it("should return 403 Forbidden when USER tries to upload cover", async () => {
     const { reqAgent } = await loginWithUser("user");
 
     const { body } = await reqAgent
@@ -394,7 +394,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to upload", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to upload cover", async () => {
     const { body } = await req
       .post(BASE_URL + "/" + "invalid-uuid" + "/cover")
       .expect(401);
@@ -404,7 +404,7 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
 });
 
 describe(`PUT ${BASE_URL}/:id`, () => {
-  it("should allow ADMIN to update a book", async () => {
+  it("should return 200 and update book when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const updatedBook = await generateNewBook({
@@ -424,7 +424,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body.data.author).toBe(updatedBook.author);
   });
 
-  it("should return status 400 when ADMIN try to update a book with invalid data", async () => {
+  it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
     const updatedBook = await generateNewBook({
@@ -452,7 +452,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(errors).toContain("categoryId");
   });
 
-  it("should return status 404 when ADMIN try to update a book that not exists", async () => {
+  it("should return 404 NotFound when ADMIN tries to update non-existent book", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const UUID = crypto.randomUUID();
     const updatedBook = await generateNewBook({
@@ -469,7 +469,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 403 when USER try to update a book", async () => {
+  it("should return 403 Forbidden when USER tries to update a book", async () => {
     const { reqAgent } = await loginWithUser("user");
     const book = await createBook();
     const updatedBook = await generateNewBook({
@@ -486,7 +486,7 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to update a book", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to update a book", async () => {
     const { body } = await req.put(BASE_URL + "/1234").expect(401);
 
     expect(body).toHaveProperty("message");
@@ -494,14 +494,14 @@ describe(`PUT ${BASE_URL}/:id`, () => {
 });
 
 describe(`DELETE ${BASE_URL}/:id`, () => {
-  it("should allow ADMIN to delete a book", async () => {
+  it("should return 204 and delete book when ADMIN sends valid ID", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const book = await createBook();
 
     await reqAgent.delete(BASE_URL + "/" + book.id).expect(204);
   });
 
-  it("should return status 400 when ADMIN try to delete a book with invalid UUID", async () => {
+  it("should return 400 BadRequest when ADMIN sends invalid UUID", async () => {
     const { reqAgent } = await loginWithUser("admin");
 
     const { body } = await reqAgent
@@ -512,7 +512,7 @@ describe(`DELETE ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("errors");
   });
 
-  it("should return status 404 when ADMIN try to delete a book that not exists", async () => {
+  it("should return 404 NotFound when ADMIN tries to delete non-existent book", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const UUID = crypto.randomUUID();
 
@@ -521,7 +521,7 @@ describe(`DELETE ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 403 when USER try to delete a book", async () => {
+  it("should return 403 Forbidden when USER tries to delete a book", async () => {
     const { reqAgent } = await loginWithUser("user");
 
     const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
@@ -529,7 +529,7 @@ describe(`DELETE ${BASE_URL}/:id`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 401 when non authenticated try to delete a book", async () => {
+  it("should return 401 Unauthorized when unauthenticated user tries to delete a book", async () => {
     const { body } = await req
       .delete(BASE_URL + "/" + "invalid-uuid")
       .expect(401);

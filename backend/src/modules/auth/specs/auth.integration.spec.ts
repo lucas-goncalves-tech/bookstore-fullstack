@@ -3,7 +3,7 @@ import { postNewUser, BASE_URL } from "../../../tests/helpers/auth.helper";
 import { req } from "../../../tests/helpers/commom.helper";
 
 describe(`POST ${BASE_URL}/register`, () => {
-  it("should register user with valid body", async () => {
+  it("should return 201 and register user when body contains valid data", async () => {
     const { registerBody, registerStatus, newUser } = await postNewUser();
 
     expect(registerStatus).toBe(201);
@@ -17,7 +17,7 @@ describe(`POST ${BASE_URL}/register`, () => {
     expect(registerBody.data).not.toHaveProperty("passwordHash");
   });
 
-  it("should return status 409 when email already exist", async () => {
+  it("should return 409 Conflict when email is already registered", async () => {
     const email = "user@exist.com";
     await postNewUser({
       email,
@@ -30,7 +30,7 @@ describe(`POST ${BASE_URL}/register`, () => {
     expect(registerBody).toHaveProperty("message");
   });
 
-  it("should return status 400 when body contain invalid fields", async () => {
+  it("should return 400 BadRequest when body contains invalid fields", async () => {
     const { registerStatus, registerBody } = await postNewUser({
       name: "\u200B\u200B\u200B",
       email: "not-valid-com",
@@ -50,7 +50,7 @@ describe(`POST ${BASE_URL}/register`, () => {
 });
 
 describe(`POST ${BASE_URL}/login`, () => {
-  it("should login and set cookies with valid credentials", async () => {
+  it("should return 204 and set HttpOnly cookies when credentials are valid", async () => {
     const { newUser } = await postNewUser();
 
     const { headers, body } = await req
@@ -67,7 +67,7 @@ describe(`POST ${BASE_URL}/login`, () => {
     expect(cookies).contains("HttpOnly");
   });
 
-  it("should return status 401 when credentials is invalid", async () => {
+  it("should return 401 Unauthorized when credentials are invalid", async () => {
     const { body } = await req
       .post(BASE_URL + "/login")
       .send({
@@ -79,7 +79,7 @@ describe(`POST ${BASE_URL}/login`, () => {
     expect(body).toHaveProperty("message");
   });
 
-  it("should return status 400 when body have invalid fields", async () => {
+  it("should return 400 BadRequest when body contains invalid fields", async () => {
     const { body } = await req
       .post(BASE_URL + "/login")
       .send({

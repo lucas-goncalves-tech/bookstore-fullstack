@@ -8,6 +8,7 @@ import "../modules/auth/auth.doc";
 import { BookRoutes } from "../modules/books/books.routes";
 import { CategoriesRoutes } from "../modules/categories/categories.routes";
 import { UsersRoutes } from "../modules/users/users.routes";
+import { OrderRoutes } from "../modules/orders/orders.routes";
 
 @injectable()
 export class Routes {
@@ -19,6 +20,8 @@ export class Routes {
     private readonly categoriesRoutes: CategoriesRoutes,
     @inject(UsersRoutes)
     private readonly usersRoutes: UsersRoutes,
+    @inject(OrderRoutes)
+    private readonly orderRoutes: OrderRoutes,
   ) {
     this.router = Router();
     this.routes();
@@ -37,6 +40,7 @@ export class Routes {
     this.router.use("/api/v1/books", this.bookRoutes.routes);
     this.router.use("/api/v1/categories", this.categoriesRoutes.routes);
     this.router.use("/api/v1/users", this.usersRoutes.routes);
+    this.router.use("/api/v1/orders", this.orderRoutes.routes);
 
     // not found
     this.router.use((req, res) => {

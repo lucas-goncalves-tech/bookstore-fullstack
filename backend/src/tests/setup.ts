@@ -35,6 +35,11 @@ const user = {
   passwordHash,
   name: "User",
 };
+const user2 = {
+  email: "test@user-second.com",
+  passwordHash,
+  name: "User Second",
+};
 const admin = {
   email: "test@admin.com",
   passwordHash,
@@ -43,12 +48,14 @@ const admin = {
 };
 
 beforeEach(async () => {
+  await prisma_test.orderItem.deleteMany();
+  await prisma_test.order.deleteMany();
   await prisma_test.book.deleteMany();
   await prisma_test.category.deleteMany();
   await prisma_test.user.deleteMany();
 
   await prisma_test.user.createMany({
-    data: [user, admin],
+    data: [user, user2, admin],
   });
 });
 

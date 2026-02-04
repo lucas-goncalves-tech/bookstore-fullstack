@@ -19,7 +19,7 @@ export class OrderService {
           },
         },
       });
-      const bookMap = new Map(books.map((b) => [b.id, b]));
+      const bookMap = new Map(books?.map((b) => [b.id, b]));
 
       const order = await tx.order.create({
         data: { userId, total: 0 },
