@@ -2,6 +2,7 @@ import { agent } from "supertest";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
 import { app, req } from "../helpers/commom.helper";
 import { User } from "@prisma/client";
+import { prisma_test } from "../setup";
 
 export function generateNewUser(
   override?: Record<string, unknown>,
@@ -51,9 +52,18 @@ export async function loginWithUser(role: "user" | "user-second" | "admin") {
     password: "12345678",
   });
 
+  const user = await prisma_test.user.findUnique({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
   return {
     loginBody: body,
     loginStatus: status,
     reqAgent,
+    user,
   };
 }

@@ -21,6 +21,7 @@ This is a modern web application frontend built with **Next.js 15** and **React 
 - **Data Fetching:** [TanStack Query v5](https://tanstack.com/query/latest) (React Query)
 - **HTTP Client:** [Axios](https://axios-http.com/)
 - **Toasts:** [Sonner](https://sonner.emilkowal.ski/)
+- **State Management:** [Zustand](https://zustand.docs.pmnd.rs/)
 
 ### Architecture
 
@@ -31,6 +32,7 @@ The project follows the standard Next.js App Router directory structure within t
 
 - `ai-files`: Contains file to use as context for the AI agent to create pages and components.
 - `src/app/`: Contains the application routes, layouts, and pages.
+  - `src/app/admin/`: Admin dashboard and management routes.
   - `src/app/auth/`: Authentication related routes.
     - `src/app/auth/page.tsx`: Login page (main auth entry).
     - `src/app/auth/register/page.tsx`: Registration page.
@@ -45,10 +47,16 @@ The project follows the standard Next.js App Router directory structure within t
   - `src/modules/home/`: Home page feature module.
     - `src/modules/home/schemas/`: Zod schemas (book.schema.ts, category.schema.ts).
     - `src/modules/home/hooks/`: TanStack Query hooks and query-keys helper.
-      - `query-keys.ts`: SST pattern for centralized query keys.
-      - `use-books.ts`: Hook for fetching books with filters.
-      - `use-categories.ts`: Hook for fetching categories (graceful fallback).
-    - `src/modules/home/components/`: UI components (hero-section, book-filter, book-card, book-grid, footer, main).
+    - `src/modules/home/components/`: UI components (hero-section, book-filter, book-grid).
+  - `src/modules/cart/`: Shopping cart module.
+    - `src/modules/cart/store/`: Zustand store for cart state (`cart.store.ts`).
+    - `src/modules/cart/components/`: Cart-specific UI (`cart-sheet.tsx`, `cart-item.tsx`, `cart-summary.tsx`).
+  - `src/modules/orders/`: Orders module.
+    - `src/modules/orders/hooks/`: Mutations for order creation (`use-create-order.ts`).
+    - `src/modules/orders/schemas/`: Validation schemas for orders.
+  - `src/modules/admin/`: Admin management module.
+    - Organized by sub-domains: `books`, `categories`, `dashboard`, `users`.
+    - Each sub-domain follows the MVVM pattern (hooks, components, schemas).
 - `src/lib/`: Utility functions and client configurations.
   - `src/lib/utils.ts`: Contains the `cn` utility for merging Tailwind classes.
   - `src/lib/axios.ts`: Configured Axios instance for API communication.

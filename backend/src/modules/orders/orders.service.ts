@@ -4,10 +4,15 @@ import { OrderItems } from "./interface/orders.interface";
 import { ConflictError } from "../../shared/errors/conflict.error";
 import { NotFoundError } from "../../shared/errors/not-found-error";
 import { Decimal } from "@prisma/client/runtime/client";
+import { OrdersRepository } from "./orders.repository";
 
 @injectable()
 export class OrderService {
-  constructor(@inject(PrismaDB) private readonly prisma: PrismaDB) {}
+  constructor(
+    @inject(PrismaDB) private readonly prisma: PrismaDB,
+    @inject(OrdersRepository)
+    private readonly ordersRepository: OrdersRepository,
+  ) {}
 
   async createOrder(userId: string, items: OrderItems[]) {
     await this.prisma.$transaction(async (tx) => {
@@ -68,5 +73,14 @@ export class OrderService {
 
       return order;
     });
+  }
+
+  async findMany(userId: string) {
+    const orders = await this.ordersRepository.findMany(userId);
+    const safeOrders = orders.map((order) => ({
+      ...order,
+      userId: "[SAFE_ID]",
+    }));
+    return safeOrders;
   }
 }

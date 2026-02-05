@@ -20,6 +20,8 @@ export class OrderRoutes {
       validateMiddleware({ body: createOrderDto }),
       this.controller.createOrder,
     );
+
+    this.router.get("/", authMiddleware, this.controller.findMany);
   }
 
   get routes() {

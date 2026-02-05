@@ -19,4 +19,13 @@ export class OrderController {
     await this.orderService.createOrder(id, items);
     return res.status(201).json({ message: "Pedido criado com sucesso!" });
   };
+
+  findMany = async (req: Request, res: Response) => {
+    const id = req.user?.sid;
+    if (!id) {
+      throw new UnauthorizedError("Usuário não autenticado!");
+    }
+    const orders = await this.orderService.findMany(id);
+    return res.status(200).json(orders);
+  };
 }

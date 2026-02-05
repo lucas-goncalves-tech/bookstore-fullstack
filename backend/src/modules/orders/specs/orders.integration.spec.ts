@@ -3,6 +3,7 @@ import { createBook } from "../../../tests/factories/book.factory";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { req } from "../../../tests/helpers/commom.helper";
 import { prisma_test } from "../../../tests/setup";
+import { createOrderWithItem } from "../../../tests/factories/order.factory";
 
 const BASE_URL = "/api/v1/orders";
 
@@ -150,6 +151,48 @@ describe(`POST ${BASE_URL}`, () => {
     const { reqAgent } = await loginWithUser("user");
 
     const { body } = await reqAgent.post(BASE_URL).send(order).expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+});
+
+describe(`GET ${BASE_URL}`, () => {
+  it("should return list with orders,orderItems and books when user is authenticated", async () => {
+    const { reqAgent, user } = await loginWithUser("user");
+    const book = await createBook({ stock: 3 });
+    await createOrderWithItem({
+      userId: user.id,
+      bookId: book.id,
+      quantity: 3,
+      priceAtTime: book.price,
+    });
+
+    const { body } = await reqAgent.get(BASE_URL).expect(200);
+
+    expect(body).toHaveLength(1);
+    expect(body[0]).toMatchObject({
+      id: expect.any(String),
+      userId: expect.any(String),
+      total: expect.any(String),
+      status: expect.any(String),
+      createdAt: expect.any(String),
+    });
+    expect(body[0].orderItem[0]).toMatchObject({
+      quantity: expect.any(Number),
+      priceAtTime: expect.any(String),
+      book: {
+        id: expect.any(String),
+        title: expect.any(String),
+        author: expect.any(String),
+        coverUrl: null,
+        coverThumbUrl: null,
+        category: null,
+      },
+    });
+  });
+
+  it("should return 401 Unauthorized when nonauthenticated user tries to get orders", async () => {
+    const { body } = await req.get(BASE_URL).expect(401);
 
     expect(body).toHaveProperty("message");
   });

@@ -12,6 +12,7 @@
 ![Lucide](https://img.shields.io/badge/Lucide-000000?style=for-the-badge&logo=lucide&logoColor=white)
 ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=for-the-badge&logo=react-hook-form&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-3982CE?style=for-the-badge&logo=Zod&logoColor=white)
+![Zustand](https://img.shields.io/badge/zustand-000000?style=for-the-badge&logo=zustand&logoColor=white)
 ![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge&logo=tanstack-query&logoColor=white)
 ![Axios](https://img.shields.io/badge/axios-671DFE?style=for-the-badge&logo=axios&logoColor=white)
 
