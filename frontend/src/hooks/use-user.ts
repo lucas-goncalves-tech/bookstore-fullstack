@@ -36,7 +36,7 @@ export function useUser() {
     },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ["users", "me"] });
-      toast.success("Logout realizado com sucesso!");
+      toast.error("Erro ao realizar logout!");
     },
   });
 

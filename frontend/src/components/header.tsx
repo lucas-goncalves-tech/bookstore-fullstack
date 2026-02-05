@@ -24,6 +24,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { useState } from "react";
+import { useCartStore } from "@/modules/cart/store/cart.store";
+import { CartSheet } from "@/modules/cart/components/cart-sheet";
 
 const navLinks = [
   { href: "/", label: "Home", active: true },
@@ -35,6 +38,8 @@ const navLinks = [
 export function Header() {
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, logout } = useUser();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const totalItems = useCartStore((state) => state.getTotalItems());
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -105,9 +110,14 @@ export function Header() {
             size="icon"
             className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
             aria-label="Carrinho de compras"
+            onClick={() => setIsCartOpen(true)}
           >
             <ShoppingCart className="size-5" />
-            <span className="absolute right-0 top-1 size-2 rounded-full bg-primary" />
+            {totalItems > 0 && (
+              <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in-50">
+                {totalItems}
+              </span>
+            )}
           </Button>
 
           {/* Auth Buttons or User Profile */}
@@ -162,6 +172,8 @@ export function Header() {
           </div>
         </div>
       </div>
+
+      <CartSheet open={isCartOpen} onOpenChange={setIsCartOpen} />
     </header>
   );
 }

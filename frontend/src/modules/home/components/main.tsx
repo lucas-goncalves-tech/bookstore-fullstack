@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { toast } from "sonner";
 import { HeroSection } from "./hero-section";
 import { BookFilter, type PriceSortOrder } from "./book-filter";
 import { BookGrid } from "./book-grid";
@@ -11,6 +10,7 @@ import type { BookQueryParams, BooksResponse } from "../schemas/book.schema";
 import type { Book } from "../schemas/book.schema";
 import { Footer } from "@/components/footer";
 import { SimplePagination } from "@/components/simple-pagination";
+import { useCartStore } from "@/modules/cart/store/cart.store";
 
 interface HomeMainProps {
   initialBooks?: BooksResponse | null;
@@ -66,9 +66,14 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
     setPriceSortOrder(order);
   }, []);
 
-  const handleAddToCart = useCallback((book: Book) => {
-    toast.success(`"${book.title}" adicionado ao carrinho!`);
-  }, []);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAddToCart = useCallback(
+    (book: Book) => {
+      addItem(book);
+    },
+    [addItem],
+  );
 
   return (
     <main className="flex min-h-screen flex-1 flex-col">
