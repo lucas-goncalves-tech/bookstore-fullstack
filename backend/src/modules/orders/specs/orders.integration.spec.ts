@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { createBook } from "../../../tests/factories/book.factory";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
+import { req } from "../../../tests/helpers/commom.helper";
+import { prisma_test } from "../../../tests/setup";
 
 const BASE_URL = "/api/v1/orders";
 
@@ -19,6 +21,52 @@ describe(`POST ${BASE_URL}`, () => {
     const { reqAgent } = await loginWithUser("user");
 
     const { body } = await reqAgent.post(BASE_URL).send(order).expect(201);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should drecrement book stock when order is created", async () => {
+    const book = await createBook({
+      stock: 10,
+    });
+    const order = [
+      {
+        id: book.id,
+        quantity: 3,
+      },
+    ];
+
+    const { reqAgent } = await loginWithUser("user");
+
+    await reqAgent.post(BASE_URL).send(order).expect(201);
+
+    const updatedBook = await prisma_test.book.findUnique({
+      where: { id: book.id },
+    });
+
+    expect(updatedBook?.stock).toBe(7);
+  });
+
+  it("should return 400 badRequest when order is invalid", async () => {
+    const order = [
+      {
+        id: "invalid-id",
+        quantity: -1,
+      },
+    ];
+
+    const { reqAgent } = await loginWithUser("user");
+
+    const { body } = await reqAgent.post(BASE_URL).send(order).expect(400);
+    const errors = body.errors.map((error: object) => Object.keys(error)[0]);
+    expect(errors).toContain("[0]quantity");
+    expect(errors).toContain("[0]id");
+  });
+
+  it("should return 400 BadRequest when order is empty array", async () => {
+    const { reqAgent } = await loginWithUser("user");
+
+    const { body } = await reqAgent.post(BASE_URL).send([]).expect(400);
 
     expect(body).toHaveProperty("message");
   });
@@ -60,7 +108,34 @@ describe(`POST ${BASE_URL}`, () => {
       reqAgentSecond.post(BASE_URL).send(order),
     ]);
     const status = [responseUser.status, responseUserSecond.status].sort();
+    const updatedBook = await prisma_test.book.findUnique({
+      where: { id: book.id },
+    });
     expect(status).toEqual([201, 409]);
+    expect(updatedBook?.stock).toBe(0);
+  });
+
+  it("should handle 10 concurrent orders correctly (stress test)", async () => {
+    const book = await createBook({ stock: 1 });
+    const order = [{ id: book.id, quantity: 1 }];
+
+    const { reqAgent } = await loginWithUser("user");
+
+    const responses = await Promise.all(
+      Array.from({ length: 10 }, (_) => reqAgent.post(BASE_URL).send(order)),
+    );
+
+    const successCount = responses.filter((r) => r.status === 201).length;
+    const failCount = responses.filter((r) => r.status === 409).length;
+
+    expect(successCount).toBe(1);
+    expect(failCount).toBe(9);
+  });
+
+  it("should return 401 Unauthorized when nonauthenticated user tries to create an order", async () => {
+    const { body } = await req.post(BASE_URL).expect(401);
+
+    expect(body).toHaveProperty("message");
   });
 
   it("should return 404 NotFound when order contains non-existent book ID", async () => {

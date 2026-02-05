@@ -8,9 +8,14 @@ export class BaseError extends Error {
   ) {
     super(message);
     if (errors instanceof ZodError) {
-      this.errors = errors.issues.map((issue) => ({
-        [issue.path.join(".")]: issue.message,
-      }));
+      this.errors = errors.issues.map((issue) => {
+        const path = issue.path.map((p) =>
+          typeof p === "number" ? `[${p}]` : String(p),
+        );
+        return {
+          [path.join("")]: issue.message,
+        };
+      });
     }
   }
 }

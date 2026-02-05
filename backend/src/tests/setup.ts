@@ -50,8 +50,8 @@ const admin = {
 beforeEach(async () => {
   await prisma_test.orderItem.deleteMany();
   await prisma_test.order.deleteMany();
-  await prisma_test.book.deleteMany();
   await prisma_test.category.deleteMany();
+  await prisma_test.book.deleteMany();
   await prisma_test.user.deleteMany();
 
   await prisma_test.user.createMany({

@@ -442,7 +442,6 @@ describe(`PUT ${BASE_URL}/:id`, () => {
       .expect(400);
 
     const errors = body.errors.map((e: object) => Object.keys(e)[0]);
-
     expect(body).toHaveProperty("message");
     expect(errors).toContain("title");
     expect(errors).toContain("description");
