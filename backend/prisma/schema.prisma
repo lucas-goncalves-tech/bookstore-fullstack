@@ -75,7 +75,7 @@ model Order {
   id String @id @default(uuid())
 
   userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   total     Decimal     @db.Decimal(10, 2)
   status    OrderStatus @default(PENDING)
@@ -91,10 +91,10 @@ model OrderItem {
   id String @id @default(uuid())
 
   orderId String @map("order_id")
-  order   Order  @relation(fields: [orderId], references: [id])
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   bookId String @map("book_id")
-  book   Book   @relation(fields: [bookId], references: [id])
+  book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
 
   quantity    Int
   priceAtTime Decimal  @map("price_at_time") @db.Decimal(10, 2)
