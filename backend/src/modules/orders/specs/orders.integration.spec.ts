@@ -177,22 +177,53 @@ describe(`GET ${BASE_URL}`, () => {
       status: expect.any(String),
       createdAt: expect.any(String),
     });
-    expect(body[0].orderItem[0]).toMatchObject({
+  });
+
+  it("should return 401 Unauthorized when nonauthenticated user tries to get orders", async () => {
+    const { body } = await req.get(BASE_URL).expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});
+
+describe(`GET ${BASE_URL}/:id`, () => {
+  it("should return order,orderItems and books when user is authenticated", async () => {
+    const { reqAgent, user } = await loginWithUser("user");
+    const book = await createBook({ stock: 3 });
+    const order = await createOrderWithItem({
+      userId: user.id,
+      bookId: book.id,
+      quantity: 3,
+      priceAtTime: book.price,
+    });
+
+    const { body } = await reqAgent.get(`${BASE_URL}/${order.id}`).expect(200);
+
+    expect(body).toMatchObject({
+      id: expect.any(String),
+      userId: expect.any(String),
+      total: expect.any(String),
+      status: expect.any(String),
+      createdAt: expect.any(String),
+    });
+    expect(body.orderItem[0]).toMatchObject({
       quantity: expect.any(Number),
       priceAtTime: expect.any(String),
       book: {
         id: expect.any(String),
         title: expect.any(String),
         author: expect.any(String),
-        coverUrl: null,
         coverThumbUrl: null,
         category: null,
       },
     });
   });
 
-  it("should return 401 Unauthorized when nonauthenticated user tries to get orders", async () => {
-    const { body } = await req.get(BASE_URL).expect(401);
+  it("should return 404 NotFound when order is not found", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const { body } = await reqAgent
+      .get(`${BASE_URL}/${crypto.randomUUID()}`)
+      .expect(404);
 
     expect(body).toHaveProperty("message");
   });

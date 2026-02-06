@@ -83,4 +83,16 @@ export class OrderService {
     }));
     return safeOrders;
   }
+
+  async findById(userId: string, id: string) {
+    const order = await this.ordersRepository.findById(userId, id);
+    if (!order) {
+      throw new NotFoundError(`Pedido não encontrado!`);
+    }
+    const safeOrder = {
+      ...order,
+      userId: "[SAFE_ID]",
+    };
+    return safeOrder;
+  }
 }

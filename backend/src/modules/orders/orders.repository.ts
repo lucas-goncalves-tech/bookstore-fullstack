@@ -8,6 +8,13 @@ export class OrdersRepository {
   async findMany(userId: string) {
     return this.prisma.order.findMany({
       where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  async findById(userId: string, id: string) {
+    return this.prisma.order.findUnique({
+      where: { id, userId },
       include: {
         orderItem: {
           select: {
@@ -18,13 +25,8 @@ export class OrdersRepository {
                 id: true,
                 title: true,
                 author: true,
-                coverUrl: true,
                 coverThumbUrl: true,
-                category: {
-                  select: {
-                    name: true,
-                  },
-                },
+                category: { select: { name: true } },
               },
             },
           },

@@ -4,6 +4,7 @@ import { Router } from "express";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { createOrderDto } from "./dtos/orders.dto";
+import { orderParamsDto } from "./dtos/order-params.dto";
 
 @injectable()
 export class OrderRoutes {
@@ -22,6 +23,13 @@ export class OrderRoutes {
     );
 
     this.router.get("/", authMiddleware, this.controller.findMany);
+
+    this.router.get(
+      "/:id",
+      authMiddleware,
+      validateMiddleware({ params: orderParamsDto }),
+      this.controller.findById,
+    );
   }
 
   get routes() {
