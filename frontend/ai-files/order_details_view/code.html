@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Details - Livraria</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen text-[#181411]">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e5e0dc] bg-white px-10 py-3 shadow-sm">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-[#181411]">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+</div>
+<h2 class="text-[#181411] text-lg font-bold leading-tight tracking-[-0.015em]">Livraria</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-[#181411] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Início</a>
+<a class="text-[#181411] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Livros</a>
+<a class="text-[#181411] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Autores</a>
+<a class="text-[#181411] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Promoções</a>
+<a class="text-primary text-sm font-bold leading-normal" href="#">Meus Pedidos</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-6">
+<label class="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#e5e0dc] bg-[#f8f7f6] focus-within:border-primary transition-colors overflow-hidden">
+<div class="text-[#887563] flex items-center justify-center pl-4 bg-transparent">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg bg-transparent text-[#181411] focus:outline-0 placeholder:text-[#887563] px-3 text-sm font-normal leading-normal border-none focus:ring-0" placeholder="Buscar livros, autores..."/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-[#f4f2f0] text-[#181411] transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-[#f4f2f0] text-[#181411] transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 justify-center py-8 px-4 md:px-8 lg:px-12">
+<div class="flex flex-col max-w-[1200px] flex-1 gap-8">
+<!-- Breadcrumbs & Header Actions -->
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-2 text-sm">
+<a class="flex items-center gap-1 text-[#887563] hover:text-primary font-medium" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        Voltar para Meus Pedidos
+                    </a>
+</div>
+<div class="flex flex-wrap items-end justify-between gap-4 bg-white p-6 rounded-xl border border-[#e5e0dc] shadow-sm">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<h1 class="text-[#181411] text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Pedido #12345</h1>
+<span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-800">
+                                Em trânsito
+                            </span>
+</div>
+<p class="text-[#887563] text-base font-normal">Realizado em 24 de Outubro, 2023</p>
+</div>
+<div class="flex gap-3">
+<button class="flex h-10 items-center justify-center gap-2 rounded-lg border border-[#e5e0dc] bg-white px-4 text-sm font-bold text-[#181411] hover:bg-[#f8f7f6] transition-colors">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                            Nota Fiscal
+                        </button>
+<button class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-white hover:bg-[#b56312] transition-colors shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+                            Rastrear Entrega
+                        </button>
+</div>
+</div>
+<!-- Status Progress -->
+<div class="bg-white p-6 rounded-xl border border-[#e5e0dc] shadow-sm">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h3 class="text-[#181411] text-base font-bold">Status do Pedido</h3>
+<span class="text-primary text-sm font-medium">Chega amanhã, 28 Out</span>
+</div>
+<div class="relative w-full h-3 bg-[#f4f2f0] rounded-full overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary rounded-full" style="width: 75%;"></div>
+</div>
+<div class="flex justify-between text-xs font-medium text-[#887563]">
+<span>Pedido Aceito</span>
+<span>Em Separação</span>
+<span class="text-[#181411]">Em Trânsito</span>
+<span>Entregue</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Order Items -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="bg-white rounded-xl border border-[#e5e0dc] shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-[#f4f2f0]">
+<h2 class="text-lg font-bold text-[#181411]">Itens do Pedido (3)</h2>
+</div>
+<div class="divide-y divide-[#f4f2f0]">
+<!-- Item 1 -->
+<div class="flex flex-col sm:flex-row gap-4 p-6">
+<div class="h-32 w-24 shrink-0 overflow-hidden rounded-md bg-[#f4f2f0] border border-[#e5e0dc]">
+<div class="h-full w-full bg-cover bg-center" data-alt="Book cover of The Great Gatsby" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAguks3w9OuMM2WuWtGw7qRQ4ShPPBQBg05FOklA0h5PFnOCo2Rhq4cu-24z-OrA8Tnd9beNL-cCu2pA0EGWWPeL3W_s33Yk8P4QQofqNLc_xZyilPWby24WzMwQqyFGfXxG-5IQGTIwXrE-WMJ6Lekwer2SknfEt-R9vSJrNvjEo1L_ASWc8SFzd5CSxZ7SDP2WpZ4KlSmh8FNCdt57EtZifeWxl4XvsQiIzZc8v4u-yHNvDgKpjQU2z5mRv1ss_1rvIMWvdF0DEgP');"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div>
+<div class="flex justify-between items-start gap-4">
+<h3 class="text-lg font-bold text-[#181411] line-clamp-2">O Grande Gatsby</h3>
+<span class="font-bold text-[#181411]">R$ 49,90</span>
+</div>
+<p class="text-[#887563] text-sm mt-1">F. Scott Fitzgerald</p>
+<p class="text-[#887563] text-sm mt-0.5">Capa Dura</p>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<div class="inline-flex items-center rounded-lg bg-[#f8f7f6] px-3 py-1 text-sm font-medium text-[#181411]">
+                                            Qtd: 1
+                                        </div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col sm:flex-row gap-4 p-6">
+<div class="h-32 w-24 shrink-0 overflow-hidden rounded-md bg-[#f4f2f0] border border-[#e5e0dc]">
+<div class="h-full w-full bg-cover bg-center" data-alt="Book cover of 1984" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA1p69cOZpeniFL6kRjadLvnJ8z9trCdYx4WpQugOmMRc6Sipueirw5rbNp7zXtGSBkbZtYtB9Oa4wCndY7lp7b7Jv7ZbFkqlPxqXtgMAKXeVHg6kL8Ruj3xElTYy95SwxOyZKZM8rgGHRxl1rUBHBigctyX8Q-OHMkBc5Yb4b4QCAWdR5SNMzE8VuVml7h1eK017Iiz9ydtSCfUMS69l3pPQHisNGUDD34ueDq9EQqmjY5qjGI8KDypmO3cDk1ITL_wH5YCUislIHE');"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div>
+<div class="flex justify-between items-start gap-4">
+<h3 class="text-lg font-bold text-[#181411] line-clamp-2">1984</h3>
+<span class="font-bold text-[#181411]">R$ 39,90</span>
+</div>
+<p class="text-[#887563] text-sm mt-1">George Orwell</p>
+<p class="text-[#887563] text-sm mt-0.5">Brochura</p>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<div class="inline-flex items-center rounded-lg bg-[#f8f7f6] px-3 py-1 text-sm font-medium text-[#181411]">
+                                            Qtd: 1
+                                        </div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col sm:flex-row gap-4 p-6">
+<div class="h-32 w-24 shrink-0 overflow-hidden rounded-md bg-[#f4f2f0] border border-[#e5e0dc]">
+<div class="h-full w-full bg-cover bg-center" data-alt="Book cover of Design Systems" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQFfZnWmnc9lABkLa52-g6LKL8Aeg-Sv4MiHouc7R4t9qBFjauJm6nYjF5K4HU663BxUhVC3P8aHS5Lny3H0v06zZ11Y32hA52o5uUWLsrsfce0ciAA6YvWAbwSIonXqTtMCGl52SSppcdi5c6sAUNUsFR8sRcvXND5qFuCdWHcXLjdR834EqF0kQcXsze1sFE5B6U8Ebk8WcCJmDjEQvAc64zIl1fwQOQjSlUnnnoV3xPtiif8SCdTOGCicY3hXbKMPc1th6uUy-R');"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div>
+<div class="flex justify-between items-start gap-4">
+<h3 class="text-lg font-bold text-[#181411] line-clamp-2">Design Systems</h3>
+<span class="font-bold text-[#181411]">R$ 120,00</span>
+</div>
+<p class="text-[#887563] text-sm mt-1">Alla Kholmatova</p>
+<p class="text-[#887563] text-sm mt-0.5">Edição Especial</p>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<div class="inline-flex items-center rounded-lg bg-[#f8f7f6] px-3 py-1 text-sm font-medium text-[#181411]">
+                                            Qtd: 1
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-[#f8f7f6] border-t border-[#e5e0dc] flex justify-end">
+<a class="text-primary text-sm font-bold hover:underline" href="#">Comprar Novamente</a>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar -->
+<div class="flex flex-col gap-6">
+<!-- Summary Card -->
+<div class="bg-white rounded-xl border border-[#e5e0dc] shadow-sm p-6">
+<h3 class="text-lg font-bold text-[#181411] mb-4">Resumo do Pedido</h3>
+<div class="flex flex-col gap-3 text-sm">
+<div class="flex justify-between text-[#887563]">
+<span>Subtotal</span>
+<span>R$ 209,80</span>
+</div>
+<div class="flex justify-between text-[#887563]">
+<span>Frete</span>
+<span>R$ 15,00</span>
+</div>
+<div class="flex justify-between text-[#887563]">
+<span>Desconto</span>
+<span class="text-green-600">- R$ 10,00</span>
+</div>
+<div class="my-2 h-px bg-[#f4f2f0]"></div>
+<div class="flex justify-between items-center text-lg font-bold text-[#181411]">
+<span>Total</span>
+<span class="text-primary">R$ 214,80</span>
+</div>
+</div>
+</div>
+<!-- Delivery Address Card -->
+<div class="bg-white rounded-xl border border-[#e5e0dc] shadow-sm p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#887563]">location_on</span>
+<h3 class="text-lg font-bold text-[#181411]">Endereço de Entrega</h3>
+</div>
+<div class="text-sm text-[#181411]">
+<p class="font-bold">João Silva</p>
+<p class="text-[#887563] mt-1">Av. Paulista, 1000, Apt 42</p>
+<p class="text-[#887563]">Bela Vista, São Paulo - SP</p>
+<p class="text-[#887563]">CEP 01310-100</p>
+</div>
+</div>
+<!-- Payment Info Card -->
+<div class="bg-white rounded-xl border border-[#e5e0dc] shadow-sm p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#887563]">credit_card</span>
+<h3 class="text-lg font-bold text-[#181411]">Informações de Pagamento</h3>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-6 bg-[#f4f2f0] rounded border border-[#e5e0dc] flex items-center justify-center">
+<span class="text-[10px] font-bold text-[#887563]">VISA</span>
+</div>
+<div class="text-sm">
+<p class="text-[#181411] font-medium">Visa final 4242</p>
+<p class="text-[#887563] text-xs">Pago em 24/10/2023</p>
+</div>
+</div>
+</div>
+<!-- Need Help -->
+<div class="bg-primary/5 rounded-xl border border-primary/20 p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-0.5">support_agent</span>
+<div>
+<h4 class="text-sm font-bold text-[#181411]">Precisa de ajuda?</h4>
+<p class="text-xs text-[#887563] mt-1 mb-3">Fale com nosso suporte sobre este pedido.</p>
+<a class="text-primary text-xs font-bold hover:underline" href="#">Entrar em contato</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

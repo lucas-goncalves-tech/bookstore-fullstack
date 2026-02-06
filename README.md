@@ -58,7 +58,7 @@ git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
 cd bookstore-fullstack
 
 # Inicie os containers
-docker compose up -d --build
+docker compose up -d
 
 # Sincronize o banco de dados (desenvolvimento)
 docker compose exec api npx prisma migrate dev
@@ -85,7 +85,7 @@ bookstore-fullstack/
 ├── backend/    # API REST (Express + Prisma)
 ├── frontend/   # Web Application (Next.js + Tailwind)
 ├── docker-compose.yml          # Configuração de serviços de produção
-└── docker-compose.override.yml # Overrides de desenvolvimento (Hot Reload, Debug)
+└── docker-compose.dev.yml # Overrides de desenvolvimento (Hot Reload, Debug)
 ```
 
 Para mais detalhes técnicos, consulte os READMEs específicos:
