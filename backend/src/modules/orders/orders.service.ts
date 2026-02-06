@@ -15,7 +15,7 @@ export class OrderService {
   ) {}
 
   async createOrder(userId: string, items: OrderItems[]) {
-    await this.prisma.$transaction(async (tx) => {
+    return await this.prisma.$transaction(async (tx) => {
       let totalRevenue = 0;
       const books = await tx.book.findMany({
         where: {
@@ -70,8 +70,11 @@ export class OrderService {
           id: order.id,
         },
       });
-
-      return order;
+      const safeOrder = {
+        ...order,
+        userId: "[SAFE_ID]",
+      };
+      return safeOrder;
     });
   }
 

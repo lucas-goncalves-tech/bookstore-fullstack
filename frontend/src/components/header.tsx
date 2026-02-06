@@ -9,21 +9,22 @@ import {
   Moon,
   ShoppingCart,
   Sun,
+  ShoppingBag,
+  Star,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/use-user";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { useCartStore } from "@/modules/cart/store/cart.store";
 import { CartSheet } from "@/modules/cart/components/cart-sheet";
@@ -123,42 +124,63 @@ export function Header() {
           {/* Auth Buttons or User Profile */}
           <div className="flex items-center gap-3 border-l border-border pl-4">
             {isAuthenticated && user ? (
-              <div className="flex items-center gap-2 space-y-1 text-right">
-                <div>
-                  <p className="text-sm font-medium leading-none">
-                    {user.name}
-                  </p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
-                </div>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                      aria-label="Sair"
-                    >
-                      <LogOut className="size-5" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Sair</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Tem certeza que deseja sair?
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => logout()}>
-                        Sair
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 h-auto py-2 pl-1 pr-3 rounded-full hover:bg-muted"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage
+                        src={`https://ui.shadcn.com/avatars/01.png`}
+                        alt={user.name}
+                      />
+                      <AvatarFallback>
+                        {user.name.slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col items-start text-left ml-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.name}
+                      </p>
+                    </div>
+                    <ChevronDown className="ml-1 h-3 w-3 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders" className="cursor-pointer">
+                      <ShoppingBag className="mr-2 h-4 w-4" />
+                      <span>Minhas Compras</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/reviews" className="cursor-pointer">
+                      <Star className="mr-2 h-4 w-4" />
+                      <span>Meus Reviews</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500 cursor-pointer focus:text-red-600 flex items-center"
+                    onClick={() => logout()}
+                  >
+                    <LogOut className="mr-2 h-4 w-4 text-red-500" />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Button variant="ghost" size="sm" asChild>

@@ -32,6 +32,7 @@ export class BookRepository implements IBookRepository {
     const where: Prisma.BookWhereInput = {};
 
     where.deletedAt = null;
+    where.stock = { gt: 0 };
     if (categorySlug) where.category = { slug: categorySlug };
     if (search)
       where.OR = [

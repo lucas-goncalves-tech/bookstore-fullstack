@@ -1,8 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
-import { CreateOrderInput } from "../schemas/order.schema";
+import {
+  CreateOrderInput,
+  createOrderResponseSchema,
+} from "../schemas/order.schema";
 import { toast } from "sonner";
 import { useCartStore } from "@/modules/cart/store/cart.store";
+import { bookQueryKeys } from "@/modules/book/hooks/query-keys";
+import { orderQueryKeys } from "./query-keys";
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();
@@ -11,13 +16,13 @@ export function useCreateOrder() {
   return useMutation({
     mutationFn: async (data: CreateOrderInput) => {
       const response = await api.post("/orders", data);
-      return response.data;
+      return createOrderResponseSchema.parse(response.data);
     },
     onSuccess: () => {
       toast.success("Pedido realizado com sucesso!");
       clearCart();
-      queryClient.invalidateQueries({ queryKey: ["orders"] }); // Invalidate list if exists
-      // router.push("/orders"); // Uncomment if we want to redirect to orders list
+      queryClient.invalidateQueries({ queryKey: orderQueryKeys.all });
+      queryClient.invalidateQueries({ queryKey: bookQueryKeys.all });
     },
     onError: async (error) => {
       console.error(error);

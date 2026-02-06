@@ -9,6 +9,11 @@ export class OrdersRepository {
     return this.prisma.order.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: { orderItem: true },
+        },
+      },
     });
   }
 

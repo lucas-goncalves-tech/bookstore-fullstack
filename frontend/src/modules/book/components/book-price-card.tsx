@@ -2,21 +2,20 @@
 
 import { ShoppingBag, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { useCartStore } from "@/modules/cart/store/cart.store";
+import { useRouter } from "next/navigation";
+import type { BookDetail } from "../schemas/book.schema";
 
 interface BookPriceCardProps {
-  price: number;
-  stock: number;
-  title: string;
+  book: BookDetail;
   originalPrice?: number;
 }
 
-export function BookPriceCard({
-  price,
-  stock,
-  title,
-  originalPrice,
-}: BookPriceCardProps) {
+export function BookPriceCard({ book, originalPrice }: BookPriceCardProps) {
+  const router = useRouter();
+  const addItem = useCartStore((state) => state.addItem);
+  const { price, stock } = book;
+
   const hasDiscount = originalPrice && originalPrice > price;
   const discountPercent = hasDiscount
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
@@ -40,18 +39,27 @@ export function BookPriceCard({
   }).format(price / 3);
 
   const handleAddToCart = () => {
-    toast.success(`"${title}" adicionado ao carrinho!`);
+    // Map BookDetail to Cart Book type (needs coverThumbUrl)
+    addItem({
+      ...book,
+      coverThumbUrl: book.coverUrl, // Use coverUrl as thumb
+      categoryId: book.categoryId || null, // Ensure null if undefined
+    });
+    // Toast is handled in store
   };
 
   const handleBuyNow = () => {
-    toast.info("Funcionalidade em desenvolvimento");
+    handleAddToCart();
+    router.push("/checkout");
   };
 
   return (
     <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
       {/* Preço */}
       <div className="mb-2 flex items-end gap-3">
-        <span className="text-4xl font-bold text-primary">{formattedPrice}</span>
+        <span className="text-4xl font-bold text-primary">
+          {formattedPrice}
+        </span>
         {hasDiscount && (
           <>
             <span className="mb-1 text-lg text-muted-foreground line-through">

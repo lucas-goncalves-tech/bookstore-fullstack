@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "../store/cart.store";
-import { useCreateOrder } from "@/modules/orders/hooks/use-create-order";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { useUser } from "@/hooks/use-user";
 
 interface CartSummaryProps {
   onClose: () => void;
@@ -12,8 +8,6 @@ interface CartSummaryProps {
 
 export function CartSummary({ onClose }: CartSummaryProps) {
   const { getTotalPrice, items } = useCartStore();
-  const { user } = useUser();
-  const { mutate: createOrder, isPending } = useCreateOrder();
 
   const total = getTotalPrice();
   const formattedTotal = new Intl.NumberFormat("pt-BR", {
@@ -22,24 +16,9 @@ export function CartSummary({ onClose }: CartSummaryProps) {
   }).format(total);
 
   const handleCheckout = () => {
-    if (!user) {
-      toast.error("Você precisa estar logado para finalizar a compra.");
-      // Optional: Redirect to login or open login modal
-      return;
-    }
-
-    const orderData = items.map((item) => ({
-      id: item.id,
-      quantity: item.quantity,
-    }));
-
-    if (orderData.length === 0) return;
-
-    createOrder(orderData, {
-      onSuccess: () => {
-        onClose();
-      },
-    });
+    onClose();
+    // Redirect to checkout page
+    window.location.href = "/checkout";
   };
 
   return (
@@ -51,7 +30,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
           <span>{formattedTotal}</span>
         </div>
         <p className="text-xs text-muted-foreground text-right">
-          Frete calculado no checkout (fake)
+          Frete calculado no checkout
         </p>
       </div>
 
@@ -59,10 +38,9 @@ export function CartSummary({ onClose }: CartSummaryProps) {
         size="lg"
         className="w-full"
         onClick={handleCheckout}
-        disabled={isPending || items.length === 0}
+        disabled={items.length === 0}
       >
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {user ? "Finalizar Compra" : "Entre para Comprar"}
+        Ir para o Pagamento
       </Button>
     </div>
   );

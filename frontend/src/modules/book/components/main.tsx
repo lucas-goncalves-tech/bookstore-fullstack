@@ -21,7 +21,11 @@ interface BookMainProps {
 
 export function BookMain({ bookId, initialBook }: BookMainProps) {
   const router = useRouter();
-  const { data: book, isLoading, isError } = useBook({
+  const {
+    data: book,
+    isLoading,
+    isError,
+  } = useBook({
     id: bookId,
     initialData: initialBook,
   });
@@ -75,15 +79,10 @@ export function BookMain({ bookId, initialBook }: BookMainProps) {
               rating={4.8}
               reviewCount={124}
             >
-              <BookPriceCard
-                price={book.price}
-                stock={book.stock}
-                title={book.title}
-              />
+              <BookPriceCard book={book} />
             </BookDetails>
           </div>
         </div>
-
 
         {/* Reviews */}
         <BookReviews bookId={book.id} />
