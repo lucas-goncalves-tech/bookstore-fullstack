@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { createCategory } from "../../../tests/factories/categorie.factory";
 import { req } from "../../../tests/helpers/commom.helper";
-import { Book } from "@prisma/client";
+import { Book, Review } from "@prisma/client";
 import { createBook } from "../../../tests/factories/book.factory";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ICreateBookInput } from "../../books/interface/books.interface";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import path from "node:path";
+import { createReview } from "../../../tests/factories/review.factory";
 
 const BASE_URL = "/api/v1/books";
 
@@ -26,6 +27,20 @@ function expectecBookShape(): Book {
   };
 }
 
+function expectedReviewShape() {
+  return {
+    id: expect.any(String),
+    rating: expect.any(Number),
+    comment: expect.any(String),
+    bookId: expect.any(String),
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
+    user: {
+      name: expect.any(String),
+    },
+  };
+}
+
 async function generateNewBook(
   overrides?: Partial<ICreateBookInput> | Record<string, unknown>,
 ): Promise<ICreateBookInput> {
@@ -41,6 +56,14 @@ async function generateNewBook(
   };
 
   return payload;
+}
+
+function generateReviewData(overrides?: Partial<Review>) {
+  return {
+    rating: 5,
+    comment: "Great book!",
+    ...overrides,
+  };
 }
 
 describe(`GET ${BASE_URL} - Pagination`, () => {
@@ -276,6 +299,39 @@ describe(`GET ${BASE_URL}/:id`, () => {
   });
 });
 
+describe(`GET ${BASE_URL}/:id/reviews`, () => {
+  it("should return all reviews from a book", async () => {
+    const review = await createReview();
+
+    const { body } = await req
+      .get(`${BASE_URL}/${review.bookId}/reviews`)
+      .expect(200);
+
+    expect(body).toHaveLength(1);
+    expect(body).toEqual(expect.arrayContaining([expectedReviewShape()]));
+  });
+
+  it("should return empty array when user has not reviewed the book", async () => {
+    const book = await createBook();
+    const { reqAgent } = await loginWithUser("user");
+
+    const { body } = await reqAgent
+      .get(`${BASE_URL}/${book.id}/reviews`)
+      .expect(200);
+
+    expect(body).toEqual([]);
+  });
+
+  it("should return 404 NotFound when book ID does not exist", async () => {
+    const UUID = crypto.randomUUID();
+    const { body } = await req
+      .get(BASE_URL + "/" + UUID + "/reviews")
+      .expect(404);
+
+    expect(body).toHaveProperty("message");
+  });
+});
+
 describe(`POST ${BASE_URL}`, () => {
   it("should return 201 and create book when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
@@ -398,6 +454,72 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
     const { body } = await req
       .post(BASE_URL + "/" + "invalid-uuid" + "/cover")
       .expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+});
+
+describe(`POST ${BASE_URL}/:id/reviews`, () => {
+  it("should create a review when user is authenticated", async () => {
+    const book = await createBook();
+    const { reqAgent } = await loginWithUser("user");
+    const review = generateReviewData();
+
+    const { body } = await reqAgent
+      .post(`${BASE_URL}/${book.id}/reviews`)
+      .send(review)
+      .expect(201);
+
+    expect(body).toMatchObject({
+      id: expect.any(String),
+      rating: expect.any(Number),
+      comment: expect.any(String),
+      bookId: expect.any(String),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+    });
+  });
+
+  it("should return 400 BadRequest when body is invalid", async () => {
+    const book = await createBook();
+    const { reqAgent } = await loginWithUser("user");
+    const review = generateReviewData({
+      rating: 6,
+      comment: "",
+    });
+
+    const { body } = await reqAgent
+      .post(`${BASE_URL}/${book.id}/reviews`)
+      .send(review)
+      .expect(400);
+    const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+
+    expect(body).toHaveProperty("message");
+    expect(errors).toContain("rating");
+    expect(errors).toContain("comment");
+  });
+
+  it("should return 401 Unauthorized when user is not authenticated", async () => {
+    const book = await createBook();
+    const review = generateReviewData();
+
+    const { body } = await req
+      .post(`${BASE_URL}/${book.id}/reviews`)
+      .send(review)
+      .expect(401);
+
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should return 404 NotFound when book does not exist", async () => {
+    const { reqAgent } = await loginWithUser("user");
+    const review = generateReviewData();
+    const UUID = crypto.randomUUID();
+
+    const { body } = await reqAgent
+      .post(`${BASE_URL}/${UUID}/reviews`)
+      .send(review)
+      .expect(404);
 
     expect(body).toHaveProperty("message");
   });

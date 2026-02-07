@@ -9,6 +9,7 @@ import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middlew
 import { bookParamsDto } from "./dtos/book-params";
 import { uploadMiddleware } from "../../shared/middlewares/upload.middleware";
 import { fileTypeMiddleware } from "../../shared/middlewares/file-type.middleware";
+import { createReviewDto } from "../reviews/dtos/review.dto";
 
 @injectable()
 export class BookRoutes {
@@ -30,6 +31,17 @@ export class BookRoutes {
       "/:id",
       validateMiddleware({ params: bookParamsDto }),
       this.controller.findById,
+    );
+    this.router.get(
+      "/:id/reviews",
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.findReviewsByBookId,
+    );
+    this.router.post(
+      "/:id/reviews",
+      authMiddleware,
+      validateMiddleware({ params: bookParamsDto, body: createReviewDto }),
+      this.controller.createReview,
     );
     this.router.post(
       "/",

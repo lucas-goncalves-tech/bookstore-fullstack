@@ -48,6 +48,7 @@ const admin = {
 };
 
 beforeEach(async () => {
+  await prisma_test.review.deleteMany();
   await prisma_test.orderItem.deleteMany();
   await prisma_test.order.deleteMany();
   await prisma_test.category.deleteMany();
