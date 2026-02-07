@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Book } from "../schemas/book.schema";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,36 @@ import Image from "next/image";
 interface BookCardProps {
   book: Book;
   onAddToCart?: (book: Book) => void;
+}
+
+function RatingStars({ rating = 0 }: { rating: number }) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(fullStars)].map((_, i) => (
+        <Star
+          key={`full-${i}`}
+          className="size-4 fill-yellow-400 text-yellow-400"
+        />
+      ))}
+      {hasHalfStar && (
+        <Star
+          key="half"
+          className="size-4 fill-yellow-400 text-yellow-400"
+          style={{ clipPath: "inset(0 50% 0 0)" }}
+        />
+      )}
+      {[...Array(emptyStars)].map((_, i) => (
+        <Star key={`empty-${i}`} className="size-4 text-muted-foreground" />
+      ))}
+      <span className="ml-1 text-sm font-medium text-foreground">
+        {rating.toFixed(1)}
+      </span>
+    </div>
+  );
 }
 
 export function BookCard({ book, onAddToCart }: BookCardProps) {
@@ -54,9 +84,14 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
             {book.title}
           </h4>
 
-          <p className="mb-3 text-sm italic text-muted-foreground">
+          <p className="mb-2 text-sm italic text-muted-foreground">
             {book.author}
           </p>
+
+          {/* Rating Stars */}
+          <div className="mb-3">
+            <RatingStars rating={book.averageRating || 0} />
+          </div>
 
           <p className="mb-4 line-clamp-3 flex-1 text-sm text-secondary-foreground">
             {book.description}

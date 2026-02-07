@@ -32,6 +32,20 @@ export class ReviewRepository {
     });
   }
 
+  async getBookReviewStats(bookId: string) {
+    return await this.prisma.review.aggregate({
+      where: {
+        bookId,
+      },
+      _avg: {
+        rating: true,
+      },
+      _count: {
+        rating: true,
+      },
+    });
+  }
+
   async create(userId: string, bookId: string, data: ICreateReviewInput) {
     return await this.prisma.review.upsert({
       where: {

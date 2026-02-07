@@ -48,6 +48,9 @@ export class BookRepository implements IBookRepository {
     const [data, total] = await Promise.all([
       this.prisma.book.findMany({
         include: {
+          review: {
+            select: { rating: true },
+          },
           category: {
             select: {
               name: true,

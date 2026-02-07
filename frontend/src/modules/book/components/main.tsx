@@ -12,14 +12,21 @@ import { BookDescriptionTabs } from "./book-description-tabs";
 import { BookReviews } from "./book-reviews";
 import { Footer } from "@/components/footer";
 import { useBook } from "../hooks/use-book";
+import { useBookReviews } from "../hooks/use-reviews";
 import type { BookDetail } from "../schemas/book.schema";
+import type { BookReviewsResponse } from "../schemas/review.schema";
 
 interface BookMainProps {
   bookId: string;
   initialBook?: BookDetail | null;
+  initialReviews?: BookReviewsResponse | null;
 }
 
-export function BookMain({ bookId, initialBook }: BookMainProps) {
+export function BookMain({
+  bookId,
+  initialBook,
+  initialReviews,
+}: BookMainProps) {
   const router = useRouter();
   const {
     data: book,
@@ -29,6 +36,8 @@ export function BookMain({ bookId, initialBook }: BookMainProps) {
     id: bookId,
     initialData: initialBook,
   });
+
+  const { data: reviewData } = useBookReviews(bookId, initialReviews);
 
   useEffect(() => {
     if (isError || (!isLoading && !book)) {
@@ -75,9 +84,8 @@ export function BookMain({ bookId, initialBook }: BookMainProps) {
               author={book.author}
               description={book.description}
               categoryName={book.category?.name}
-              // Mock rating/reviews até API existir
-              rating={4.8}
-              reviewCount={124}
+              rating={reviewData?.averageRating ?? 0}
+              reviewCount={reviewData?.totalReviews ?? 0}
             >
               <BookPriceCard book={book} />
             </BookDetails>

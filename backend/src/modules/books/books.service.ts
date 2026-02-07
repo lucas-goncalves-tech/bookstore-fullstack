@@ -45,7 +45,24 @@ export class BookService {
   }
 
   async findMany(query: IFindManyQuery) {
-    return await this.bookRepository.findMany(query);
+    const data = await this.bookRepository.findMany(query);
+    const dataWithRatings = data.data.map((book) => {
+      const { review, ...bookData } = book;
+      const averageRating =
+        review.length > 0
+          ? review.reduce((acc, r) => acc + r.rating, 0) / review.length
+          : 0;
+
+      return {
+        ...bookData,
+        averageRating: Number(averageRating.toFixed(1)),
+      };
+    });
+
+    return {
+      data: dataWithRatings,
+      metadata: data.metadata,
+    };
   }
 
   async create(data: ICreateBookInput) {

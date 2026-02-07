@@ -26,6 +26,7 @@ export const bookSchema = z.object({
   coverUrl: z.string().nullable(),
   coverThumbUrl: z.string().nullable(),
   categoryId: z.uuid().nullable(),
+  averageRating: z.number().optional().default(0),
   category: z
     .object({
       name: z.string(),

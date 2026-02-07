@@ -19,7 +19,10 @@ export interface IFindManyQuery {
 }
 
 export interface IFindMany {
-  data: Book[];
+  data: (Book & {
+    review: { rating: number }[];
+    category: { name: string } | null;
+  })[];
   metadata: {
     page: number;
     limit: number;

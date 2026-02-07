@@ -66,15 +66,15 @@ export function BookDetails({
       </div>
 
       {/* Rating */}
-      {reviewCount > 0 && (
-        <div className="mb-6 flex items-center gap-2">
-          <RatingStars rating={rating} />
-          <span className="text-base font-bold text-foreground">{rating.toFixed(1)}</span>
-          <span className="text-sm text-muted-foreground">
-            ({reviewCount} avaliações)
-          </span>
-        </div>
-      )}
+      <div className="mb-6 flex items-center gap-2">
+        <RatingStars rating={rating} />
+        <span className="text-base font-bold text-foreground">
+          {rating.toFixed(1)}
+        </span>
+        <span className="text-sm text-muted-foreground">
+          ({reviewCount} {reviewCount === 1 ? "avaliação" : "avaliações"})
+        </span>
+      </div>
 
       {children}
 
