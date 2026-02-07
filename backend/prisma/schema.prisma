@@ -30,9 +30,30 @@ model User {
   passwordHash String @map("password_hash")
   role         Role   @default(USER)
 
-  order Order[]
+  order  Order[]
+  review Review[]
 
   @@map("users")
+}
+
+model Review {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bookId String @map("book_id")
+  book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, bookId])
+  @@index([bookId])
+  @@index([userId])
+  @@map("reviews")
 }
 
 model Category {
@@ -64,6 +85,7 @@ model Book {
   deletedAt DateTime? @map("deleted_at")
 
   orderItems OrderItem[]
+  review     Review[]
 
   @@index([title])
   @@index([author])
