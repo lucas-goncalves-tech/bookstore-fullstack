@@ -28,6 +28,8 @@ export class AuthRoutes {
       this.controller.login,
     );
 
+    this.router.get("/refresh", this.controller.refresh);
+
     this.router.get("/logout", authMiddleware, this.controller.logout);
   }
 
