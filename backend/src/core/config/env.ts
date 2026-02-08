@@ -12,6 +12,10 @@ const checkEnv = z.object({
     .string()
     .min(32, "JWT SECRET deve conter no minimo 32 caracteres"),
   JWT_EXPIRES: z.string(),
+  JWT_REFRESH_SECRET: z
+    .string()
+    .min(32, "JWT REFRESH SECRET deve conter no minimo 32 caracteres"),
+  JWT_REFRESH_EXPIRES: z.string(),
   SALT: z.coerce.number().default(10),
   ADMIN_EMAIL: zodSafeEmail,
   ADMIN_PASSWORD: zodPassword(),

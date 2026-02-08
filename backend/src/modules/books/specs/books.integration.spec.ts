@@ -307,8 +307,10 @@ describe(`GET ${BASE_URL}/:id/reviews`, () => {
       .get(`${BASE_URL}/${review.bookId}/reviews`)
       .expect(200);
 
-    expect(body).toHaveLength(1);
-    expect(body).toEqual(expect.arrayContaining([expectedReviewShape()]));
+    expect(body.reviews).toHaveLength(1);
+    expect(body.reviews).toEqual(
+      expect.arrayContaining([expectedReviewShape()]),
+    );
   });
 
   it("should return empty array when user has not reviewed the book", async () => {
@@ -319,7 +321,7 @@ describe(`GET ${BASE_URL}/:id/reviews`, () => {
       .get(`${BASE_URL}/${book.id}/reviews`)
       .expect(200);
 
-    expect(body).toEqual([]);
+    expect(body.reviews).toEqual([]);
   });
 
   it("should return 404 NotFound when book ID does not exist", async () => {

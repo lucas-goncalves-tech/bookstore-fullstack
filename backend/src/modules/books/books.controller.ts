@@ -49,7 +49,7 @@ export class BookController {
   createReview = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
     const data = req.safeBody as CreateReviewDto;
-    const userId = req.user?.sid;
+    const userId = req.user?.sub;
 
     if (!userId) {
       throw new UnauthorizedError("Usuário não autenticado");

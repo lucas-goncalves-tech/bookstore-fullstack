@@ -1,4 +1,4 @@
-import { UserPayload } from "../services/token.service";
+import { AccessPayload } from "../services/token.service";
 
 declare global {
   namespace Express {
@@ -6,7 +6,7 @@ declare global {
       safeBody?: unknown;
       safeParams?: unknown;
       safeQuery?: unknown;
-      user?: UserPayload;
+      user?: AccessPayload;
     }
   }
 }

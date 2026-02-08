@@ -17,7 +17,7 @@ export class UsersController {
       throw new UnauthorizedError("Usuário não autenticado");
     }
 
-    const result = await this.usersService.me(user.sid);
+    const result = await this.usersService.me(user.sub);
 
     return res.status(200).json(result);
   };

@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 
-export type ICreateUser = Omit<User, "role" | "id">;
+export type ICreateUser = Pick<User, "email" | "name" | "passwordHash">;
 export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
   password: string;
   confirmPassword: string;

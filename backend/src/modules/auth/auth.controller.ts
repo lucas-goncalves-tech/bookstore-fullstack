@@ -3,8 +3,10 @@ import { inject, injectable } from "tsyringe";
 import { AuthService } from "./auth.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import {
-  SID_COOKIE,
-  SID_COOKIE_OPTIONS,
+  SID_ACCESS_COOKIE,
+  SID_ACCESS_COOKIE_OPTIONS,
+  SID_REFRESH_COOKIE,
+  SID_REFRESH_COOKIE_OPTIONS,
 } from "../../shared/contants/sid-cookie";
 import { LoginDTO } from "./dto/login.dto";
 
@@ -26,13 +28,38 @@ export class AuthController {
   login = async (req: Request, res: Response) => {
     const body = req.body as LoginDTO;
 
-    const token = await this.authService.login(body);
-    res.cookie(SID_COOKIE, token, SID_COOKIE_OPTIONS());
+    const { accessToken, refreshToken } = await this.authService.login(body);
+    res.cookie(SID_ACCESS_COOKIE, accessToken, SID_ACCESS_COOKIE_OPTIONS());
+    res.cookie(SID_REFRESH_COOKIE, refreshToken, SID_REFRESH_COOKIE_OPTIONS());
     res.status(204).end();
   };
 
-  logout = async (_req: Request, res: Response) => {
-    res.clearCookie(SID_COOKIE, SID_COOKIE_OPTIONS());
+  refresh = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies[SID_REFRESH_COOKIE];
+
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      expiresMs,
+    } = await this.authService.refresh(refreshToken);
+
+    res.cookie(SID_ACCESS_COOKIE, accessToken, SID_ACCESS_COOKIE_OPTIONS());
+    res.cookie(
+      SID_REFRESH_COOKIE,
+      newRefreshToken,
+      SID_REFRESH_COOKIE_OPTIONS(expiresMs),
+    );
+    res.status(204).end();
+  };
+
+  logout = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies[SID_REFRESH_COOKIE];
+
+    if (refreshToken) {
+      await this.authService.logout(refreshToken);
+    }
+    res.clearCookie(SID_ACCESS_COOKIE, SID_ACCESS_COOKIE_OPTIONS());
+    res.clearCookie(SID_REFRESH_COOKIE, SID_REFRESH_COOKIE_OPTIONS());
     res.status(204).end();
   };
 }

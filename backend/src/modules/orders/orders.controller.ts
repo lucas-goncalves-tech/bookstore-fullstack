@@ -13,7 +13,7 @@ export class OrderController {
 
   createOrder = async (req: Request, res: Response) => {
     const items = req.safeBody as CreateOrderDto;
-    const id = req.user?.sid;
+    const id = req.user?.sub;
     if (!id) {
       throw new UnauthorizedError("Usuário não autenticado!");
     }
@@ -24,7 +24,7 @@ export class OrderController {
   };
 
   findMany = async (req: Request, res: Response) => {
-    const id = req.user?.sid;
+    const id = req.user?.sub;
     if (!id) {
       throw new UnauthorizedError("Usuário não autenticado!");
     }
@@ -33,7 +33,7 @@ export class OrderController {
   };
 
   findById = async (req: Request, res: Response) => {
-    const id = req.user?.sid;
+    const id = req.user?.sub;
     const orderId = req.safeParams as OrderParamsDto;
     if (!id) {
       throw new UnauthorizedError("Usuário não autenticado!");
