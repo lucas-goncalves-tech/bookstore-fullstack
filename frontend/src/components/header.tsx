@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCartStore } from "@/modules/cart/store/cart.store";
 import { CartSheet } from "@/modules/cart/components/cart-sheet";
 
@@ -40,7 +40,12 @@ export function Header() {
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, logout } = useUser();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -114,7 +119,7 @@ export function Header() {
             onClick={() => setIsCartOpen(true)}
           >
             <ShoppingCart className="size-5" />
-            {totalItems > 0 && (
+            {isMounted && totalItems > 0 && (
               <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in-50">
                 {totalItems}
               </span>

@@ -85,6 +85,9 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new UnauthorizedError("Token de atualização inválido!");
+    }
     verifyRefreshToken(refreshToken);
 
     const session = await this.sessionsRepository.findByTokenHash(

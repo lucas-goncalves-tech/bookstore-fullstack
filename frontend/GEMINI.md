@@ -22,6 +22,8 @@ This project is a modern bookstore web application built with Next.js 15, focuse
 - **ALWAYS**: use ../backend/src/modules/**/\*.spec.ts/** for know how API works.
 - **ALWAYS**: use FrontEnd skills and MCPs for help.
 - **ALWAYS**: use fetch on SSR first and push to tanstack query with initial data.
+- **ALWAYS**: use "use client" for client components.
+- **ALWAYS**: use useRouter or Link from next/navigation for navigation.
 
 ## Project Overview
 

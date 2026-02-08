@@ -1,6 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "../store/cart.store";
+import { useRouter } from "next/navigation";
 
 interface CartSummaryProps {
   onClose: () => void;
@@ -8,6 +11,7 @@ interface CartSummaryProps {
 
 export function CartSummary({ onClose }: CartSummaryProps) {
   const { getTotalPrice, items } = useCartStore();
+  const router = useRouter();
 
   const total = getTotalPrice();
   const formattedTotal = new Intl.NumberFormat("pt-BR", {
@@ -17,8 +21,7 @@ export function CartSummary({ onClose }: CartSummaryProps) {
 
   const handleCheckout = () => {
     onClose();
-    // Redirect to checkout page
-    window.location.href = "/checkout";
+    router.push("/checkout");
   };
 
   return (

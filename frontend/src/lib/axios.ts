@@ -53,11 +53,8 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError as AxiosError);
-        // Redirect to login on refresh failure
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
-        return Promise.reject(refreshError);
+        // Don't redirect - let the component handle the 401 appropriately
+        return Promise.reject(error);
       } finally {
         isRefreshing = false;
       }
