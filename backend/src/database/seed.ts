@@ -207,6 +207,24 @@ const categories = [
   },
 ];
 
+const comments = [
+  "Excelente leitura, recomendo a todos!",
+  "O livro chegou rápido.",
+  "História envolvente do início ao fim.",
+  "Não gostei muito do final.",
+  "Conteúdo muito técnico e bem explicado.",
+  "Valeu a pena comprar.",
+  "A edição é linda e o papel é de qualidade.",
+  "Um guia prático e útil.",
+  "Personagens bem construídos e cativantes.",
+  "Leitura leve e fluida.",
+  "Mudou minha forma de ver o mundo hoje.",
+  "Chegou antes do prazo.",
+  "Simplesmente fantástico, nota dez!",
+  "Achei um pouco parado.",
+  "Essencial para quem quer aprender mais.",
+];
+
 async function main() {
   const adminEmail = env.ADMIN_EMAIL;
   const adminPassword = env.ADMIN_PASSWORD;
@@ -238,6 +256,17 @@ async function main() {
     },
   });
 
+  const userJubileu = await prisma_seed.user.upsert({
+    where: { email: "jubileu@user.com" },
+    update: {},
+    create: {
+      email: "jubileu@user.com",
+      name: "Jubileu",
+      passwordHash: hashUser,
+      role: "USER",
+    },
+  });
+
   //eslint-disable-next-line
   console.log(`Usuário Admin ${adminName} criado com sucesso!`);
 
@@ -257,7 +286,7 @@ async function main() {
   for (const book of books) {
     const randomCategoryId =
       categoryIds[Math.floor(Math.random() * categoryIds.length)];
-    await prisma_seed.book.create({
+    const bookCreated = await prisma_seed.book.create({
       data: {
         ...book,
         categoryId: randomCategoryId,
@@ -269,6 +298,19 @@ async function main() {
     });
     //eslint-disable-next-line
     console.log(`Livro ${book.title} criado com sucesso!`);
+
+    const randomComments =
+      comments[Math.floor(Math.random() * comments.length)];
+    await prisma_seed.review.create({
+      data: {
+        bookId: bookCreated.id,
+        userId: userJubileu.id,
+        rating: Math.floor(Math.random() * 5) + 1,
+        comment: randomComments,
+      },
+    });
+    //eslint-disable-next-line
+    console.log(`Review para o livro ${book.title} criado com sucesso!`);
   }
 }
 

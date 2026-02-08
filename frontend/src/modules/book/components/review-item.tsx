@@ -1,24 +1,11 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Review } from "@/modules/book/schemas/review.schema";
-import { Star } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { RatingStars } from "./rating-stars";
 
 interface ReviewItemProps {
   review: Review;
-}
-
-function ReviewStars({ rating }: { rating: number }) {
-  return (
-    <div className="flex text-primary">
-      {[...Array(5)].map((_, i) => (
-        <Star
-          key={i}
-          className={`size-4 ${i < rating ? "fill-current" : "text-muted"}`}
-        />
-      ))}
-    </div>
-  );
 }
 
 export function ReviewItem({ review }: ReviewItemProps) {
@@ -48,7 +35,7 @@ export function ReviewItem({ review }: ReviewItemProps) {
             </p>
           </div>
         </div>
-        <ReviewStars rating={review.rating} />
+        <RatingStars rating={review.rating} size="sm" showHalfStars={false} />
       </div>
       <p className="text-sm text-muted-foreground">{review.comment}</p>
     </div>

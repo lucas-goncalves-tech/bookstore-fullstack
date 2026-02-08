@@ -1,7 +1,8 @@
 "use client";
 
-import { Star, StarHalf, Share2, Heart } from "lucide-react";
+import { Share2, Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { RatingStars } from "./rating-stars";
 
 interface BookDetailsProps {
   title: string;
@@ -11,24 +12,6 @@ interface BookDetailsProps {
   rating?: number;
   reviewCount?: number;
   children?: React.ReactNode;
-}
-
-function RatingStars({ rating = 0 }: { rating: number }) {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  return (
-    <div className="flex text-primary">
-      {[...Array(fullStars)].map((_, i) => (
-        <Star key={`full-${i}`} className="size-5 fill-current" />
-      ))}
-      {hasHalfStar && <StarHalf className="size-5 fill-current" />}
-      {[...Array(emptyStars)].map((_, i) => (
-        <Star key={`empty-${i}`} className="size-5 text-muted" />
-      ))}
-    </div>
-  );
 }
 
 export function BookDetails({

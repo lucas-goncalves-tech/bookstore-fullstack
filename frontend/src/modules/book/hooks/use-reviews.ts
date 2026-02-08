@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { bookQueryKeys } from "./query-keys";
+import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 import {
   CreateReviewSchema,
   Review,
@@ -56,9 +57,21 @@ export function useCreateReview(bookId: string) {
       return data;
     },
     onSuccess: () => {
+      // Invalida a lista de reviews do livro
       queryClient.invalidateQueries({
         queryKey: bookQueryKeys.reviews.list(bookId),
       });
+
+      // Invalida os detalhes do livro (para atualizar o rating médio)
+      queryClient.invalidateQueries({
+        queryKey: bookQueryKeys.detail(bookId),
+      });
+
+      // Invalida a lista de livros da home (para atualizar o rating nos cards)
+      queryClient.invalidateQueries({
+        queryKey: homeQueryKeys.books.all,
+      });
+
       toast.success("Avaliação enviada com sucesso!");
     },
     onError: (error) => {
