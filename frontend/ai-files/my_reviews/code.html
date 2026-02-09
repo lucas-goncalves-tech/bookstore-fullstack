@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Reviews - Bookstore</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#cf7317",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#211911",
+                        "stone-paper": "#ede9da", // Warm beige background requested
+                        "stone-card": "#ffffff",
+                        "stone-text": "#181411",
+                        "stone-muted": "#887563",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif-title": ["Libre Baskerville", "serif"],
+                        "serif-body": ["Lora", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "sm": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-stone-paper text-stone-text antialiased font-display min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e5e0dc] bg-white/95 backdrop-blur px-10 py-3 shadow-sm">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-stone-text">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined !text-3xl filled">auto_stories</span>
+</div>
+<h2 class="text-stone-text text-xl font-bold leading-tight tracking-[-0.015em] font-serif-title">Bookstore</h2>
+</div>
+<label class="flex flex-col min-w-40 !h-10 max-w-64 hidden md:flex">
+<div class="flex w-full flex-1 items-stretch rounded-sm h-full ring-1 ring-[#e5e0dc] focus-within:ring-primary/50 transition-shadow">
+<div class="text-stone-muted flex border-none bg-stone-50 items-center justify-center pl-4 rounded-l-sm border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-sm text-stone-text focus:outline-0 focus:ring-0 border-none bg-stone-50 focus:border-none h-full placeholder:text-stone-muted px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Buscar livros, autores..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden lg:flex items-center gap-9">
+<a class="text-stone-text text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-stone-text text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Categorias</a>
+<a class="text-stone-text text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Mais Vendidos</a>
+<a class="text-primary text-sm font-bold leading-normal" href="#">Minha Biblioteca</a>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center overflow-hidden rounded-full size-10 bg-stone-50 hover:bg-stone-100 text-stone-text transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="flex items-center justify-center overflow-hidden rounded-full size-10 bg-stone-50 hover:bg-stone-100 text-stone-text transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-stone-200 cursor-pointer" data-alt="Portrait of a user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6UaTU0NWuFwbb8om66fNoGJtOWGtLaAf5OBf7NPlA-_cvbI7pKB4CpYR7hXkHDVR1hI2q0fvk07ZDMJ4ogkKx2QWMAsv1hu_rCRZR7nFg1Bza93gL4ZBvMQ5vHmdG_k2TKIZ2EXEq-xMIti7UCFurltJ0qFoLeC20d2z4iSbWa9IHS0zyTIhKUSw1MwtpTVhRfJ8WUp8-w41XzwHTf5zqwhkgAbGG-Fuv_yAvqq6nVgb3i3ICSKUuo4dLKUzsUtHh-EgBzrSulfSz");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow w-full px-4 md:px-10 py-12">
+<div class="max-w-[1024px] mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-stone-800/10 pb-6">
+<div class="flex flex-col gap-2">
+<h1 class="text-stone-text text-4xl md:text-5xl font-serif-title font-bold leading-tight tracking-tight">Minhas Avaliações</h1>
+<p class="text-stone-muted text-lg font-serif-body italic">Gerencie e edite suas opiniões sobre suas leituras recentes.</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-stone-muted uppercase tracking-wider">Ordenar por:</span>
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 bg-white rounded-sm border border-[#e5e0dc] shadow-sm text-sm font-medium hover:border-primary/50 transition-colors">
+                            Mais Recentes
+                            <span class="material-symbols-outlined text-base">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Stats Overview (Optional but adds to profile feel) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+<div class="bg-white p-6 rounded-sm shadow-sm border border-stone-100 flex items-center justify-between">
+<div>
+<p class="text-stone-muted text-xs font-bold uppercase tracking-widest mb-1">Total de Reviews</p>
+<p class="text-3xl font-serif-title font-bold text-stone-text">24</p>
+</div>
+<div class="size-12 rounded-full bg-stone-50 flex items-center justify-center text-primary/80">
+<span class="material-symbols-outlined filled">rate_review</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-sm shadow-sm border border-stone-100 flex items-center justify-between">
+<div>
+<p class="text-stone-muted text-xs font-bold uppercase tracking-widest mb-1">Livros Lidos</p>
+<p class="text-3xl font-serif-title font-bold text-stone-text">42</p>
+</div>
+<div class="size-12 rounded-full bg-stone-50 flex items-center justify-center text-primary/80">
+<span class="material-symbols-outlined filled">book_2</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-sm shadow-sm border border-stone-100 flex items-center justify-between">
+<div>
+<p class="text-stone-muted text-xs font-bold uppercase tracking-widest mb-1">Média</p>
+<p class="text-3xl font-serif-title font-bold text-stone-text flex items-center gap-1">4.8 <span class="text-primary text-xl material-symbols-outlined filled">star</span></p>
+</div>
+</div>
+</div>
+<!-- Reviews List -->
+<div class="flex flex-col gap-6">
+<!-- Review Card 1 -->
+<article class="bg-white rounded-sm p-6 shadow-sm border border-[#e5e0dc] hover:shadow-md transition-shadow flex flex-col md:flex-row gap-6 relative group">
+<!-- Book Cover -->
+<div class="shrink-0 w-32 md:w-40 self-start md:self-center">
+<div class="aspect-[2/3] bg-stone-200 rounded-sm overflow-hidden shadow-md relative group-hover:-translate-y-1 transition-transform duration-300 ease-out">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Book cover of The Name of the Wind featuring a dark moody atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1b5fdEtVCiRdoQEV8jK8Qd6tSFgxs_4fZkucxBCct3lLg3Jg5jUuzmc4MTK8qcnSCjwcC__jTCcY0Y1r6bXRR7c_RawU3dyH3ijmWv2-AMckuves-gzN1_rEYYiaFwv_Gg64PW2jarKm-MAQ-X0AmroUy53seq3XPruqY3zofuMvWdiUGAm4vmVboZ14cWYFb1dULYSGpr4baWfCoULMzprgHzJo-lelXpCCM-PPG0MGGoW7oU6Y1T-yFnT4hjkuuMt_-Hy5T_5yi');"></div>
+<!-- Hover Overlay -->
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<!-- Content -->
+<div class="flex flex-col flex-1 gap-3">
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">Fantasia</span>
+<span class="text-xs text-stone-400"> • Lido em 10 Out, 2023</span>
+</div>
+<h3 class="text-2xl font-serif-title font-bold text-stone-text group-hover:text-primary transition-colors cursor-pointer">O Nome do Vento</h3>
+<p class="text-sm font-medium text-stone-muted">Patrick Rothfuss</p>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 self-end sm:self-start opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-stone-400 hover:text-stone-600 p-1" title="Editar Review">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-stone-400 hover:text-red-500 p-1" title="Deletar Review">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Rating -->
+<div class="flex items-center gap-1 my-1">
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="ml-2 text-sm font-bold text-stone-text">5.0</span>
+</div>
+<!-- Comment -->
+<div class="relative">
+<span class="absolute -left-3 -top-2 text-4xl text-stone-200 font-serif-title opacity-50">“</span>
+<p class="font-serif-body text-stone-600 leading-relaxed text-lg pl-4 border-l-2 border-primary/20">
+                                Uma verdadeira obra-prima da construção de mundo. A prosa é lírica e o sistema de magia é incrivelmente detalhado. Kvothe é um protagonista fascinante, com falhas e virtudes que o tornam humano. Simplesmente não conseguia parar de ler...
+                            </p>
+</div>
+<div class="mt-2 pt-4 border-t border-dashed border-stone-200 flex justify-between items-center">
+<span class="text-xs text-stone-400">Avaliado em 12 Out, 2023</span>
+<button class="text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                                Ler review completo <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Review Card 2 -->
+<article class="bg-white rounded-sm p-6 shadow-sm border border-[#e5e0dc] hover:shadow-md transition-shadow flex flex-col md:flex-row gap-6 relative group">
+<div class="shrink-0 w-32 md:w-40 self-start md:self-center">
+<div class="aspect-[2/3] bg-stone-200 rounded-sm overflow-hidden shadow-md relative group-hover:-translate-y-1 transition-transform duration-300 ease-out">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Book cover of Dune depicting vast desert dunes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkvw9XsZr68RzxCp9zq1_1YBeJB8RW3eLRXcr6Up3439swLuPDh2WUG8AYnlDqXYAFI8cVYulGAwseov4cOMWg18W43WCfIP_LUM6Viy8pzx7X9CHxZJp4F70c14JR1jLCm_HHMBQWLFIO5-HhowUDFEnoZbu1N6Vc8-2YoJOFAEUgnlDTVIhXQqrgXis0GmSl5FgM01blcQoiBUJQQ6vJf4JofXBV9zpDxW95B-bJffDQ3VGfloWV28LYgqaV8xcm33DKbg0dKw0F');"></div>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<div class="flex flex-col flex-1 gap-3">
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">Sci-Fi</span>
+<span class="text-xs text-stone-400"> • Lido em 28 Ago, 2023</span>
+</div>
+<h3 class="text-2xl font-serif-title font-bold text-stone-text group-hover:text-primary transition-colors cursor-pointer">Duna</h3>
+<p class="text-sm font-medium text-stone-muted">Frank Herbert</p>
+</div>
+<div class="flex items-center gap-2 self-end sm:self-start opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-stone-400 hover:text-stone-600 p-1" title="Editar Review">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-stone-400 hover:text-red-500 p-1" title="Deletar Review">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-1 my-1">
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-stone-300 text-xl filled">star</span>
+<span class="ml-2 text-sm font-bold text-stone-text">4.0</span>
+</div>
+<div class="relative">
+<span class="absolute -left-3 -top-2 text-4xl text-stone-200 font-serif-title opacity-50">“</span>
+<p class="font-serif-body text-stone-600 leading-relaxed text-lg pl-4 border-l-2 border-primary/20">
+                                Denso, mas recompensador. Demora um pouco para entrar na intriga política e entender todas as casas, mas uma vez que você entra, é diferente de qualquer outra coisa no gênero. A escala é monumental.
+                            </p>
+</div>
+<div class="mt-2 pt-4 border-t border-dashed border-stone-200 flex justify-between items-center">
+<span class="text-xs text-stone-400">Avaliado em 05 Set, 2023</span>
+<button class="text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                                Ler review completo <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Review Card 3 -->
+<article class="bg-white rounded-sm p-6 shadow-sm border border-[#e5e0dc] hover:shadow-md transition-shadow flex flex-col md:flex-row gap-6 relative group">
+<div class="shrink-0 w-32 md:w-40 self-start md:self-center">
+<div class="aspect-[2/3] bg-stone-200 rounded-sm overflow-hidden shadow-md relative group-hover:-translate-y-1 transition-transform duration-300 ease-out">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Book cover of Atomic Habits minimalist style" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6SbzhallUIVXMb0SW9Li5GJMBvhdGrlXldjrbdPDSRtddhSRaKKt1KSlCnJa9wukg5sUMoNK4MOQPYAZsmQUugaV-hRdxUCoqcngI31LSxUdsT_b8faWF8eZ310JgsJ3YEgvlhQnm4_DGmJQxaf_s1SR-OFRUTspINpdCJj0rNtHuNgeEQdQqxejTeguBdLWpG0kARAFK6ZyBPGXU1CQmx7PvhZKvl0BdvoshpXM8gMMoZ7Nf67aHv021NgJvDx46Z7-s689DtaPQ');"></div>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+</div>
+<div class="flex flex-col flex-1 gap-3">
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-700/10">Produtividade</span>
+<span class="text-xs text-stone-400"> • Lido em 15 Jul, 2023</span>
+</div>
+<h3 class="text-2xl font-serif-title font-bold text-stone-text group-hover:text-primary transition-colors cursor-pointer">Hábitos Atômicos</h3>
+<p class="text-sm font-medium text-stone-muted">James Clear</p>
+</div>
+<div class="flex items-center gap-2 self-end sm:self-start opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-stone-400 hover:text-stone-600 p-1" title="Editar Review">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-stone-400 hover:text-red-500 p-1" title="Deletar Review">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-1 my-1">
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="material-symbols-outlined text-primary text-xl filled">star</span>
+<span class="ml-2 text-sm font-bold text-stone-text">5.0</span>
+</div>
+<div class="relative">
+<span class="absolute -left-3 -top-2 text-4xl text-stone-200 font-serif-title opacity-50">“</span>
+<p class="font-serif-body text-stone-600 leading-relaxed text-lg pl-4 border-l-2 border-primary/20">
+                                Prático e direto ao ponto. As estratégias de 1% de melhoria mudaram a forma como encaro meus projetos diários. Recomendo para todos que sentem que estão estagnados.
+                            </p>
+</div>
+<div class="mt-2 pt-4 border-t border-dashed border-stone-200 flex justify-between items-center">
+<span class="text-xs text-stone-400">Avaliado em 20 Jul, 2023</span>
+<button class="text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                                Ler review completo <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination / Load More -->
+<div class="flex justify-center mt-12 mb-8">
+<button class="bg-primary hover:bg-[#b05f10] text-white font-bold py-3 px-8 rounded-sm shadow-md transition-all transform active:scale-95 flex items-center gap-2">
+                    Carregar Mais Avaliações
+                    <span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-[#e5e0dc] py-10 mt-auto">
+<div class="max-w-[1024px] mx-auto px-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="size-6 text-stone-400">
+<span class="material-symbols-outlined filled">auto_stories</span>
+</div>
+<span class="text-stone-muted font-serif-title font-bold">Bookstore © 2024</span>
+</div>
+<div class="flex gap-6">
+<a class="text-stone-muted hover:text-primary text-sm" href="#">Sobre</a>
+<a class="text-stone-muted hover:text-primary text-sm" href="#">Termos</a>
+<a class="text-stone-muted hover:text-primary text-sm" href="#">Privacidade</a>
+<a class="text-stone-muted hover:text-primary text-sm" href="#">Ajuda</a>
+</div>
+</div>
+</footer>
+</body></html>

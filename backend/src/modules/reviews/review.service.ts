@@ -18,15 +18,11 @@ export class ReviewService {
     if (!book) {
       throw new NotFoundError("Livro não encontrado");
     }
-    const [reviews, stats] = await Promise.all([
-      this.reviewRepository.findByBookId(bookId),
-      this.reviewRepository.getBookReviewStats(bookId),
-    ]);
-    return {
-      reviews,
-      averageRating: stats._avg.rating ?? 0,
-      totalReviews: stats._count.rating,
-    };
+    return await this.reviewRepository.findManyByBookId(bookId);
+  }
+
+  async findManyByUserId(userId: string) {
+    return await this.reviewRepository.findManyByUserId(userId);
   }
 
   async create(userId: string, bookId: string, data: ICreateReviewInput) {
