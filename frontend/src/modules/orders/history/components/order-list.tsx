@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { SkeletonOrderList } from "./skeleton-order-list";
+import type { OrderResponse } from "../../schemas/order.response";
 
 const statusMap: Record<string, { label: string; color: string }> = {
   PENDING: {
@@ -25,15 +27,15 @@ const statusMap: Record<string, { label: string; color: string }> = {
   },
 };
 
-export function OrderList() {
-  const { data: orders, isLoading } = useOrders();
+interface OrderListProps {
+  initialData?: OrderResponse | null;
+}
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center p-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+export function OrderList({ initialData }: OrderListProps) {
+  const { data: orders, isLoading } = useOrders({ initialData });
+
+  if (isLoading && !orders) {
+    return <SkeletonOrderList />;
   }
 
   if (!orders || orders.length === 0) {

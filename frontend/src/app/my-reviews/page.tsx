@@ -1,11 +1,8 @@
-import { cookies } from "next/headers";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ReviewList } from "@/modules/my-reviews/components/review-list";
-import {
-  myReviewsResponseSchema,
-  MyReviewsResponse,
-} from "@/modules/my-reviews/schemas/my-reviews.schema";
+import { serverGet } from "@/lib/server-fetch";
+import type { MyReviewsResponse } from "@/modules/my-reviews/schemas/my-reviews.schema";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,31 +10,10 @@ export const metadata: Metadata = {
   description: "Gerencie e edite suas opiniões sobre suas leituras recentes.",
 };
 
-async function fetchMyReviews(): Promise<MyReviewsResponse | null> {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-
-  try {
-    const response = await fetch(`${process.env.API_URL}/reviews`, {
-      headers: {
-        Cookie: cookieHeader,
-      },
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = await response.json();
-    return myReviewsResponseSchema.parse(data);
-  } catch {
-    return null;
-  }
-}
+export const dynamic = "force-dynamic";
 
 export default async function MyReviewsPage() {
-  const initialData = await fetchMyReviews();
+  const initialData = await serverGet<MyReviewsResponse>("/reviews");
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-serif">

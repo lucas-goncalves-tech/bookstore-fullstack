@@ -2,13 +2,19 @@ import { OrderList } from "@/modules/orders/history/components/order-list";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Metadata } from "next";
+import { serverGet } from "@/lib/server-fetch";
+import type { OrderResponse } from "@/modules/orders/schemas/order.response";
 
 export const metadata: Metadata = {
   title: "Meus Pedidos | Bookstore",
   description: "Visualize seu histórico de pedidos.",
 };
 
-export default function OrderHistoryPage() {
+export const dynamic = "force-dynamic";
+
+export default async function OrderHistoryPage() {
+  const initialData = await serverGet<OrderResponse>("/orders");
+
   return (
     <div className="flex min-h-screen flex-col bg-background font-serif">
       <Header />
@@ -20,7 +26,7 @@ export default function OrderHistoryPage() {
               Acompanhe o status e histórico de suas compras.
             </p>
           </div>
-          <OrderList />
+          <OrderList initialData={initialData} />
         </div>
       </main>
       <Footer />

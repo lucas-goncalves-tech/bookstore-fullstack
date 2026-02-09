@@ -11,8 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAdminBooks } from "../hooks/use-books";
 import { useDeleteBook } from "../hooks/use-delete-book";
-import { Book } from "@/modules/home/schemas/book.schema";
-import { Edit, Trash2, Loader2 } from "lucide-react";
+import { Book, BooksResponse } from "@/modules/home/schemas/book.schema";
+import { Edit, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,23 +27,21 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SkeletonBooksTable } from "./skeleton-books-table";
 
 interface BooksTableProps {
   onEdit: (book: Book) => void;
+  initialData?: BooksResponse | null;
 }
 
-export function BooksTable({ onEdit }: BooksTableProps) {
+export function BooksTable({ onEdit, initialData }: BooksTableProps) {
   const [page, setPage] = useState(1);
   const limit = 10;
-  const { data, isLoading } = useAdminBooks(page, limit);
+  const { data, isLoading } = useAdminBooks(page, limit, initialData);
   const deleteBook = useDeleteBook();
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center p-8">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
+  if (isLoading && !data) {
+    return <SkeletonBooksTable />;
   }
 
   const handleDelete = async (id: string) => {

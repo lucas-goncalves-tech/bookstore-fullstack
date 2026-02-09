@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Header } from "@/components/header";
 import { HomeMain } from "@/modules/home/components/main";
 import type { BooksResponse } from "@/modules/home/schemas/book.schema";
@@ -22,8 +23,9 @@ export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-background font-serif">
       <Header />
-      <HomeMain initialBooks={initialBooks} />
+      <Suspense fallback={<div className="flex-1 animate-pulse bg-muted/20" />}>
+        <HomeMain initialBooks={initialBooks} />
+      </Suspense>
     </div>
   );
 }
-

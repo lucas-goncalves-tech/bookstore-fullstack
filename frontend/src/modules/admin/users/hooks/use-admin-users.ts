@@ -30,10 +30,16 @@ const deleteUser = async (id: string): Promise<void> => {
   await api.delete(`/admin/users/${id}`);
 };
 
-export function useAdminUsers(page = 1, limit = 10) {
+export function useAdminUsers(
+  page = 1,
+  limit = 10,
+  initialData?: UsersResponse | null,
+) {
   return useQuery({
     queryKey: ["admin", "users", page, limit],
     queryFn: () => fetchUsers(page, limit),
+    initialData: page === 1 && initialData ? initialData : undefined,
+    staleTime: 0,
   });
 }
 

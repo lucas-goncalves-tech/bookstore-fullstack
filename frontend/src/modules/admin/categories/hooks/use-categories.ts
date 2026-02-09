@@ -8,9 +8,11 @@ const fetchCategories = async (): Promise<CategoriesResponse> => {
   return data;
 };
 
-export function useAdminCategories() {
+export function useAdminCategories(initialData?: CategoriesResponse | null) {
   return useQuery({
     queryKey: adminCategoryKeys.lists(),
     queryFn: fetchCategories,
+    initialData: initialData ?? undefined,
+    staleTime: 0,
   });
 }

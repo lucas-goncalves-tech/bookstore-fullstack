@@ -1,11 +1,12 @@
 "use client";
 
-import { Loader2, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useMyReviews } from "../hooks/use-my-reviews";
 import { ReviewStats } from "./review-stats";
 import { ReviewCard } from "./review-card";
+import { SkeletonReviews } from "./skeleton-reviews";
 import { MyReviewsResponse } from "../schemas/my-reviews.schema";
 
 interface ReviewListProps {
@@ -15,12 +16,8 @@ interface ReviewListProps {
 export function ReviewList({ initialData }: ReviewListProps) {
   const { data, isLoading } = useMyReviews(initialData);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center p-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+  if (isLoading && !data) {
+    return <SkeletonReviews />;
   }
 
   if (!data || data.reviews.length === 0) {
