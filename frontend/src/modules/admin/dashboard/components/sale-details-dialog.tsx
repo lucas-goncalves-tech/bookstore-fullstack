@@ -10,7 +10,7 @@ import { DashboardSaleItem } from "../schemas/dashboard-sales.schema";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 interface SaleDetailsDialogProps {
   sale: DashboardSaleItem | null;
@@ -38,12 +38,7 @@ export function SaleDetailsDialog({
                 ID: {sale.id}
               </p>
             </div>
-            <Badge
-              variant="outline"
-              className="bg-green-500/10 text-green-700 border-green-200"
-            >
-              {sale.status === "CONFIRMED" ? "Concluído" : sale.status}
-            </Badge>
+            <StatusBadge status={sale.status} />
           </div>
         </DialogHeader>
 

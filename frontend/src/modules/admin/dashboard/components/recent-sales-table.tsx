@@ -12,6 +12,7 @@ import {
   DashboardSaleItem,
   DashboardSales,
 } from "../schemas/dashboard-sales.schema";
+import { StatusBadge } from "@/components/ui/status-badge";
 
 interface RecentSalesTableProps {
   initialData?: DashboardSales | null;
@@ -131,12 +132,7 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                             )}
                     </td>
                     <td className="py-4 px-6">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-700 border border-green-200">
-                        <span className="size-1.5 rounded-full bg-green-500"></span>
-                        {sale.status === "CONFIRMED"
-                          ? "Concluído"
-                          : sale.status}
-                      </span>
+                      <StatusBadge status={sale.status} />
                     </td>
                     <td className="py-4 px-6 text-sm font-bold text-card-foreground text-right">
                       {new Intl.NumberFormat("pt-BR", {

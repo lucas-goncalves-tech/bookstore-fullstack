@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const dashboardSaleItemSchema = z.object({
   id: z.string(),
-  status: z.string(),
+  status: z.enum(["CONFIRMED", "PENDING"]),
   total: z.string().transform((val) => Number(val)),
   createdAt: z.string(),
   user: z.object({

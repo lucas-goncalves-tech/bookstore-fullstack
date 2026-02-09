@@ -1,23 +1,12 @@
 "use client";
 
 import { useOrderDetails } from "../hooks/use-order-details";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, ArrowLeft, Package, MapPin, CreditCard } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-
-const statusMap: Record<string, { label: string; color: string }> = {
-  PENDING: {
-    label: "Pendente",
-    color: "bg-amber-100 text-amber-800 border-amber-200",
-  },
-  CONFIRMED: {
-    label: "Confirmado",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-};
+import { StatusBadge } from "@/components/ui/status-badge";
 
 export function OrderDetailsView({ orderId }: { orderId: string }) {
   const { data: order, isLoading } = useOrderDetails(orderId);
@@ -41,11 +30,6 @@ export function OrderDetailsView({ orderId }: { orderId: string }) {
     );
   }
 
-  const status = statusMap[order.status] || {
-    label: order.status,
-    color: "bg-gray-100 text-gray-800",
-  };
-
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -55,9 +39,7 @@ export function OrderDetailsView({ orderId }: { orderId: string }) {
             <h1 className="text-2xl font-bold tracking-tight">
               Pedido #{order.id.slice(0, 8)}
             </h1>
-            <Badge variant="outline" className={`font-normal ${status.color}`}>
-              {status.label}
-            </Badge>
+            <StatusBadge status={order.status} />
           </div>
           <p className="text-sm text-muted-foreground">
             Realizado em{" "}

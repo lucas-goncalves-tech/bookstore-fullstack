@@ -1,7 +1,7 @@
 "use client";
 
 import { useDashboardDetails } from "../hooks/use-dashboard-details";
-import { LibraryBig, CircleDollarSign, Users, TrendingUp } from "lucide-react";
+import { LibraryBig, CircleDollarSign, Users } from "lucide-react";
 import { SkeletonMetrics } from "./skeleton-metrics";
 import type { DashboardDetails } from "../schemas/dashboard-details.schema";
 
@@ -27,7 +27,6 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
       title: "Vendas Totais",
       value: details.sales,
       icon: LibraryBig,
-      trend: "+2.5%",
     },
     {
       title: "Receita Total",
@@ -36,13 +35,11 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
         currency: "BRL",
       }).format(details.revenue),
       icon: CircleDollarSign,
-      trend: "+12%",
     },
     {
       title: "Total de Usuários",
       value: details.totalUsers,
       icon: Users,
-      trend: "+45",
     },
   ];
 
@@ -57,9 +54,6 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
             <div className="p-3 bg-muted rounded-lg text-primary group-hover:bg-primary/5 transition-colors">
               <metric.icon className="size-6" />
             </div>
-            <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-500/10 px-2 py-1 rounded-full">
-              <TrendingUp className="size-3" /> {metric.trend}
-            </span>
           </div>
           <div>
             <p className="text-muted-foreground text-sm font-medium font-sans italic">

@@ -9,23 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { SkeletonOrderList } from "./skeleton-order-list";
 import type { OrderResponse } from "../../schemas/order.response";
-
-const statusMap: Record<string, { label: string; color: string }> = {
-  PENDING: {
-    label: "Pendente",
-    color: "bg-amber-100 text-amber-800 border-amber-200",
-  },
-  CONFIRMED: {
-    label: "Confirmado",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-};
+import { StatusBadge } from "@/components/ui/status-badge";
 
 interface OrderListProps {
   initialData?: OrderResponse | null;
@@ -65,10 +54,6 @@ export function OrderList({ initialData }: OrderListProps) {
         </TableHeader>
         <TableBody>
           {orders.map((order) => {
-            const status = statusMap[order.status] || {
-              label: order.status,
-              color: "bg-gray-100 text-gray-800",
-            };
             return (
               <TableRow key={order.id} className="group">
                 <TableCell className="font-medium">
@@ -87,12 +72,7 @@ export function OrderList({ initialData }: OrderListProps) {
                   })}
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={`font-normal ${status.color}`}
-                  >
-                    {status.label}
-                  </Badge>
+                  <StatusBadge status={order.status} />
                 </TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("pt-BR", {

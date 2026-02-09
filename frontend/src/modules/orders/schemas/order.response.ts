@@ -5,7 +5,7 @@ export const ordersResponseSchema = z.array(
     id: z.uuid(),
     createdAt: z.string(),
     total: z.string(),
-    status: z.string(),
+    status: z.enum(["CONFIRMED", "PENDING"]),
     _count: z.object({
       orderItem: z.number(),
     }),
@@ -17,7 +17,7 @@ export const orderDetailResponseSchema = z.object({
   id: z.uuid(),
   createdAt: z.string(),
   total: z.string(),
-  status: z.string(),
+  status: z.enum(["CONFIRMED", "PENDING"]),
   userId: z.string(),
   orderItem: z.array(
     z.object({
