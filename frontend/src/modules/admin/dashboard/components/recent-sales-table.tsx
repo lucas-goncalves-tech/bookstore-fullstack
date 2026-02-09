@@ -42,12 +42,6 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
         <h3 className="text-xl font-heading font-bold text-card-foreground">
           Últimas Vendas
         </h3>
-        <Link
-          href="/admin/orders"
-          className="text-primary text-sm font-bold font-sans hover:underline"
-        >
-          Ver todos
-        </Link>
       </div>
 
       <div className="bg-card rounded-xl shadow-sm border border-border overflow-hidden">
