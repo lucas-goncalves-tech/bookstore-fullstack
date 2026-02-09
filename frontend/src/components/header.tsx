@@ -12,9 +12,9 @@ import {
   ShoppingBag,
   Star,
   ChevronDown,
+  Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/use-user";
 import {
   DropdownMenu,
@@ -28,13 +28,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/modules/cart/store/cart.store";
 import { CartSheet } from "@/modules/cart/components/cart-sheet";
-
-const navLinks = [
-  { href: "/", label: "Home", active: true },
-  { href: "/autores", label: "Autores" },
-  { href: "/editoras", label: "Editoras" },
-  { href: "/contato", label: "Contato" },
-];
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -61,25 +54,6 @@ export function Header() {
             BookStore
           </h1>
         </Link>
-
-        {/* Navigation */}
-        <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Button
-              key={link.href}
-              variant="ghost"
-              size="sm"
-              asChild
-              className={cn(
-                link.active
-                  ? "font-bold text-primary"
-                  : "text-muted-foreground",
-              )}
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
-        </nav>
 
         {/* User Actions */}
         <div className="flex items-center gap-4">
@@ -124,6 +98,19 @@ export function Header() {
                 {totalItems}
               </span>
             )}
+          </Button>
+
+          {/* Home button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
+            aria-label="Home"
+            asChild
+          >
+            <Link href="/">
+              <Home className="size-5" />
+            </Link>
           </Button>
 
           {/* Auth Buttons or User Profile */}

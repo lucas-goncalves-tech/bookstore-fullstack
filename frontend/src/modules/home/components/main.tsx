@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { HeroSection } from "./hero-section";
 import { BookFilter, type PriceSortOrder } from "./book-filter";
 import { BookGrid } from "./book-grid";
 import { useBooks } from "../hooks/use-books";
 import { useCategories } from "../hooks/use-categories";
-import type { BookQueryParams, BooksResponse } from "../schemas/book.schema";
-import type { Book } from "../schemas/book.schema";
+import type { BooksResponse, Book } from "../schemas/book.schema";
 import { Footer } from "@/components/footer";
 import { SimplePagination } from "@/components/simple-pagination";
 import { useCartStore } from "@/modules/cart/store/cart.store";
@@ -17,24 +17,46 @@ interface HomeMainProps {
 }
 
 export function HomeMain({ initialBooks }: HomeMainProps) {
-  const [filters, setFilters] = useState<BookQueryParams>({});
-  const [page, setPage] = useState(1);
-  const [priceSortOrder, setPriceSortOrder] = useState<PriceSortOrder>("none");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Passa initialData apenas quando não há filtros aplicados e estamos na primeira página
-  const hasFilters = Object.keys(filters).length > 0;
-  // Only use initialData for the very first page with no filters
+  // Read all filter values from URL
+  const search = searchParams.get("search") || undefined;
+  const categorySlug = searchParams.get("categorySlug") || undefined;
+  const sortOrder = (searchParams.get("sort") as PriceSortOrder) || "none";
+  const minPrice = searchParams.get("minPrice")
+    ? Number(searchParams.get("minPrice"))
+    : undefined;
+  const maxPrice = searchParams.get("maxPrice")
+    ? Number(searchParams.get("maxPrice"))
+    : undefined;
+  const page = Number(searchParams.get("page")) || 1;
+
+  // Build params object from URL
+  const params = useMemo(
+    () => ({
+      search,
+      categorySlug,
+      minPrice,
+      maxPrice,
+      page,
+      limit: 12,
+    }),
+    [search, categorySlug, minPrice, maxPrice, page],
+  );
+
+  // Check if we have any filters applied
+  const hasFilters = !!(search || categorySlug || minPrice || maxPrice);
   const shouldUseInitialData = !hasFilters && page === 1;
 
   const { data: booksResponse, isLoading: isLoadingBooks } = useBooks({
-    params: { ...filters, page, limit: 12 },
+    params,
     initialData: shouldUseInitialData ? initialBooks : undefined,
   });
   const { data: categories = [] } = useCategories();
 
   const totalPages = useMemo(() => {
     if (!booksResponse) return 1;
-    // Handle both array and paginated response formats
     return Array.isArray(booksResponse)
       ? 1
       : (booksResponse.metadata?.totalPages ?? 1);
@@ -42,29 +64,33 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
 
   const books = useMemo(() => {
     if (!booksResponse) return [];
-    // Handle both array and paginated response formats
     const rawBooks = Array.isArray(booksResponse)
       ? booksResponse
       : (booksResponse.data ?? []);
 
-    // Ordenação client-side por preço
-    if (priceSortOrder === "none") return rawBooks;
+    // Client-side sorting by price
+    if (sortOrder === "none") return rawBooks;
 
     return [...rawBooks].sort((a, b) => {
       const priceA = Number(a.price);
       const priceB = Number(b.price);
-      return priceSortOrder === "asc" ? priceA - priceB : priceB - priceA;
+      return sortOrder === "asc" ? priceA - priceB : priceB - priceA;
     });
-  }, [booksResponse, priceSortOrder]);
+  }, [booksResponse, sortOrder]);
 
-  const handleFilterChange = useCallback((newFilters: BookQueryParams) => {
-    setFilters(newFilters);
-    setPage(1); // Reset page when filters change
-  }, []);
-
-  const handleSortChange = useCallback((order: PriceSortOrder) => {
-    setPriceSortOrder(order);
-  }, []);
+  // Handle page change via URL
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (newPage === 1) {
+        params.delete("page");
+      } else {
+        params.set("page", String(newPage));
+      }
+      router.push(`?${params.toString()}`, { scroll: false });
+    },
+    [router, searchParams],
+  );
 
   const addItem = useCartStore((state) => state.addItem);
 
@@ -78,13 +104,7 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
   return (
     <main className="flex min-h-screen flex-1 flex-col">
       <HeroSection />
-      <BookFilter
-        categories={categories}
-        onFilterChange={handleFilterChange}
-        onSortChange={handleSortChange}
-        initialValues={filters}
-        sortOrder={priceSortOrder}
-      />
+      <BookFilter categories={categories} />
       <BookGrid
         books={books}
         isLoading={isLoadingBooks}
@@ -96,7 +116,7 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
           <SimplePagination
             currentPage={page}
             totalPages={totalPages}
-            onPageChange={setPage}
+            onPageChange={handlePageChange}
           />
         </div>
       )}
