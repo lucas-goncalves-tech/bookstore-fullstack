@@ -20,6 +20,7 @@ import {
 import { ForbiddenError } from "../../shared/errors/forbidden.error";
 import { SessionsRepository } from "../sessions/sessions.repository";
 import { parseExpiration } from "../../shared/contants/sid-cookie";
+import { SessionError } from "../../shared/errors/session.error";
 
 @injectable()
 export class AuthService {
@@ -85,29 +86,38 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
-    if (!refreshToken) {
-      throw new UnauthorizedError("Token de atualização inválido!");
+    try {
+      verifyRefreshToken(refreshToken);
+    } catch {
+      throw new SessionError("Token de atualização inválido!");
     }
-    verifyRefreshToken(refreshToken);
 
     const session = await this.sessionsRepository.findByTokenHash(
       hashToken(refreshToken),
     );
 
-    if (!session || session.revokedAt) {
-      throw new UnauthorizedError("Sessão inválida ou revogada!");
+    if (!session) {
+      throw new SessionError("Sessão inválida!");
+    }
+    if (session.revokedAt) {
+      await this.sessionsRepository.revokeAllByUserId(session.userId);
+      throw new SessionError(
+        "Reutilização de token detectada! Todas as sessões foram revogadas.",
+      );
     }
     if (session.expiresAt < new Date()) {
-      throw new UnauthorizedError("Sessão expirada!");
+      throw new SessionError("Sessão expirada!");
     }
 
     const user = await this.usersRepository.findByKey("id", session.userId);
     if (!user) {
-      throw new UnauthorizedError("Usuário não encontrado!");
+      throw new SessionError("Usuário não encontrado!");
     }
 
     if (user.bannedAt) {
-      throw new ForbiddenError(`Usuário banido! Motivo: ${user.banReason}`);
+      await this.sessionsRepository.revokeAllByUserId(session.userId);
+
+      throw new SessionError(`Usuário banido! Motivo: ${user.banReason}`);
     }
 
     const newAccessToken = generateAccessToken({

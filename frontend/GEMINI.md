@@ -5,7 +5,7 @@ This project is a modern bookstore web application built with Next.js 15, focuse
 ## Important Note for AI Agents
 
 - **DO NOT** Create new components before check /src/components/\*\*
-- **DO NOT** edit @../backend this is only READ-ONLY for reference.
+- **DO NOT** edit ../backend/\*\* this is READ-ONLY for reference.
 - **ALWAYS** use the actual project files in `src/` as the source of truth for the project structure and implementation details.
 - **ALWAYS**: Use lucide icons and shadcn components. (if not installed use npx shadcn@latest add <component-name>)
 - **ALWAYS**: Implement SSR in /src/app

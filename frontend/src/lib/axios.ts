@@ -6,6 +6,7 @@ export const api = axios.create({
 });
 
 let isRefreshing = false;
+let refreshFailed = false;
 let failedQueue: Array<{
   resolve: (value?: unknown) => void;
   reject: (reason?: unknown) => void;
@@ -32,16 +33,23 @@ api.interceptors.response.use(
     // Skip refresh attempt for auth endpoints to avoid infinite loops
     const isAuthEndpoint = originalRequest?.url?.includes("/auth/");
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !isAuthEndpoint
-    ) {
+    // If refresh already failed in this session, don't try again
+    if (refreshFailed || isAuthEndpoint) {
+      return Promise.reject(error);
+    }
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         // Queue requests while refresh is in progress
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then(() => api(originalRequest));
+        }).then(() => {
+          // After queue resolves, check if refresh failed
+          if (refreshFailed) {
+            return Promise.reject(error);
+          }
+          return api(originalRequest);
+        });
       }
 
       originalRequest._retry = true;
@@ -52,8 +60,8 @@ api.interceptors.response.use(
         processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {
+        refreshFailed = true;
         processQueue(refreshError as AxiosError);
-        // Don't redirect - let the component handle the 401 appropriately
         return Promise.reject(error);
       } finally {
         isRefreshing = false;
@@ -63,3 +71,10 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+// Reset refresh state on successful login (call this from your login flow)
+export const resetRefreshState = () => {
+  refreshFailed = false;
+  isRefreshing = false;
+  failedQueue = [];
+};
