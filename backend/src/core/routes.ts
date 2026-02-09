@@ -10,6 +10,7 @@ import { CategoriesRoutes } from "../modules/categories/categories.routes";
 import { UsersRoutes } from "../modules/users/users.routes";
 import { OrderRoutes } from "../modules/orders/orders.routes";
 import { ReviewsRoutes } from "../modules/reviews/reviews.routes";
+import { DashboardRoutes } from "../modules/dashboard/dashboard.routes";
 
 @injectable()
 export class Routes {
@@ -25,6 +26,8 @@ export class Routes {
     private readonly orderRoutes: OrderRoutes,
     @inject(ReviewsRoutes)
     private readonly reviewsRoutes: ReviewsRoutes,
+    @inject(DashboardRoutes)
+    private readonly dashboardRoutes: DashboardRoutes,
   ) {
     this.router = Router();
     this.routes();
@@ -45,6 +48,7 @@ export class Routes {
     this.router.use("/api/v1/users", this.usersRoutes.routes);
     this.router.use("/api/v1/orders", this.orderRoutes.routes);
     this.router.use("/api/v1/reviews", this.reviewsRoutes.routes);
+    this.router.use("/api/v1/dashboard", this.dashboardRoutes.routes);
 
     // not found
     this.router.use((req, res) => {
