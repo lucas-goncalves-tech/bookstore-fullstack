@@ -39,11 +39,12 @@ export function BookPriceCard({ book, originalPrice }: BookPriceCardProps) {
   }).format(price / 3);
 
   const handleAddToCart = () => {
-    // Map BookDetail to Cart Book type (needs coverThumbUrl)
+    // Map BookDetail to Cart Book type (needs coverThumbUrl and averageRating)
     addItem({
       ...book,
       coverThumbUrl: book.coverUrl, // Use coverUrl as thumb
       categoryId: book.categoryId || null, // Ensure null if undefined
+      averageRating: 0, // Not available in BookDetail, default to 0
     });
     // Toast is handled in store
   };

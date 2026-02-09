@@ -94,3 +94,12 @@ Runs ESLint for code quality checks.
 ## Backend Integration
 
 The frontend communicates with a REST API. Authentication is handled via cookies (`withCredentials: true`). The `useUser` hook provides the current user's state and logout functionality.
+
+## Protected Routes (Middleware)
+
+The following routes require authentication (defined in `src/middleware.ts`):
+
+- `/orders` - Order history and details
+- `/checkout` - Checkout flow
+- `/admin` - Admin panel
+- `/my-reviews` - User reviews page

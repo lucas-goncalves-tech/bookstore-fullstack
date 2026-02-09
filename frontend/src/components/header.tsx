@@ -171,7 +171,7 @@ export function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/reviews" className="cursor-pointer">
+                    <Link href="/my-reviews" className="cursor-pointer">
                       <Star className="mr-2 h-4 w-4" />
                       <span>Meus Reviews</span>
                     </Link>
