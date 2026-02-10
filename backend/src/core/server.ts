@@ -21,7 +21,7 @@ const gracefulShutdown = () => {
   server.closeAllConnections();
   setTimeout(() => {
     process.exit(1);
-  }, 5_000);
+  }, 5_000).unref();
 };
 
 process.on("SIGINT", gracefulShutdown);
