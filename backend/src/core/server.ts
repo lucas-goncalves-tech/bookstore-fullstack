@@ -4,6 +4,7 @@ import { container } from "tsyringe";
 import "./config/container"; // <-- Registra o StorageProvider ANTES de resolver App
 import { env } from "./config/env";
 import { App } from "../app";
+import { PrismaDB } from "../database/prisma";
 
 const app = container.resolve(App).getServer();
 
@@ -13,7 +14,8 @@ const server = app.listen(env.PORT, () => {
 });
 
 const gracefulShutdown = () => {
-  server.close(() => {
+  server.close(async () => {
+    await container.resolve(PrismaDB).$disconnect();
     process.exit(0);
   });
   server.closeAllConnections();
