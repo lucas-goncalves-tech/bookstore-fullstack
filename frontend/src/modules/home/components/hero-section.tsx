@@ -8,7 +8,7 @@ export function HeroSection() {
   return (
     <section className="relative w-full px-6 py-8">
       <div className="mx-auto max-w-7xl">
-        <div className="group relative h-[500px] w-full overflow-hidden rounded-xl shadow-lg">
+        <div className="group relative h-[500px] w-full overflow-hidden rounded-lg shadow-lg">
           {/* Background Image */}
           <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
             <Image

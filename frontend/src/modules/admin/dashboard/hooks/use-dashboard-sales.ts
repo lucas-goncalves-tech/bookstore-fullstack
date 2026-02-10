@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import {
   dashboardSalesSchema,
@@ -13,13 +13,28 @@ interface UseDashboardSalesOptions {
 }
 
 export function useDashboardSales(options: UseDashboardSalesOptions = {}) {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: adminDashboardKeys.sales(),
-    queryFn: async () => {
-      const response = await api.get("/dashboard/sales");
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await api.get("/dashboard/sales", {
+        params: { page: pageParam },
+      });
       return dashboardSalesSchema.parse(response.data);
     },
-    initialData: options.initialData ?? undefined,
+    getNextPageParam: (lastPage: DashboardSales) => {
+      if (lastPage.metadata.page < lastPage.metadata.totalPage) {
+        return lastPage.metadata.page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+    throwOnError: true,
+    initialData: options.initialData
+      ? {
+          pages: [options.initialData],
+          pageParams: [1],
+        }
+      : undefined,
     staleTime: 0, // Always revalidate on client
   });
 }

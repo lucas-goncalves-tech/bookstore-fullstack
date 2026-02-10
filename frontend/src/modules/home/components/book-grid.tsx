@@ -18,7 +18,7 @@ function BookGridSkeleton() {
           key={i}
           className="flex animate-pulse flex-col rounded-lg bg-card p-4"
         >
-          <div className="mb-4 aspect-2/3 w-full rounded-md bg-muted" />
+          <div className="mb-4 aspect-2/3 w-full rounded-lg bg-muted" />
           <div className="mb-2 h-5 w-3/4 rounded bg-muted" />
           <div className="mb-3 h-4 w-1/2 rounded bg-muted" />
           <div className="mb-4 space-y-2">

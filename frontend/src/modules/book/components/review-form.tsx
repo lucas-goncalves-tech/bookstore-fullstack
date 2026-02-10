@@ -54,7 +54,7 @@ export function ReviewForm({ bookId }: ReviewFormProps) {
   };
 
   return (
-    <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
+    <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
       <h4 className="mb-4 text-lg font-bold">Escreva sua avaliação</h4>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

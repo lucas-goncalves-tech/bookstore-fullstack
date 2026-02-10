@@ -46,10 +46,10 @@ export function BookCoverGallery({ coverUrl, title }: BookCoverGalleryProps) {
               key={index}
               onClick={() => setSelectedIndex(index)}
               className={cn(
-                "relative aspect-2/3 cursor-pointer overflow-hidden rounded-md border-2 transition-colors",
+                "relative aspect-2/3 cursor-pointer overflow-hidden rounded-lg border-2 transition-colors",
                 selectedIndex === index
                   ? "border-primary"
-                  : "border-transparent hover:border-primary/50"
+                  : "border-transparent hover:border-primary/50",
               )}
             >
               <Image

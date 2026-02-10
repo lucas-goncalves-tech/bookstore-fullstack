@@ -10,7 +10,7 @@ import {
 
 export function SkeletonOrderList() {
   return (
-    <div className="rounded-md border bg-card">
+    <div className="rounded-lg border bg-card">
       <Table>
         <TableHeader>
           <TableRow>

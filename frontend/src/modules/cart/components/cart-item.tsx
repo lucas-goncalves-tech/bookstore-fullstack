@@ -20,7 +20,7 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <div className="flex gap-4 py-4">
-      <div className="relative aspect-3/4 w-20 flex-none overflow-hidden rounded-md border border-border bg-muted">
+      <div className="relative aspect-3/4 w-20 flex-none overflow-hidden rounded-lg border border-border bg-muted">
         {item.coverThumbUrl ? (
           <Image
             src={item.coverThumbUrl}
@@ -49,7 +49,7 @@ export function CartItem({ item }: CartItemProps) {
           <p className="font-semibold">{formattedPrice}</p>
 
           <div className="flex items-center gap-2">
-            <div className="flex items-center rounded-md border border-border">
+            <div className="flex items-center rounded-lg border border-border">
               <Button
                 variant="ghost"
                 size="icon"

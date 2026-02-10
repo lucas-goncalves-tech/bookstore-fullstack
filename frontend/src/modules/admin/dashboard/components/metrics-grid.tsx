@@ -48,7 +48,7 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
       {metrics.map((metric, index) => (
         <div
           key={index}
-          className="bg-card p-6 rounded-xl shadow-sm border border-border flex flex-col gap-4 group hover:border-primary/30 transition-colors"
+          className="bg-card p-6 rounded-lg shadow-sm border border-border flex flex-col gap-4 group hover:border-primary/30 transition-colors"
         >
           <div className="flex justify-between items-start">
             <div className="p-3 bg-muted rounded-lg text-primary group-hover:bg-primary/5 transition-colors">

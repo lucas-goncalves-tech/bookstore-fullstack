@@ -17,7 +17,7 @@ export function SkeletonReviews() {
             key={i}
             className="flex flex-col md:flex-row gap-6 p-6 border rounded-lg bg-card"
           >
-            <Skeleton className="size-24 rounded-md md:w-32 md:h-48 shrink-0" />
+            <Skeleton className="size-24 rounded-lg md:w-32 md:h-48 shrink-0" />
             <div className="flex flex-col flex-1 gap-4">
               <div className="flex justify-between items-start">
                 <div className="space-y-2">

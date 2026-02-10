@@ -41,7 +41,7 @@ export function OrderList({ initialData }: OrderListProps) {
   }
 
   return (
-    <div className="rounded-md border bg-card">
+    <div className="rounded-lg border bg-card">
       <Table>
         <TableHeader>
           <TableRow>

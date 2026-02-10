@@ -11,7 +11,7 @@ import {
 export function SkeletonBooksTable() {
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
+      <div className="rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>

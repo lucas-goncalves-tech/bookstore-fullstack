@@ -51,7 +51,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
     <div className="group flex flex-col rounded-lg border border-transparent bg-card p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-xl">
       <Link href={`/books/${book.id}`} className="flex flex-1 flex-col">
         {/* Cover Image */}
-        <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-md shadow-md">
+        <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-lg shadow-md">
           <div
             className={cn(
               "absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110",

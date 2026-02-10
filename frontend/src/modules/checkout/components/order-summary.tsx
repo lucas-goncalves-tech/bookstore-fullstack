@@ -22,7 +22,7 @@ export function OrderSummary({
   const total = subtotal + shipping;
 
   return (
-    <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden sticky top-24">
+    <div className="rounded-lg border border-border bg-card text-card-foreground shadow-sm overflow-hidden sticky top-24">
       <div className="p-6 border-b border-border bg-muted/50">
         <h2 className="text-xl font-bold">Resumo do Pedido</h2>
       </div>

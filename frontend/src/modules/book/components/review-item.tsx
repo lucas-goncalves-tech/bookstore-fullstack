@@ -17,7 +17,7 @@ export function ReviewItem({ review }: ReviewItemProps) {
     .toUpperCase();
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+    <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
       <div className="mb-4 flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">

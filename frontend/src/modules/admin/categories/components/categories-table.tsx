@@ -75,7 +75,7 @@ export function CategoriesTable({ initialData }: CategoriesTableProps) {
         </Button>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>

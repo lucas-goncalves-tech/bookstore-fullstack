@@ -21,7 +21,16 @@ export const dashboardSaleItemSchema = z.object({
   ),
 });
 
-export const dashboardSalesSchema = z.array(dashboardSaleItemSchema);
+const dashboardSalesMetadata = z.object({
+  page: z.number(),
+  total: z.number(),
+  totalPage: z.number(),
+});
+
+export const dashboardSalesSchema = z.object({
+  sales: z.array(dashboardSaleItemSchema),
+  metadata: dashboardSalesMetadata,
+});
 
 export type DashboardSaleItem = z.infer<typeof dashboardSaleItemSchema>;
 export type DashboardSales = z.infer<typeof dashboardSalesSchema>;

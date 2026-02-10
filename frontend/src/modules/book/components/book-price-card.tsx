@@ -55,7 +55,7 @@ export function BookPriceCard({ book, originalPrice }: BookPriceCardProps) {
   };
 
   return (
-    <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
+    <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
       {/* Preço */}
       <div className="mb-2 flex items-end gap-3">
         <span className="text-4xl font-bold text-primary">
