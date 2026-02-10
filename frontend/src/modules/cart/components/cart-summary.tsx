@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "../store/cart.store";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/hooks/use-user";
+import Link from "next/link";
 
 interface CartSummaryProps {
   onClose: () => void;
@@ -11,6 +13,8 @@ interface CartSummaryProps {
 
 export function CartSummary({ onClose }: CartSummaryProps) {
   const { getTotalPrice, items } = useCartStore();
+  const { user } = useUser();
+  const isAuthenticated = !!user;
   const router = useRouter();
 
   const total = getTotalPrice();
@@ -37,14 +41,20 @@ export function CartSummary({ onClose }: CartSummaryProps) {
         </p>
       </div>
 
-      <Button
-        size="lg"
-        className="w-full"
-        onClick={handleCheckout}
-        disabled={items.length === 0}
-      >
-        Ir para o Pagamento
-      </Button>
+      {isAuthenticated ? (
+        <Button
+          size="lg"
+          className="w-full"
+          onClick={handleCheckout}
+          disabled={items.length === 0}
+        >
+          Ir para o Pagamento
+        </Button>
+      ) : (
+        <Button size="lg" className="w-full" asChild>
+          <Link href="/auth">Fazer Login</Link>
+        </Button>
+      )}
     </div>
   );
 }
