@@ -8,8 +8,6 @@ import type { DashboardSales } from "@/modules/admin/dashboard/schemas/dashboard
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  // Fetch initial data on server (SSR)
-  // Returns null if 401 - client will handle refresh and refetch
   const [detailsData, salesData] = await Promise.all([
     serverGet<DashboardDetails>("/dashboard/details"),
     serverGet<DashboardSales>("/dashboard/sales"),

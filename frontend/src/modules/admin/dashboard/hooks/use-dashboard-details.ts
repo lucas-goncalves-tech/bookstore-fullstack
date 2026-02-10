@@ -6,6 +6,7 @@ import {
   dashboardDetailsSchema,
   type DashboardDetails,
 } from "../schemas/dashboard-details.schema";
+import { adminDashboardKeys } from "./query-keys";
 
 interface UseDashboardDetailsOptions {
   initialData?: DashboardDetails | null;
@@ -13,7 +14,7 @@ interface UseDashboardDetailsOptions {
 
 export function useDashboardDetails(options: UseDashboardDetailsOptions = {}) {
   return useQuery({
-    queryKey: ["dashboard", "details"],
+    queryKey: adminDashboardKeys.details(),
     queryFn: async () => {
       const response = await api.get("/dashboard/details");
       return dashboardDetailsSchema.parse(response.data);
