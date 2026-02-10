@@ -7,6 +7,7 @@ import { Routes } from "./core/routes";
 import { errorHandler } from "./shared/middlewares/error-handler.middleware";
 import { env } from "./core/config/env";
 import cookieParser from "cookie-parser";
+import { globalRateLimit } from "./shared/middlewares/rate-limit.middleware";
 
 @singleton()
 export class App {
@@ -22,8 +23,10 @@ export class App {
   }
 
   private middlewares() {
+    this.app.set("trust proxy", 1);
+    this.app.use(globalRateLimit);
     this.app.use(express.json());
-    this.app.use(cookieParser())
+    this.app.use(cookieParser());
     this.app.use(
       helmet({
         contentSecurityPolicy: {

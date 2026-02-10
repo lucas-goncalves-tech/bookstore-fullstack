@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { postNewUser, BASE_URL } from "../../../tests/helpers/auth.helper";
 import { req } from "../../../tests/helpers/commom.helper";
+import { createUser } from "../../../tests/factories/user.factory";
 
 describe(`POST ${BASE_URL}/register`, () => {
   it("should return 201 and register user when body contains valid data", async () => {
@@ -51,13 +52,13 @@ describe(`POST ${BASE_URL}/register`, () => {
 
 describe(`POST ${BASE_URL}/login`, () => {
   it("should return 204 and set HttpOnly cookies when credentials are valid", async () => {
-    const { newUser } = await postNewUser();
+    const user = await createUser();
 
     const { headers, body } = await req
       .post(BASE_URL + "/login")
       .send({
-        email: newUser.email,
-        password: newUser.password,
+        email: user.email,
+        password: "password",
       })
       .expect(204);
     const cookies = headers["set-cookie"][0];

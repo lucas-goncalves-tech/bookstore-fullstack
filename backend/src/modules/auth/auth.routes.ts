@@ -5,6 +5,10 @@ import { validateMiddleware } from "../../shared/middlewares/validate.middleware
 import { createUserDto } from "./dto/create-user.dto";
 import { loginDto } from "./dto/login.dto";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
+import {
+  authRateLimit,
+  registerRateLimit,
+} from "../../shared/middlewares/rate-limit.middleware";
 
 @injectable()
 export class AuthRoutes {
@@ -19,11 +23,13 @@ export class AuthRoutes {
   private setupRoutes() {
     this.router.post(
       "/register",
+      registerRateLimit,
       validateMiddleware({ body: createUserDto }),
       this.controller.create,
     );
     this.router.post(
       "/login",
+      authRateLimit,
       validateMiddleware({ body: loginDto }),
       this.controller.login,
     );

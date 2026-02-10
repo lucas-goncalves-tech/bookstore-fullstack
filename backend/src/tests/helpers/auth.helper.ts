@@ -23,6 +23,8 @@ export function generateFakeUser(override?: Record<string, unknown>): User {
     name: "Fake User",
     role: "USER",
     passwordHash: "1234",
+    banReason: null,
+    bannedAt: null,
     ...override,
   };
 }
