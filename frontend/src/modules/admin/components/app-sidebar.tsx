@@ -1,11 +1,6 @@
-"use client"
+"use client";
 
-import {
-  Book,
-  LayoutDashboard,
-  Users,
-  Tags,
-} from "lucide-react"
+import { Book, LayoutDashboard, Tags } from "lucide-react";
 
 import {
   Sidebar,
@@ -16,9 +11,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+} from "@/components/ui/sidebar";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const items = [
@@ -37,26 +32,27 @@ const items = [
     url: "/admin/categories",
     icon: Tags,
   },
-  {
-    title: "Usuários",
-    url: "/admin/users",
-    icon: Users,
-  },
-]
+];
 
 export function AppSidebar() {
-    const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-bold text-primary">BookStore Admin</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg font-bold text-primary">
+            BookStore Admin
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="mt-4">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.url}
+                    tooltip={item.title}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -69,5 +65,5 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
