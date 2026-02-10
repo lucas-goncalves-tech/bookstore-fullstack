@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { DashboardService } from "./dashboard.service";
 import { Request, Response } from "express";
+import { DashBoardQueryDto } from "./dtos/dashboard-querys.dto";
 
 @injectable()
 export class DashboardController {
@@ -16,7 +17,8 @@ export class DashboardController {
   };
 
   getLastSales = async (req: Request, res: Response) => {
-    const result = await this.dashboardService.getLastSales();
+    const { page } = req.safeQuery as DashBoardQueryDto;
+    const result = await this.dashboardService.getLastSales(page);
     res.json(result);
   };
 }

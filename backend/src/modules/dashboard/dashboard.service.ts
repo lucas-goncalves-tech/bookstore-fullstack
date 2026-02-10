@@ -12,7 +12,7 @@ export class DashboardService {
     return await this.dashboardRepository.getOverviewMetrics();
   }
 
-  async getLastSales() {
-    return await this.dashboardRepository.getLastSales();
+  async getLastSales(page: number) {
+    return await this.dashboardRepository.getLastSales(page);
   }
 }

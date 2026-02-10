@@ -30,36 +30,55 @@ export class DashboardRepository {
     };
   }
 
-  async getLastSales(take = 10) {
-    return this.prisma.order.findMany({
-      take,
-      orderBy: {
-        createdAt: "desc",
-      },
-      select: {
-        id: true,
-        status: true,
-        total: true,
-        createdAt: true,
-        user: {
-          select: {
-            name: true,
-          },
+  async getLastSales(page = 1) {
+    const take = 10;
+    const skip = (page - 1) * take;
+    const [sales, total] = await Promise.all([
+      this.prisma.order.findMany({
+        skip,
+        take,
+        orderBy: {
+          createdAt: "desc",
         },
-        orderItem: {
-          select: {
-            quantity: true,
-            priceAtTime: true,
-            book: {
-              select: {
-                title: true,
-                author: true,
-                coverThumbUrl: true,
+        select: {
+          id: true,
+          status: true,
+          total: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          orderItem: {
+            select: {
+              quantity: true,
+              priceAtTime: true,
+              book: {
+                select: {
+                  title: true,
+                  author: true,
+                  coverThumbUrl: true,
+                },
               },
             },
           },
         },
+      }),
+      this.prisma.order.count({
+        select: {
+          _all: true,
+        },
+      }),
+    ]);
+
+    return {
+      sales,
+      metadata: {
+        page,
+        total: total._all,
+        totalPage: Math.ceil(total._all / take),
       },
-    });
+    };
   }
 }

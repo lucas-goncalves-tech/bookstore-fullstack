@@ -3,6 +3,8 @@ import { container, injectable } from "tsyringe";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middleware";
 import { DashboardController } from "./dashboard.controller";
+import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
+import { dashboardQueryDto } from "./dtos/dashboard-querys.dto";
 
 @injectable()
 export class DashboardRoutes {
@@ -16,7 +18,11 @@ export class DashboardRoutes {
     this.router.use(authMiddleware, adminOnlyMiddleware);
     this.router.get("/details", this.controller.getOverviewMetrics);
 
-    this.router.get("/sales", this.controller.getLastSales);
+    this.router.get(
+      "/sales",
+      validateMiddleware({ query: dashboardQueryDto }),
+      this.controller.getLastSales,
+    );
   }
 
   get routes() {
