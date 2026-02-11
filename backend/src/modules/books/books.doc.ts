@@ -1,6 +1,6 @@
 import {
   badRequestResponse,
-  forbiddenResponse,
+  forbiddenAdminResponse,
   notFoundResponse,
   unauthorizedResponse,
 } from "../../docs/errors/errors";
@@ -96,7 +96,8 @@ registry.registerPath({
   path: "/books",
   tags: ["Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Criar livro",
+  summary: "Criar livro (ADMIN)",
+  description: "Cria um novo livro, apenas para administradores.",
   request: {
     body: {
       content: {
@@ -125,7 +126,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenResponse,
+    ...forbiddenAdminResponse,
   },
 });
 
@@ -175,7 +176,8 @@ registry.registerPath({
   path: "/books/{id}/cover",
   tags: ["Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Upload de capa de livro",
+  summary: "Upload de capa de livro (ADMIN)",
+  description: "Upload de capa de livro, apenas para administradores.",
   parameters: [
     {
       name: "id",
@@ -216,7 +218,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenResponse,
+    ...forbiddenAdminResponse,
   },
 });
 
@@ -225,7 +227,8 @@ registry.registerPath({
   path: "/books/{id}",
   tags: ["Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Atualizar livro",
+  summary: "Atualizar livro (ADMIN)",
+  description: "Atualiza um livro do sistema, apenas para administradores.",
   parameters: [
     {
       name: "id",
@@ -257,7 +260,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenResponse,
+    ...forbiddenAdminResponse,
   },
 });
 
@@ -266,7 +269,8 @@ registry.registerPath({
   path: "/books/{id}",
   tags: ["Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Deletar livro",
+  summary: "Deletar livro (ADMIN)",
+  description: "Remove um livro do sistema, apenas para administradores.",
   parameters: [
     {
       name: "id",
@@ -284,6 +288,6 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenResponse,
+    ...forbiddenAdminResponse,
   },
 });
