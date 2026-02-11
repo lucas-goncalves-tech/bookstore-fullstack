@@ -1,6 +1,6 @@
 import {
   badRequestResponse,
-  forbiddenAdminResponse,
+  forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
 } from "../../docs/errors/errors";
@@ -126,7 +126,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenAdminResponse,
+    ...forbiddenResponse,
   },
 });
 
@@ -218,7 +218,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenAdminResponse,
+    ...forbiddenResponse,
   },
 });
 
@@ -260,7 +260,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenAdminResponse,
+    ...forbiddenResponse,
   },
 });
 
@@ -288,6 +288,6 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
-    ...forbiddenAdminResponse,
+    ...forbiddenResponse,
   },
 });

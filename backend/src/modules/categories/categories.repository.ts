@@ -4,14 +4,18 @@ import {
   ICreateCategoryInput,
   IUpdateCategoryInput,
 } from "./interface/categories.interface";
+import { Prisma } from "@prisma/client";
 
 @injectable()
 export class CategoriesRepository {
   constructor(@inject(PrismaDB) private readonly prisma: PrismaDB) {}
 
-  async findById(id: string) {
+  async findByKey(key: "id" | "slug", value: string) {
+    const where: Prisma.CategoryWhereUniqueInput =
+      key === "id" ? { id: value } : { slug: value };
+
     return await this.prisma.category.findUnique({
-      where: { id },
+      where,
     });
   }
 

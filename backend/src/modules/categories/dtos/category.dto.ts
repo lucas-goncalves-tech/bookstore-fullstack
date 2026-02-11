@@ -15,3 +15,12 @@ export const updateCategoryDto = createCategoryDto.partial();
 
 export type CreateCategoryDto = z.infer<typeof createCategoryDto>;
 export type UpdateCategoryDto = z.infer<typeof updateCategoryDto>;
+
+export const categoryResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  description: z.string(),
+});
+
+export const categoryFindManyResponseSchema = z.array(categoryResponseSchema);

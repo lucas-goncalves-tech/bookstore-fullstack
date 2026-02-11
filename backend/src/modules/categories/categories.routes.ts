@@ -16,17 +16,15 @@ export class CategoriesRoutes {
 
   private setupRoutes() {
     this.router.get("/", this.controller.findMany);
+
+    this.router.use(authMiddleware, adminOnlyMiddleware);
     this.router.post(
       "/",
-      authMiddleware,
-      adminOnlyMiddleware,
       validateMiddleware({ body: createCategoryDto }),
       this.controller.create,
     );
     this.router.put(
       "/:id",
-      authMiddleware,
-      adminOnlyMiddleware,
       validateMiddleware({
         body: createCategoryDto,
         params: categoryParamsDto,
@@ -35,8 +33,6 @@ export class CategoriesRoutes {
     );
     this.router.delete(
       "/:id",
-      authMiddleware,
-      adminOnlyMiddleware,
       validateMiddleware({ params: categoryParamsDto }),
       this.controller.delete,
     );
