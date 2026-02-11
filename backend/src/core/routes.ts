@@ -1,10 +1,12 @@
+import "../modules/auth/auth.doc";
+import "../modules/books/books.doc";
+
 import { Router } from "express";
 import { inject, injectable } from "tsyringe";
 import { AuthRoutes } from "../modules/auth/auth.routes";
 import { generateOpenAPISpec } from "../docs/openapi.generator";
 import { apiReference } from "@scalar/express-api-reference";
 
-import "../modules/auth/auth.doc";
 import { BookRoutes } from "../modules/books/books.routes";
 import { CategoriesRoutes } from "../modules/categories/categories.routes";
 import { UsersRoutes } from "../modules/users/users.routes";

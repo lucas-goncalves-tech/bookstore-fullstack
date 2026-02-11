@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { container } from "tsyringe";
-import "./config/container"; // <-- Registra o StorageProvider ANTES de resolver App
+import "./config/container";
 import { env } from "./config/env";
 import { App } from "../app";
 import { PrismaDB } from "../database/prisma";

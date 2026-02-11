@@ -12,3 +12,39 @@ export const createReviewDto = z.strictObject({
 });
 
 export type CreateReviewDto = z.infer<typeof createReviewDto>;
+
+const reviewSchema = z.object({
+  id: z.uuid(),
+  bookId: z.uuid(),
+  rating: z.number().min(1).max(5),
+  comment: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  user: z.object({
+    name: z.string(),
+  }),
+});
+
+export const reviewResponseSchema = z.object({
+  reviews: z.array(reviewSchema),
+  averageRating: z.number(),
+  totalReviews: z.number(),
+});
+
+export const createReviewResponseSchema = z.object({
+  message: z.string(),
+  data: z.object({
+    id: z.uuid(),
+    bookId: z.uuid(),
+    rating: z.number().min(1).max(5),
+    comment: z.string(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+  }),
+});
+
+export const listReviewsResponseSchema = z.object({
+  reviews: z.array(reviewResponseSchema),
+  averageRating: z.number(),
+  totalReviews: z.number(),
+});

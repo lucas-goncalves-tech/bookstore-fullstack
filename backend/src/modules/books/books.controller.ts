@@ -55,7 +55,10 @@ export class BookController {
       throw new UnauthorizedError("Usuário não autenticado");
     }
     const review = await this.reviewService.create(userId, id, data);
-    return res.status(201).json(review);
+    return res.status(201).json({
+      message: `Avaliação do livro ${review.bookId} criada com sucesso`,
+      data: review,
+    });
   };
 
   uploadCover = async (req: Request, res: Response) => {

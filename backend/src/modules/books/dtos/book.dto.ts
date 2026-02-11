@@ -24,3 +24,43 @@ export const updateBookDto = createBookDto.partial().extend({
 
 export type CreateBookDto = z.infer<typeof createBookDto>;
 export type UpdateBookDto = z.infer<typeof updateBookDto>;
+
+export const bookResponseSchema = z.object({
+  id: z.uuid(),
+  author: z.string(),
+  title: z.string(),
+  description: z.string(),
+  price: z.string(),
+  stock: z.number(),
+  coverUrl: z.string().nullable(),
+  coverThumbUrl: z.string().nullable(),
+  categoryId: z.uuid().nullable(),
+  createdAt: z.coerce.date(),
+  deletedAt: z.coerce.date().nullable(),
+});
+
+const booksData = z.array(
+  bookResponseSchema.extend({
+    averageRating: z.number(),
+    category: z.object({
+      name: z.string().nullable(),
+    }),
+  }),
+);
+
+const bookMetadata = z.object({
+  page: z.number(),
+  limit: z.number(),
+  total: z.number(),
+  totalPages: z.number(),
+});
+
+export const booksResponseSchema = z.object({
+  data: booksData,
+  metadata: bookMetadata,
+});
+
+export const createBookResponseSchema = z.object({
+  message: z.string(),
+  data: bookResponseSchema,
+});
