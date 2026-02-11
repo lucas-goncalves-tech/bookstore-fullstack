@@ -2,13 +2,12 @@ import { container, injectable } from "tsyringe";
 import { AuthController } from "./auth.controller";
 import { Router } from "express";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { createUserDto } from "./dto/create-user.dto";
-import { loginDto } from "./dto/login.dto";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import {
   authRateLimit,
   registerRateLimit,
 } from "../../shared/middlewares/rate-limit.middleware";
+import { createUserDto, loginDto } from "./dto/auth.dto";
 
 @injectable()
 export class AuthRoutes {

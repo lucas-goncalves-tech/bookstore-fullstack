@@ -29,3 +29,10 @@ export const notFoundResponse = {
     content: { "application/json": { schema: commomError } },
   },
 };
+
+export const conflictResponse = {
+  409: {
+    description: "Conflito de recursos",
+    content: { "application/json": { schema: commomError } },
+  },
+};

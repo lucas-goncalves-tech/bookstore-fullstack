@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { AuthService } from "./auth.service";
-import { CreateUserDto } from "./dto/create-user.dto";
 import {
   SID_ACCESS_COOKIE,
   SID_ACCESS_COOKIE_OPTIONS,
   SID_REFRESH_COOKIE,
   SID_REFRESH_COOKIE_OPTIONS,
 } from "../../shared/contants/sid-cookie";
-import { LoginDTO } from "./dto/login.dto";
+import { CreateUserDto, LoginDTO } from "./dto/auth.dto";
 
 @injectable()
 export class AuthController {

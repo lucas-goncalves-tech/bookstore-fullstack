@@ -1,7 +1,7 @@
 import z from "zod";
 import { zodSafeEmail } from "../../../shared/validators/email.validator";
-import { zodSafeString } from "../../../shared/validators/string.validator";
 import { zodPassword } from "../../../shared/validators/comom.validators";
+import { zodSafeString } from "../../../shared/validators/string.validator";
 
 export const createUserDto = z
   .strictObject({
@@ -17,4 +17,22 @@ export const createUserDto = z
     path: ["confirmPassword"],
   });
 
+export const loginDto = z.strictObject({
+  email: zodSafeEmail,
+  password: zodPassword(),
+});
+
+export type LoginDTO = z.infer<typeof loginDto>;
+
 export type CreateUserDto = z.infer<typeof createUserDto>;
+
+export const registerResponseDto = z.object({
+  message: z.string(),
+  data: z.object({
+    name: z.string(),
+    email: z.string(),
+    role: z.enum(["ADMIN", "USER"]),
+  }),
+});
+
+export type RegisterResponseDto = z.infer<typeof registerResponseDto>;

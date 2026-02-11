@@ -1,11 +1,10 @@
 import {
   badRequestResponse,
+  conflictResponse,
   unauthorizedResponse,
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
-import { createUserDto } from "./dto/create-user.dto";
-import { loginDto } from "./dto/login.dto";
-import { registerResponseDto } from "./dto/response.dto";
+import { createUserDto, loginDto, registerResponseDto } from "./dto/auth.dto";
 
 registry.registerPath({
   method: "post",
@@ -47,7 +46,7 @@ registry.registerPath({
             name: "User",
             email: "test@test.com",
             password: "123123123",
-            passwordConfirmation: "123123123",
+            confirmPassword: "123123123",
           },
         },
       },
@@ -63,6 +62,7 @@ registry.registerPath({
       },
     },
     ...badRequestResponse,
+    ...conflictResponse,
   },
 });
 
