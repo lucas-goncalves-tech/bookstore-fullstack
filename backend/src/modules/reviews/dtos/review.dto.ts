@@ -48,3 +48,26 @@ export const listReviewsResponseSchema = z.object({
   averageRating: z.number(),
   totalReviews: z.number(),
 });
+
+const userReviewSchema = z.object({
+  id: z.uuid(),
+  bookId: z.uuid(),
+  rating: z.number().min(1).max(5),
+  comment: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  book: z.object({
+    title: z.string(),
+    category: z.object({
+      name: z.string(),
+    }),
+    coverUrl: z.string().nullable(),
+    author: z.string(),
+  }),
+});
+
+export const findManyByUserIdResponseSchema = z.object({
+  reviews: z.array(userReviewSchema),
+  averageRating: z.number(),
+  totalReviews: z.number(),
+});
