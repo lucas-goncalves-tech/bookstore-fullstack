@@ -10,6 +10,7 @@ cloudinary.config({
 });
 
 export class CloudinaryUploadService implements StorageProvider {
+  private readonly folder = "bookstore/covers";
   private async uploadStream(
     buffer: Buffer,
     publicId: string,
@@ -43,11 +44,24 @@ export class CloudinaryUploadService implements StorageProvider {
     });
   }
 
+  private sanitizeFilename(filename: string): string {
+    return filename
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9_-]/g, "_")
+      .replace(/_+/g, "_")
+      .replace(/^_|_$/g, "")
+      .slice(0, 100);
+  }
+
   async uploadCover(
     file: Express.Multer.File,
   ): Promise<{ fullUrl: string; thumbUrl: string }> {
     const baseName = file.originalname.replace(/\.[^/.]+$/, "");
-    const publicId = `bookstore/covers/${Date.now()}_${baseName}`;
+    const sanitizedName = this.sanitizeFilename(baseName);
+
+    const publicId = `${this.folder}/${Date.now()}_${sanitizedName}`;
     const [fullUrl, thumbUrl] = await Promise.all([
       this.uploadStream(file.buffer, publicId + "_full", 1200),
       this.uploadStream(file.buffer, publicId + "_thumb", 400),
@@ -60,15 +74,21 @@ export class CloudinaryUploadService implements StorageProvider {
   }
 
   async deleteFile(path: string): Promise<void> {
-    const publicId = path.split("/").pop()?.split(".")[0];
-    if (!publicId) return;
+    const filename = path.split("/").pop()?.split(".")[0];
+
+    if (!filename) {
+      throw new Error(`[Cloudinary] Could not extract filename from: ${path}`);
+    }
+
+    const publicId = `${this.folder}/${filename}`;
+
     const deleted = await cloudinary.uploader.destroy(publicId, {
       invalidate: true,
       resource_type: "image",
     });
 
     if (deleted.result !== "ok" && deleted.result !== "not found") {
-      throw new Error("Cloudinary Error ao deletar imagem");
+      throw new Error(`Cloudinary Error ao deletar imagem: ${deleted.result}`);
     }
   }
 }
