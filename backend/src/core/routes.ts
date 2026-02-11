@@ -1,6 +1,7 @@
 import "../modules/auth/auth.doc";
 import "../modules/books/books.doc";
 import "../modules/categories/categories.doc";
+import "../modules/dashboard/dashboard.doc";
 
 import { Router } from "express";
 import { inject, injectable } from "tsyringe";
