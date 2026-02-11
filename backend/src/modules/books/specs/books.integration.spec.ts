@@ -400,7 +400,10 @@ describe(`POST ${BASE_URL}/:id/cover`, () => {
       .expect(201);
 
     expect(body).toHaveProperty("message");
-    expect(body.data).toMatchObject(expectecBookShape());
+    expect(body.data).toMatchObject({
+      coverUrl: expect.any(String),
+      coverThumbUrl: expect.any(String),
+    });
   });
 
   it("should return 400 BadRequest when no file is attached", async () => {
@@ -472,7 +475,8 @@ describe(`POST ${BASE_URL}/:id/reviews`, () => {
       .send(review)
       .expect(201);
 
-    expect(body).toMatchObject({
+    expect(body).toHaveProperty("message");
+    expect(body.data).toMatchObject({
       id: expect.any(String),
       rating: expect.any(Number),
       comment: expect.any(String),

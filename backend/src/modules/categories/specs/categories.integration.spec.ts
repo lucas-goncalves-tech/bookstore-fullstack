@@ -15,11 +15,14 @@ function expectedCategoryShape() {
   };
 }
 
-function generateCategory(): ICreateCategoryInput {
+function generateCategory(
+  overrides?: Partial<ICreateCategoryInput>,
+): ICreateCategoryInput {
   return {
     name: "Ação",
     slug: "acao",
     description: "Livros de ação",
+    ...overrides,
   };
 }
 
@@ -94,7 +97,11 @@ describe(`PUT ${BASE_URL}/:id`, () => {
   it("should return 200 and update category when ADMIN sends valid data", async () => {
     const { reqAgent } = await loginWithUser("admin");
     const category = await createCategory();
-    const newCategory = generateCategory();
+    const newCategory = generateCategory({
+      name: "Ação 2",
+      slug: "acao-2",
+      description: "Descrição da categoria 2",
+    });
 
     const { body } = await reqAgent
       .put(BASE_URL + "/" + category.id)
