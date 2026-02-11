@@ -17,6 +17,10 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: loginDto,
+          example: {
+            email: "user@user.com",
+            password: "123123123",
+          },
         },
       },
     },
@@ -39,6 +43,12 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: createUserDto,
+          example: {
+            name: "User",
+            email: "test@test.com",
+            password: "123123123",
+            passwordConfirmation: "123123123",
+          },
         },
       },
     },
@@ -53,5 +63,33 @@ registry.registerPath({
       },
     },
     ...badRequestResponse,
+  },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/auth/refresh",
+  security: [{ cookieAuth: [] }],
+  tags: ["Auth"],
+  summary: "Renovar token de autenticação",
+  responses: {
+    204: {
+      description: "Token renovado com sucesso",
+    },
+    ...unauthorizedResponse,
+  },
+});
+
+registry.registerPath({
+  method: "get",
+  path: "/auth/logout",
+  security: [{ cookieAuth: [] }],
+  tags: ["Auth"],
+  summary: "Logout de usuário",
+  responses: {
+    204: {
+      description: "Usuário deslogado com sucesso",
+    },
+    ...unauthorizedResponse,
   },
 });
