@@ -3,6 +3,7 @@ import "../modules/books/books.doc";
 import "../modules/categories/categories.doc";
 import "../modules/orders/orders.doc";
 import "../modules/reviews/review.doc";
+import "../modules/users/users.doc";
 import "../modules/dashboard/dashboard.doc";
 
 import { Router } from "express";
