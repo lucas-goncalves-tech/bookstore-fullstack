@@ -64,3 +64,16 @@ export const createBookResponseSchema = z.object({
   message: z.string(),
   data: bookResponseSchema,
 });
+
+export const uploadBookCoverResponseSchema = z.object({
+  message: z.string(),
+  data: z.object({
+    coverUrl: z.string(),
+    coverThumbUrl: z.string(),
+  }),
+});
+
+export const updateBookResponseSchema = z.object({
+  message: z.string(),
+  data: bookResponseSchema,
+});

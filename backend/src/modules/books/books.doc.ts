@@ -14,6 +14,9 @@ import {
   bookResponseSchema,
   createBookDto,
   createBookResponseSchema,
+  uploadBookCoverResponseSchema,
+  updateBookDto,
+  updateBookResponseSchema,
 } from "./dtos/book.dto";
 
 registry.registerPath({
@@ -105,7 +108,7 @@ registry.registerPath({
             description: "Book Description",
             price: 10.99,
             stock: 10,
-            categoryId: "uuid",
+            categoryId: null,
           },
         },
       },
@@ -164,5 +167,123 @@ registry.registerPath({
     ...badRequestResponse,
     ...notFoundResponse,
     ...unauthorizedResponse,
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/books/{id}/cover",
+  tags: ["Books"],
+  security: [{ cookieAuth: [] }],
+  summary: "Upload de capa de livro",
+  parameters: [
+    {
+      name: "id",
+      in: "path",
+      required: true,
+      schema: {
+        type: "string",
+        format: "uuid",
+      },
+    },
+  ],
+  request: {
+    body: {
+      content: {
+        "multipart/form-data": {
+          schema: {
+            type: "object",
+            properties: {
+              cover: {
+                type: "string",
+                format: "binary",
+              },
+            },
+            required: ["cover"],
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: "Capa do livro enviada com sucesso",
+      content: {
+        "application/json": {
+          schema: uploadBookCoverResponseSchema,
+        },
+      },
+    },
+    ...badRequestResponse,
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/books/{id}",
+  tags: ["Books"],
+  security: [{ cookieAuth: [] }],
+  summary: "Atualizar livro",
+  parameters: [
+    {
+      name: "id",
+      in: "path",
+      required: true,
+      schema: {
+        type: "string",
+        format: "uuid",
+      },
+    },
+  ],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: updateBookDto,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Livro atualizado com sucesso",
+      content: {
+        "application/json": {
+          schema: updateBookResponseSchema,
+        },
+      },
+    },
+    ...badRequestResponse,
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/books/{id}",
+  tags: ["Books"],
+  security: [{ cookieAuth: [] }],
+  summary: "Deletar livro",
+  parameters: [
+    {
+      name: "id",
+      in: "path",
+      required: true,
+      schema: {
+        type: "string",
+        format: "uuid",
+      },
+    },
+  ],
+  responses: {
+    204: {
+      description: "Livro deletado com sucesso",
+    },
+    ...badRequestResponse,
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
   },
 });

@@ -89,10 +89,15 @@ export class BookService {
       });
     }
 
-    return await this.bookRepository.update(id, {
+    await this.bookRepository.update(id, {
       coverUrl: result.fullUrl,
       coverThumbUrl: result.thumbUrl,
     });
+
+    return {
+      coverUrl: result.fullUrl,
+      coverThumbUrl: result.thumbUrl,
+    };
   }
 
   async update(id: string, data: IUpdateBookInput) {
