@@ -14,14 +14,11 @@ interface CreateBookData {
 const createBook = async (data: BookFormValues) => {
   const { coverImage, ...bookData } = data;
 
-  // 1. Create book with JSON data
   const { data: createdBook } = await api.post<CreateBookData>(
     "/books",
     bookData,
   );
 
-  console.log(createdBook);
-  // 2. Upload cover image if exists
   if (coverImage && coverImage.length > 0) {
     const formData = new FormData();
     formData.append("cover", coverImage[0]);

@@ -6,7 +6,6 @@ import { adminBookKeys } from "./query-keys";
 import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 import { BookFormValues } from "../schemas/book-form.schema";
 
-// Update book
 const updateBook = async ({
   id,
   data,
@@ -16,10 +15,8 @@ const updateBook = async ({
 }): Promise<Book> => {
   const { coverImage, ...bookData } = data;
 
-  // 1. Update book details
   const { data: updatedBook } = await api.put<Book>(`/books/${id}`, bookData);
 
-  // 2. Upload new cover if provided
   if (coverImage && coverImage.length > 0) {
     const formData = new FormData();
     formData.append("cover", coverImage[0]);
@@ -42,9 +39,12 @@ export function useUpdateBook() {
 
   return useMutation({
     mutationFn: updateBook,
-    onSuccess: () => {
+    onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: adminBookKeys.all });
       queryClient.invalidateQueries({ queryKey: homeQueryKeys.books.all });
+      queryClient.invalidateQueries({
+        queryKey: homeQueryKeys.books.detail(id),
+      });
       toast.success("Livro atualizado com sucesso!");
     },
     onError: (error) => {

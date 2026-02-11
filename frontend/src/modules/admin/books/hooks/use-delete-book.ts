@@ -14,9 +14,12 @@ export function useDeleteBook() {
 
   return useMutation({
     mutationFn: deleteBook,
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: adminBookKeys.all });
       queryClient.invalidateQueries({ queryKey: homeQueryKeys.books.all });
+      queryClient.invalidateQueries({
+        queryKey: homeQueryKeys.books.detail(variables),
+      });
       toast.success("Livro removido com sucesso!");
     },
     onError: (error) => {
