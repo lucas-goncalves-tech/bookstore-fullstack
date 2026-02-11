@@ -24,9 +24,16 @@ export class App {
 
   private middlewares() {
     this.app.set("trust proxy", 1);
-    this.app.use(globalRateLimit);
-    this.app.use(express.json());
-    this.app.use(cookieParser());
+    this.app.use(
+      cors({
+        origin:
+          env.NODE_ENV === "production"
+            ? env.ALLOWED_ORIGINS
+            : ["http://localhost:3000"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+      }),
+    );
     this.app.use(
       helmet({
         contentSecurityPolicy: {
@@ -39,16 +46,9 @@ export class App {
         },
       }),
     );
-    this.app.use(
-      cors({
-        origin:
-          env.NODE_ENV === "production"
-            ? env.ALLOWED_ORIGINS
-            : ["http://localhost:3000"],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true,
-      }),
-    );
+    this.app.use(globalRateLimit);
+    this.app.use(express.json());
+    this.app.use(cookieParser());
   }
 
   private setupRoutes() {

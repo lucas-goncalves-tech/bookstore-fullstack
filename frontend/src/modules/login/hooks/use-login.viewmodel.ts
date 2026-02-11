@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LoginFormData, loginSchema } from "../schemas/login.schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { api, resetRefreshState } from "@/lib/axios";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ export function useLoginViewModel() {
       await api.post("/auth/login", data);
     },
     onSuccess: () => {
+      resetRefreshState();
       queryClient.invalidateQueries({ queryKey: ["users", "me"] });
       toast.success("Login realizado com sucesso");
       router.push("/");

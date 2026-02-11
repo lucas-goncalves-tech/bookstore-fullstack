@@ -23,6 +23,13 @@ export const unauthorizedResponse = {
   },
 };
 
+export const forbiddenResponse = {
+  403: {
+    description: "Proibido",
+    content: { "application/json": { schema: commomError } },
+  },
+};
+
 export const notFoundResponse = {
   404: {
     description: "Não encontrado",

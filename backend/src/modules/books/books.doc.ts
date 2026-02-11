@@ -1,5 +1,6 @@
 import {
   badRequestResponse,
+  forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
 } from "../../docs/errors/errors";
@@ -98,6 +99,14 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: createBookDto,
+          example: {
+            title: "Book Title",
+            author: "Book Author",
+            description: "Book Description",
+            price: 10.99,
+            stock: 10,
+            categoryId: "uuid",
+          },
         },
       },
     },
@@ -113,6 +122,7 @@ registry.registerPath({
     },
     ...badRequestResponse,
     ...unauthorizedResponse,
+    ...forbiddenResponse,
   },
 });
 

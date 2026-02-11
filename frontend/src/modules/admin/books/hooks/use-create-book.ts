@@ -6,20 +6,28 @@ import { adminBookKeys } from "./query-keys";
 import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 import { BookFormValues } from "../schemas/book-form.schema";
 
-// Create book
-const createBook = async (data: BookFormValues): Promise<Book> => {
+interface CreateBookData {
+  message: string;
+  data: Book;
+}
+
+const createBook = async (data: BookFormValues) => {
   const { coverImage, ...bookData } = data;
 
   // 1. Create book with JSON data
-  const { data: createdBook } = await api.post<Book>("/books", bookData);
+  const { data: createdBook } = await api.post<CreateBookData>(
+    "/books",
+    bookData,
+  );
 
+  console.log(createdBook);
   // 2. Upload cover image if exists
   if (coverImage && coverImage.length > 0) {
     const formData = new FormData();
     formData.append("cover", coverImage[0]);
 
     const { data: bookWithCover } = await api.post<Book>(
-      `/admin/books/${createdBook.id}/cover`,
+      `/books/${createdBook.data.id}/cover`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
