@@ -14,7 +14,7 @@ import { BookRoutes } from "../modules/books/books.routes";
 import { CategoriesRoutes } from "../modules/categories/categories.routes";
 import { UsersRoutes } from "../modules/users/users.routes";
 import { OrderRoutes } from "../modules/orders/orders.routes";
-import { ReviewsRoutes } from "../modules/reviews/reviews.routes";
+import { ReviewsRoutes } from "../modules/reviews/review.routes";
 import { DashboardRoutes } from "../modules/dashboard/dashboard.routes";
 
 @injectable()

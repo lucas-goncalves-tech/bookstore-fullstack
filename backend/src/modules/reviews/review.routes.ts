@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
-import { ReviewController } from "./reviews.controller";
+import { ReviewController } from "./review.controller";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 
 @injectable()
