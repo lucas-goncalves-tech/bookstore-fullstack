@@ -24,6 +24,56 @@ registry.registerPath({
   path: "/books",
   tags: ["Books"],
   summary: "Listar livros",
+  parameters: [
+    {
+      name: "limit",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "page",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "search",
+      in: "query",
+      required: false,
+      schema: {
+        type: "string",
+      },
+    },
+    {
+      name: "categorySlug",
+      in: "query",
+      required: false,
+      schema: {
+        type: "string",
+      },
+    },
+    {
+      name: "minPrice",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "maxPrice",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+  ],
   responses: {
     200: {
       description: "Livros listados com sucesso",

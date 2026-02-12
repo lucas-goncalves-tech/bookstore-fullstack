@@ -34,6 +34,16 @@ registry.registerPath({
   tags: ["Dashboard"],
   security: [{ cookieAuth: [] }],
   summary: "Mostra as ultimas vendas do BookStore",
+  parameters: [
+    {
+      name: "page",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+  ],
   responses: {
     200: {
       description: "Todas as vendas do BookStore",
