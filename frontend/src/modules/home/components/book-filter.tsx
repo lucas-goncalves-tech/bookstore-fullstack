@@ -41,8 +41,13 @@ export function BookFilter({ categories }: BookFilterProps) {
 
   // Update URL with new params
   const updateParams = useCallback(
-    (updates: Record<string, string | undefined>) => {
+    (updates: Record<string, string | undefined>, resetPage = true) => {
       const params = new URLSearchParams(searchParams.toString());
+
+      // Reset page to 1 when filters change (unless explicitly keeping page)
+      if (resetPage) {
+        params.delete("page");
+      }
 
       Object.entries(updates).forEach(([key, value]) => {
         if (value === undefined || value === "" || value === "none") {
@@ -68,7 +73,7 @@ export function BookFilter({ categories }: BookFilterProps) {
         updateParams({
           minPrice: String(localPriceRange[0]),
           maxPrice: String(localPriceRange[1]),
-        });
+        }, true);
       }
     }, DEBOUNCE_DELAY);
 
