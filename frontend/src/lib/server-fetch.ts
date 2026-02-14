@@ -16,6 +16,10 @@ interface ServerFetchOptions {
   headers?: HeadersInit;
   /** Include refresh token cookie (default: false) */
   includeRefreshToken?: boolean;
+  /** Public endpoint — skips auth requirement (default: false) */
+  public?: boolean;
+  /** Fetch timeout in milliseconds (default: 8000) */
+  timeout?: number;
 }
 
 /**
@@ -60,6 +64,8 @@ export async function serverFetch<T>(
     revalidate,
     headers: customHeaders = {},
     includeRefreshToken = false,
+    public: isPublic = false,
+    timeout = 8000,
   } = options;
 
   try {
@@ -77,20 +83,28 @@ export async function serverFetch<T>(
       cookieHeader.push(`refreshToken=${refreshToken}`);
     }
 
-    // If no access token, return null (client will handle)
-    if (!accessToken) {
+    // If no access token and endpoint requires auth, return null (client will handle)
+    if (!accessToken && !isPublic) {
       return null;
+    }
+
+    // Build request headers
+    const requestHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...Object.fromEntries(new Headers(customHeaders).entries()),
+    };
+
+    // Only include cookie header if there are cookies
+    if (cookieHeader.length > 0) {
+      requestHeaders.Cookie = cookieHeader.join("; ");
     }
 
     // Build request options
     const fetchOptions: RequestInit = {
       method,
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieHeader.join("; "),
-        ...customHeaders,
-      },
+      headers: requestHeaders,
       cache,
+      signal: AbortSignal.timeout(timeout),
       ...(revalidate !== undefined && { next: { revalidate } }),
     };
 
