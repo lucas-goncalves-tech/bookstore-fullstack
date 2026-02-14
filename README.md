@@ -51,7 +51,7 @@ Este projeto utiliza **Docker Compose** para orquestrar o ambiente de desenvolvi
 ### Pré-requisitos
 
 - Docker & Docker Desktop
-- Node.js (opcional, para rodar comandos locais)
+- Node.js (para rodar comandos do package.json)
 - Conta na Cloudinary (obrigátrio para uploads de imagens)
 
 ### Rode o Projeto
@@ -73,20 +73,15 @@ copy .\backend\.env.example .\backend\.env
 copy .\backend\.env.example .\backend\.env
 ```
 
+#### ADMIN_EMAIL, DB_USER, DB_PASS, DB_NAME, JWT_SECRET e JWT_REFRESH_SECRET já funcionam com valores padrão
+
 ### 1. Cloudinary (upload de imagens)
 
 - Crie uma conta na [Cloudinary](https://cloudinary.com/users/register_free)
 - Crie um novo repositório
 - Copie as credenciais name, api_key e api_secret do repositório para o arquivo .env
 
-### 2. JWT SECRET (minimo 32 caracteres)
-
-- Crie um JWT SECRET e JWT_REFRESH_SECRET ex: minha-chave-super-secreta-32-chars
-- Copie o JWT SECRET e JWT_REFRESH_SECRET para o arquivo .env
-
-### 3. Após configurar o .env, execute os comandos abaixo:
-
-#### ADMIN_EMAIL, DB_USER, DB_PASS, DB_NAME já funcionam com valores padrão
+### 2. Após configurar o .env, execute os comandos abaixo:
 
 ```bash
 # Clone o repositório
