@@ -5,6 +5,12 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+// Cliente para auth via proxy (mesmo domínio)
+export const authApi = axios.create({
+  baseURL: "/api",
+  withCredentials: true,
+});
+
 let isRefreshing = false;
 let refreshFailed = false;
 let failedQueue: Array<{
@@ -56,7 +62,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await api.get("/auth/refresh");
+        await authApi.get("/auth/refresh");
         processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {

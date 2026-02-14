@@ -8,17 +8,14 @@ import {
   registerSchema,
 } from "../schemas/register.schema";
 import { useMutation } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { authApi } from "@/lib/axios";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 export function useRegisterViewModel() {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: RegisterFormData) => {
-      const response = await api.post(
-        process.env.NEXT_PUBLIC_API_URL + "/auth/register",
-        data,
-      );
+      const response = await authApi.post("/auth/register", data);
       return registerResponseSchema.parse(response.data);
     },
     onSuccess: (result) => {

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { api, authApi } from "@/lib/axios";
 import { toast } from "sonner";
 
 export interface User {
@@ -28,7 +28,7 @@ export function useUser() {
 
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
-      await api.get("/auth/logout");
+      await authApi.get("/auth/logout");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users", "me"] });

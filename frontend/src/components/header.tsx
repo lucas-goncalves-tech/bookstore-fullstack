@@ -28,10 +28,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/modules/cart/store/cart.store";
 import { CartSheet } from "@/modules/cart/components/cart-sheet";
+import { LoadingScreen } from "./loading-screen";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const { user, isAuthenticated, logout } = useUser();
+  const { user, isAuthenticated, logout, isLoading } = useUser();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
@@ -45,7 +46,9 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 shadow-sm backdrop-blur-sm">
+    <>
+      <LoadingScreen isLoading={isLoading} />
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 shadow-sm backdrop-blur-sm">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="group flex cursor-pointer items-center gap-3">
@@ -189,5 +192,6 @@ export function Header() {
 
       <CartSheet open={isCartOpen} onOpenChange={setIsCartOpen} />
     </header>
+    </>
   );
 }

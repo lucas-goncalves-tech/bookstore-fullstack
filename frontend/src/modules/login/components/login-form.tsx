@@ -46,12 +46,6 @@ export function LoginForm() {
           >
             Senha
           </label>
-          <Link
-            href="/auth/forgot-password"
-            className="text-sm font-semibold text-[#a77d52] hover:text-[#8e6a45] transition-colors"
-          >
-            Esqueceu a senha?
-          </Link>
         </div>
         <Input
           {...register("password")}
