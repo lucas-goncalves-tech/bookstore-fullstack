@@ -10,22 +10,27 @@ interface MetricsGridProps {
 }
 
 export function MetricsGrid({ initialData }: MetricsGridProps) {
-  const {
-    data: details,
-    isLoading,
-    error,
-  } = useDashboardDetails({ initialData });
+  const { data: details, isLoading } = useDashboardDetails({ initialData });
 
-  if (isLoading && !details) {
+  // Só mostra skeleton se realmente não tem dados e está carregando
+  if (isLoading && !details && !initialData) {
     return <SkeletonMetrics />;
   }
 
-  if (error || !details) return null;
+  // Pega os dados reais (do fetch ou do SSR), tratando null como 0
+  const rawData = details || initialData;
+  const metricsData = {
+    sales: rawData?.sales ?? 0,
+    revenue: rawData?.revenue ?? 0,
+    totalUsers: rawData?.totalUsers ?? 0,
+  };
+
+  console.log(rawData);
 
   const metrics = [
     {
       title: "Vendas Totais",
-      value: details.sales,
+      value: metricsData.sales,
       icon: LibraryBig,
     },
     {
@@ -33,12 +38,12 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
       value: new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(details.revenue),
+      }).format(metricsData.revenue),
       icon: CircleDollarSign,
     },
     {
       title: "Total de Usuários",
-      value: details.totalUsers,
+      value: metricsData.totalUsers,
       icon: Users,
     },
   ];

@@ -42,16 +42,37 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  if (isLoading && !data) {
+  // Só mostra skeleton se realmente não tem dados e está carregando
+  if (isLoading && !data && !initialData) {
     return <SkeletonSales />;
   }
 
-  if (error || !data) return null;
+  // Se há erro nos dados, mostra mensagem de erro
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h3 className="text-xl font-heading font-bold text-card-foreground">
+          Últimas Vendas
+        </h3>
+        <div className="rounded-lg shadow-sm border border-border p-8 text-center">
+          <p className="text-muted-foreground">
+            Erro ao carregar vendas. Tente novamente mais tarde.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const handleRowClick = (sale: DashboardSaleItem) => {
     setSelectedSale(sale);
     setIsDialogOpen(true);
   };
+
+  // Usa dados iniciais se não houver dados carregados ainda
+  const salesData = data || (initialData ? { pages: [initialData] } : null);
+  
+  // Verifica se há vendas
+  const hasSales = salesData && salesData.pages.some(page => page.sales.length > 0);
 
   return (
     <div className="flex flex-col gap-4">
@@ -61,19 +82,29 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
         </h3>
       </div>
 
-      <div className="rounded-lg shadow-sm border border-border overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Livro</TableHead>
-              <TableHead>Cliente</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Valor</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.pages.map((page, i) => (
+      {!hasSales ? (
+        <div className="rounded-lg shadow-sm border border-border p-8 text-center bg-card">
+          <p className="text-muted-foreground mb-2">
+            Nenhuma venda registrada ainda
+          </p>
+          <p className="text-sm text-muted-foreground/70">
+            As vendas aparecerão aqui quando os clientes fizerem pedidos
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-lg shadow-sm border border-border overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Livro</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Valor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {salesData.pages.map((page, i) => (
               <React.Fragment key={i}>
                 {page.sales.map((sale) => {
                   const firstItem = sale.orderItem[0];
@@ -161,7 +192,8 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
             </Button>
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       <SaleDetailsDialog
         sale={selectedSale}

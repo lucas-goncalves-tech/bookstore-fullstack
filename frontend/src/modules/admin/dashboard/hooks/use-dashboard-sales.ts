@@ -35,6 +35,9 @@ export function useDashboardSales(options: UseDashboardSalesOptions = {}) {
           pageParams: [1],
         }
       : undefined,
-    staleTime: 0, // Always revalidate on client
+    // Cache curto para métricas em tempo real
+    staleTime: 30 * 1000,
+    refetchOnWindowFocus: true,
+    retry: false,
   });
 }

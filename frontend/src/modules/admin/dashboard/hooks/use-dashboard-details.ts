@@ -19,7 +19,13 @@ export function useDashboardDetails(options: UseDashboardDetailsOptions = {}) {
       const response = await api.get("/dashboard/details");
       return dashboardDetailsSchema.parse(response.data);
     },
-    initialData: options.initialData ?? undefined,
-    staleTime: 0, // Always revalidate on client
+    initialData: options.initialData || undefined,
+    // Cache curto para métricas em tempo real (30 segundos)
+    staleTime: 30 * 1000,
+    // Refetcha quando volta para a aba
+    refetchOnWindowFocus: true,
+    // Refetcha a cada 30 segundos automaticamente
+    refetchInterval: 30 * 1000,
+    retry: false,
   });
 }
