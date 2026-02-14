@@ -8,7 +8,7 @@ export default defineConfig({
       provider: "v8",
       reportsDirectory: "./coverage",
     },
-    globalSetup: ["./src/tests/global-setup.ts"],
+    globalSetup: ["./src/tests/global-setup.js"],
     setupFiles: ["./src/tests/setup.ts"],
     env: {
       NODE_ENV: "test",

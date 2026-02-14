@@ -8,9 +8,11 @@
     "build": "tsc",
     "start": "node dist/core/server.js",
     "test": "docker compose exec api npx vitest",
-    "db:migrate": "docker compose exec api npx prisma migrate dev",
+    "lint": "docker compose exec api npx eslint .",
+    "lint:fix": "docker compose exec api npx eslint . --fix",
     "db:generate": "docker compose exec api npx prisma generate",
-    "db:seed": "docker compose exec api npx prisma seed"
+    "db:migrate": "docker compose exec api npx prisma migrate dev",
+    "db:seed": "docker compose exec api npx prisma db seed"
   },
   "prisma": {
     "seed": "tsx src/database/seed.ts"

@@ -1,0 +1,66 @@
+name: CI/CD PIPELINE (BACKEND)
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      PORT: 3333
+      DATABASE_URL: postgresql://test:test@localhost:5432/bookstore_test
+      DATABASE_TEST_URL: postgresql://test:test@localhost:5432/bookstore_test
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRES: 10m
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+      JWT_REFRESH_EXPIRES: 10m
+      SALT: 10
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
+      ALLOWED_ORIGINS: "[]"
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: bookstore_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+          cache-dependency-path: ./backend/package-lock.json
+
+      - working-directory: ./backend
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./backend
+        run: npx eslint .
+
+      - name: Generate prisma client
+        working-directory: ./backend
+        run: npx prisma generate
+
+      - name: Migrate prisma
+        working-directory: ./backend
+        run: npx prisma db push --accept-data-loss
+
+      - name: Run vitest
+        working-directory: ./backend
+        run: npx vitest run
+      - name: Run BUILD
+        working-directory: ./backend
+        run: npx tsc

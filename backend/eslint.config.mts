@@ -17,4 +17,13 @@ export default defineConfig(
       ],
     },
   },
+  {
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "**/prisma/**",
+      "**/coverage/**",
+      "src/tests/global-setup.js",
+    ],
+  },
 );

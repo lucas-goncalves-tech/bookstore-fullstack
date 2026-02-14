@@ -4,8 +4,6 @@
   "scripts": {
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
-    "docker:clean": "docker system prune -f && docker image prune -f",
-    "docker:hard-reset": "docker compose down -v && docker system prune -a --volumes -f",
     "db:migrate": "docker compose exec api npx prisma migrate dev",
     "db:generate": "docker compose exec api npx prisma generate",
     "db:seed": "docker compose exec api npx prisma db seed",
