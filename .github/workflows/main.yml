@@ -58,9 +58,15 @@ jobs:
         working-directory: ./backend
         run: npx prisma db push --accept-data-loss
 
-      - name: Run vitest
+      - name: Run vitest with coverage
         working-directory: ./backend
-        run: npx vitest run
+        run: npx vitest run --coverage
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Run BUILD
         working-directory: ./backend
         run: npx tsc

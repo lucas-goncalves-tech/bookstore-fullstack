@@ -7,6 +7,8 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reportsDirectory: "./coverage",
+      reporter: ["text", "json", "json-summary"],
+      reportOnFailure: true,
     },
     globalSetup: ["./src/tests/global-setup.js"],
     setupFiles: ["./src/tests/setup.ts"],
