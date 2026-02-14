@@ -14,12 +14,12 @@ export function generateOpenAPISpec() {
     },
     servers: [
       {
-        url: "http://localhost:3333/api/v1",
-        description: "Desenvolvimento Local",
-      },
-      {
         url: env.OPENAPI_URL || "http://api:3333/api/v1",
         description: "Hospedagem",
+      },
+      {
+        url: "http://localhost:3333/api/v1",
+        description: "Desenvolvimento Local",
       },
     ],
   });
