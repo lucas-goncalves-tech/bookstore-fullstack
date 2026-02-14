@@ -23,7 +23,6 @@ services:
     environment:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
       PORT: ${PORT:-3333}
-      NODE_ENV: production
     ports:
       - ${PORT:-3333}:${PORT:-3333}
     depends_on:
