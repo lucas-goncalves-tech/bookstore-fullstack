@@ -27,6 +27,7 @@ const checkEnv = z.object({
   CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_API_KEY: z.string(),
   CLOUDINARY_API_SECRET: z.string(),
+  OPENAPI_URL: z.string().optional(),
 });
 
 export const env = checkEnv.parse(process.env);

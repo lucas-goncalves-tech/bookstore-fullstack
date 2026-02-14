@@ -1,5 +1,6 @@
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { registry } from "./openapi.registry";
+import { env } from "../core/config/env";
 
 export function generateOpenAPISpec() {
   const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -17,8 +18,8 @@ export function generateOpenAPISpec() {
         description: "Desenvolvimento Local",
       },
       {
-        url: "http://api:3333/api/v1",
-        description: "Docker (interno)",
+        url: env.OPENAPI_URL || "http://api:3333/api/v1",
+        description: "Hospedagem",
       },
     ],
   });
