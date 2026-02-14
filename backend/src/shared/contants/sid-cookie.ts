@@ -24,16 +24,18 @@ export const SID_ACCESS_COOKIE =
 export const SID_REFRESH_COOKIE =
   env.NODE_ENV === "production" ? "__Secure-refresh-sid" : "refresh-sid";
 
-export const SID_ACCESS_COOKIE_OPTIONS = (maxAge?: number): CookieOptions => ({
-  sameSite: "lax",
+const cookieOptions: CookieOptions = {
+  sameSite: env.NODE_ENV === "production" ? "none" : "lax",
   httpOnly: true,
   secure: env.NODE_ENV === "production",
+};
+
+export const SID_ACCESS_COOKIE_OPTIONS = (maxAge?: number): CookieOptions => ({
+  ...cookieOptions,
   maxAge: maxAge ? maxAge : parseExpiration(env.JWT_EXPIRES),
 });
 
 export const SID_REFRESH_COOKIE_OPTIONS = (maxAge?: number): CookieOptions => ({
-  sameSite: "lax",
-  httpOnly: true,
-  secure: env.NODE_ENV === "production",
+  ...cookieOptions,
   maxAge: maxAge ? maxAge : parseExpiration(env.JWT_REFRESH_EXPIRES),
 });

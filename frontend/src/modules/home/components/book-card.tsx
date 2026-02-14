@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { ShoppingCart, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Book } from "../schemas/book.schema";
@@ -42,14 +44,22 @@ function RatingStars({ rating = 0 }: { rating: number }) {
 }
 
 export function BookCard({ book, onAddToCart }: BookCardProps) {
+  const router = useRouter();
   const formattedPrice = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(book.price);
 
+  const handleCardClick = () => {
+    router.push(`/books/${book.id}`);
+  };
+
   return (
-    <div className="group flex flex-col rounded-lg border border-transparent bg-card p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-xl">
-      <Link href={`/books/${book.id}`} className="flex flex-1 flex-col">
+    <div 
+      className="group flex flex-col rounded-lg border border-transparent bg-card p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-xl cursor-pointer"
+      onClick={handleCardClick}
+    >
+      <div className="flex flex-1 flex-col">
         {/* Cover Image */}
         <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-lg shadow-md">
           <div
@@ -97,7 +107,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
             {book.description}
           </p>
         </div>
-      </Link>
+      </div>
 
       {/* Footer (Not wrapped in Link to allow button interaction) */}
       <div className="mt-auto flex flex-col gap-4 border-t border-border pt-4">
@@ -114,7 +124,6 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
         {/* Add to Cart Button */}
         <Button
           onClick={(e) => {
-            e.preventDefault();
             e.stopPropagation();
             onAddToCart?.(book);
           }}
