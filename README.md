@@ -52,21 +52,58 @@ Este projeto utiliza **Docker Compose** para orquestrar o ambiente de desenvolvi
 
 - Docker & Docker Desktop
 - Node.js (opcional, para rodar comandos locais)
+- Conta na Cloudinary (obrigátrio para uploads de imagens)
 
 ### Rode o Projeto
+
+#### O backend exige um arquivo .env para funcionar
+
+```bash
+# Linux/macOS
+cp backend/.env.example backend/.env
+```
+
+```bash
+# Windows (PowerShell)
+copy .\backend\.env.example .\backend\.env
+```
+
+```bash
+# Windows (CMD)
+copy .\backend\.env.example .\backend\.env
+```
+
+### 1. Cloudinary (upload de imagens)
+
+- Crie uma conta na [Cloudinary](https://cloudinary.com/users/register_free)
+- Crie um novo repositório
+- Copie as credenciais name, api_key e api_secret do repositório para o arquivo .env
+
+### 2. JWT SECRET (minimo 32 caracteres)
+
+- Crie um JWT SECRET e JWT_REFRESH_SECRET ex: minha-chave-super-secreta-32-chars
+- Copie o JWT SECRET e JWT_REFRESH_SECRET para o arquivo .env
+
+### 3. Após configurar o .env, execute os comandos abaixo:
+
+#### ADMIN_EMAIL, DB_USER, DB_PASS, DB_NAME já funcionam com valores padrão
 
 ```bash
 # Clone o repositório
 git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
 cd bookstore-fullstack
 
-# Inicie os containers
-docker compose up -d
+# Faz a build e inicia os containers
+# prisma generate é feito durante a build do container
+npm run docker:up -- --build
 
-# Sincronize o banco de dados (desenvolvimento)
-docker compose exec api npx prisma migrate dev
+# Sincroniza o banco de dados (desenvolvimento)
+npm run db:migrate
 
-# Para produção, use: docker compose exec api npx prisma migrate deploy
+# Popula banco de dados (opcional)
+npm run db:seed
+
+# Para produção, use: npm run db:migrate -- --deploy
 ```
 
 ### Serviços Disponíveis
@@ -86,9 +123,8 @@ O repositório é um **Monorepo** organizado da seguinte forma:
 ```text
 bookstore-fullstack/
 ├── backend/    # API REST (Express + Prisma)
-├── frontend/   # Web Application (Next.js + Tailwind)
-├── docker-compose.yml          # Configuração de serviços de produção
-└── docker-compose.dev.yml # Overrides de desenvolvimento (Hot Reload, Debug)
+├── frontend/   # Web Application (Next.js)
+└── compose.yaml # Configuração do serviço web e includes com backend/compose.yaml e backend/compose.dev.yaml para rodar ambiente de desenvolvimento.
 ```
 
 Para mais detalhes técnicos, consulte os READMEs específicos:
