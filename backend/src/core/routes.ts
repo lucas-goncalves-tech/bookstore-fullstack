@@ -9,8 +9,6 @@ import "../modules/dashboard/dashboard.doc";
 import { Router } from "express";
 import { inject, injectable } from "tsyringe";
 import { AuthRoutes } from "../modules/auth/auth.routes";
-import { generateOpenAPISpec } from "../docs/openapi.generator";
-import { apiReference } from "@scalar/express-api-reference";
 
 import { BookRoutes } from "../modules/books/books.routes";
 import { CategoriesRoutes } from "../modules/categories/categories.routes";
@@ -41,21 +39,13 @@ export class Routes {
   }
 
   private routes() {
-    this.router.use(
-      "/api-docs",
-      apiReference({
-        theme: "deepSpace",
-        content: generateOpenAPISpec(),
-      }),
-    );
-    this.router.get("/health", (_req, res) => res.json({ message: "OK" }));
-    this.router.use("/api/v1/auth", this.authRoutes.routes);
-    this.router.use("/api/v1/books", this.bookRoutes.routes);
-    this.router.use("/api/v1/categories", this.categoriesRoutes.routes);
-    this.router.use("/api/v1/users", this.usersRoutes.routes);
-    this.router.use("/api/v1/orders", this.orderRoutes.routes);
-    this.router.use("/api/v1/reviews", this.reviewsRoutes.routes);
-    this.router.use("/api/v1/dashboard", this.dashboardRoutes.routes);
+    this.router.use("/auth", this.authRoutes.routes);
+    this.router.use("/books", this.bookRoutes.routes);
+    this.router.use("/categories", this.categoriesRoutes.routes);
+    this.router.use("/users", this.usersRoutes.routes);
+    this.router.use("/orders", this.orderRoutes.routes);
+    this.router.use("/reviews", this.reviewsRoutes.routes);
+    this.router.use("/dashboard", this.dashboardRoutes.routes);
 
     // not found
     this.router.use((req, res) => {

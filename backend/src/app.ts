@@ -8,6 +8,8 @@ import { errorHandler } from "./shared/middlewares/error-handler.middleware";
 import { env } from "./core/config/env";
 import cookieParser from "cookie-parser";
 import { globalRateLimit } from "./shared/middlewares/rate-limit.middleware";
+import { apiReference } from "@scalar/express-api-reference";
+import { generateOpenAPISpec } from "./docs/openapi.generator";
 
 @singleton()
 export class App {
@@ -17,9 +19,21 @@ export class App {
     private readonly routes: Routes,
   ) {
     this.app = express();
+    this.docs();
     this.middlewares();
     this.setupRoutes();
     this.errorHandling();
+  }
+
+  private docs() {
+    this.app.get("/health", (_req, res) => res.json({ message: "OK" }));
+    this.app.use(
+      "/api-docs",
+      apiReference({
+        theme: "deepSpace",
+        content: generateOpenAPISpec(),
+      }),
+    );
   }
 
   private middlewares() {
@@ -34,25 +48,14 @@ export class App {
         credentials: true,
       }),
     );
-    this.app.use(
-      helmet({
-        contentSecurityPolicy: {
-          directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
-            styleSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
-            imgSrc: ["'self'", "data:", "cdn.jsdelivr.net"],
-          },
-        },
-      }),
-    );
+    this.app.use(helmet());
     this.app.use(globalRateLimit);
     this.app.use(express.json());
     this.app.use(cookieParser());
   }
 
   private setupRoutes() {
-    this.app.use(this.routes.getRouter());
+    this.app.use("/api/v1", this.routes.getRouter());
   }
 
   private errorHandling() {
