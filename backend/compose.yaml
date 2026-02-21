@@ -20,9 +20,6 @@ services:
       target: prod
     env_file:
       - .env
-    environment:
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
-      PORT: ${PORT:-3333}
     ports:
       - ${PORT:-3333}:${PORT:-3333}
     depends_on:

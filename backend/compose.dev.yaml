@@ -21,8 +21,6 @@ services:
   api:
     build:
       target: dev
-    environment:
-      DATABASE_TEST_URL: postgres://test:test@db_test:5432/bookstore_test
     volumes:
       - ./:/app
       - /app/node_modules

@@ -54,7 +54,12 @@ Este projeto utiliza **Docker Compose** para orquestrar o ambiente de desenvolvi
 - Node.js (para rodar comandos do package.json)
 - Conta na Cloudinary (obrigátrio para uploads de imagens)
 
-### Rode o Projeto
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
+cd bookstore-fullstack
+```
 
 #### O backend exige um arquivo .env para funcionar
 
@@ -75,19 +80,15 @@ copy .\backend\.env.example .\backend\.env
 
 #### ADMIN_EMAIL, DB_USER, DB_PASS, DB_NAME, JWT_SECRET e JWT_REFRESH_SECRET já funcionam com valores padrão
 
-### 1. Cloudinary (upload de imagens)
+### 2. Cloudinary (upload de imagens)
 
-- Crie uma conta na [Cloudinary](https://cloudinary.com/users/register_free)
+- Crie uma conta na [Cloudinary](https://cloudinary.com/invites/lpov9zyyucivvxsnalc5/d0anj1n9qawezhamhtpb?t=default) (Link de invite)
 - Crie um novo repositório
 - Copie as credenciais name, api_key e api_secret do repositório para o arquivo .env
 
-### 2. Após configurar o .env, execute os comandos abaixo:
+### 3. Após configurar o .env, execute os comandos abaixo:
 
 ```bash
-# Clone o repositório
-git clone https://github.com/lucas-goncalves-tech/bookstore-fullstack.git
-cd bookstore-fullstack
-
 # Faz a build e inicia os containers
 # prisma generate é feito durante a build do container
 npm run docker:up -- --build
