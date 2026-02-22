@@ -28,13 +28,15 @@ container.register("StorageProvider", {
 });
 
 beforeEach(async () => {
-  await prisma_test.review.deleteMany();
-  await prisma_test.orderItem.deleteMany();
-  await prisma_test.order.deleteMany();
-  await prisma_test.category.deleteMany();
-  await prisma_test.book.deleteMany();
-  await prisma_test.session.deleteMany();
-  await prisma_test.user.deleteMany();
+  await prisma_test.$transaction([
+    prisma_test.review.deleteMany(),
+    prisma_test.orderItem.deleteMany(),
+    prisma_test.order.deleteMany(),
+    prisma_test.category.deleteMany(),
+    prisma_test.book.deleteMany(),
+    prisma_test.session.deleteMany(),
+    prisma_test.user.deleteMany(),
+  ]);
 });
 
 afterAll(async () => {
