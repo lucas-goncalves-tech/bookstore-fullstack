@@ -24,9 +24,9 @@ export class DashboardRepository {
     ]);
 
     return {
-      revenue: revenue._sum.total,
+      revenue: Number(revenue._sum.total) || 0,
       totalUsers: users._all,
-      sales: sales._sum.quantity,
+      sales: sales._sum.quantity || 0,
     };
   }
 
@@ -77,7 +77,7 @@ export class DashboardRepository {
       metadata: {
         page,
         total: total._all,
-        totalPage: Math.ceil(total._all / take),
+        totalPage: Math.ceil(total._all / take) || 0,
       },
     };
   }

@@ -35,3 +35,5 @@ export const dashboardSalesSchema = z.object({
     totalPage: z.number(),
   }),
 });
+
+export type DashboardSalesDto = z.infer<typeof dashboardSalesSchema>;
