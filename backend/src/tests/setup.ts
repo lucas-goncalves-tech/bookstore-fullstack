@@ -1,7 +1,6 @@
 import "reflect-metadata";
 
 import { afterAll, beforeEach } from "vitest";
-import bcrypt from "bcrypt";
 import { container } from "tsyringe";
 import { PrismaDB } from "../database/prisma";
 import { env } from "../core/config/env";
@@ -28,25 +27,6 @@ container.register("StorageProvider", {
   },
 });
 
-const passwordHash = bcrypt.hashSync("12345678", 5);
-
-const user = {
-  email: "test@user.com",
-  passwordHash,
-  name: "User",
-};
-const user2 = {
-  email: "test@user-second.com",
-  passwordHash,
-  name: "User Second",
-};
-const admin = {
-  email: "test@admin.com",
-  passwordHash,
-  name: "Admin User",
-  role: "ADMIN",
-};
-
 beforeEach(async () => {
   await prisma_test.review.deleteMany();
   await prisma_test.orderItem.deleteMany();
@@ -55,10 +35,6 @@ beforeEach(async () => {
   await prisma_test.book.deleteMany();
   await prisma_test.session.deleteMany();
   await prisma_test.user.deleteMany();
-
-  await prisma_test.user.createMany({
-    data: [user, user2, admin],
-  });
 });
 
 afterAll(async () => {

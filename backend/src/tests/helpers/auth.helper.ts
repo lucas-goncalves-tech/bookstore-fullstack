@@ -1,8 +1,8 @@
-import { agent } from "supertest";
+import bcrypt from "bcrypt";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
-import { app, req } from "../helpers/commom.helper";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { prisma_test } from "../setup";
+import { req, reqAgent } from "./commom.helper";
 
 export function generateNewUser(
   override?: Record<string, unknown>,
@@ -45,9 +45,21 @@ export async function postNewUser(
   };
 }
 
-export async function loginWithUser(role: "user" | "user-second" | "admin") {
-  const email = `test@${role}.com`;
-  const reqAgent = agent(app);
+const passwordHash = bcrypt.hashSync("12345678", 5);
+
+export async function loginWithUser(
+  userType: "user" | "user-second" | "admin" = "user",
+) {
+  const role: Role = userType === "admin" ? "ADMIN" : "USER";
+  const email = `test@${userType}.com`;
+  await prisma_test.user.create({
+    data: {
+      email,
+      passwordHash,
+      name: "User",
+      role,
+    },
+  });
 
   const { body, status } = await reqAgent.post(BASE_URL + "/login").send({
     email,
