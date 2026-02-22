@@ -9,21 +9,36 @@ const BASE_URL = "/api/v1/orders";
 
 describe(`POST ${BASE_URL}`, () => {
   it("should return 201 and create order when user sends valid items with sufficient stock", async () => {
+    const quantity = 2;
     const book = await createBook({
-      stock: 2,
+      stock: quantity,
     });
     const order = [
       {
         id: book.id,
-        quantity: 2,
+        quantity,
       },
     ];
 
-    const { reqAgent } = await loginWithUser("user");
+    const { reqAgent, user } = await loginWithUser("user");
 
     const { body } = await reqAgent.post(BASE_URL).send(order).expect(201);
 
     expect(body).toHaveProperty("message");
+
+    const orderFromDb = await prisma_test.order.findFirst({
+      where: { userId: user.id },
+      include: {
+        orderItem: true,
+      },
+    });
+
+    expect(orderFromDb).toBeTruthy();
+    expect(orderFromDb?.total).toEqual(book.price.mul(quantity));
+    expect(orderFromDb?.orderItem).toHaveLength(1);
+    expect(orderFromDb?.orderItem[0].bookId).toEqual(book.id);
+    expect(orderFromDb?.orderItem[0].priceAtTime).toEqual(book.price);
+    expect(orderFromDb?.orderItem[0].quantity).toEqual(quantity);
   });
 
   it("should drecrement book stock when order is created", async () => {
