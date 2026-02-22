@@ -593,9 +593,9 @@ describe("BooksIntegration", () => {
         },
       });
       expect(bookFromDb).toBeTruthy();
-      expect(bookFromDb?.title).toBe(updatedBook.title);
-      expect(bookFromDb?.author).toBe(updatedBook.author);
-      expect(bookFromDb?.description).toBe(updatedBook.description);
+      expect(bookFromDb?.title).toEqual(updatedBook.title);
+      expect(bookFromDb?.author).toEqual(updatedBook.author);
+      expect(bookFromDb?.description).toEqual(updatedBook.description);
     });
 
     it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {

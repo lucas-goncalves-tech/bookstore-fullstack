@@ -3,6 +3,7 @@ import { req } from "../../../tests/helpers/commom.helper";
 import { createCategory } from "../../../tests/factories/categorie.factory";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { ICreateCategoryInput } from "../interface/categories.interface";
+import { prisma_test } from "../../../tests/setup";
 
 const BASE_URL = "/api/v1/categories";
 
@@ -58,6 +59,16 @@ describe(`POST ${BASE_URL}`, () => {
 
     expect(body).toHaveProperty("message");
     expect(body.data).toMatchObject(expectedCategoryShape());
+
+    const categoryFromDb = await prisma_test.category.findUnique({
+      where: {
+        id: body.data.id,
+      },
+    });
+    expect(categoryFromDb).toBeTruthy();
+    expect(categoryFromDb?.name).toEqual(newCategory.name);
+    expect(categoryFromDb?.slug).toEqual(newCategory.slug);
+    expect(categoryFromDb?.description).toEqual(newCategory.description);
   });
 
   it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
@@ -113,6 +124,16 @@ describe(`PUT ${BASE_URL}/:id`, () => {
     expect(body.data.name).toBe(newCategory.name);
     expect(body.data.slug).toBe(newCategory.slug);
     expect(body.data.description).toBe(newCategory.description);
+
+    const categoryFromDb = await prisma_test.category.findUnique({
+      where: {
+        id: category.id,
+      },
+    });
+    expect(categoryFromDb).toBeTruthy();
+    expect(categoryFromDb?.name).toEqual(newCategory.name);
+    expect(categoryFromDb?.slug).toEqual(newCategory.slug);
+    expect(categoryFromDb?.description).toEqual(newCategory.description);
   });
 
   it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
@@ -168,6 +189,13 @@ describe(`DELETE ${BASE_URL}/:id`, () => {
     const category = await createCategory();
 
     await reqAgent.delete(BASE_URL + "/" + category.id).expect(204);
+
+    const categoryFromDb = await prisma_test.category.findUnique({
+      where: {
+        id: category.id,
+      },
+    });
+    expect(categoryFromDb).toBeFalsy();
   });
 
   it("should return 404 NotFound when ADMIN tries to delete non-existent category", async () => {
