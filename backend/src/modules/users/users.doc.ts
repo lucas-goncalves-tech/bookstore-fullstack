@@ -3,17 +3,7 @@ import {
   unauthorizedResponse,
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
-import z from "zod";
-
-export const meResponseDto = z.object({
-  email: z.string(),
-  name: z.string(),
-  role: z.enum(["ADMIN", "USER"]),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-export type MeResponseDto = z.infer<typeof meResponseDto>;
+import { meResponse } from "./dtos/user.dto";
 
 registry.registerPath({
   method: "get",
@@ -26,7 +16,7 @@ registry.registerPath({
       description: "Dados do usuário retornados com sucesso",
       content: {
         "application/json": {
-          schema: meResponseDto,
+          schema: meResponse,
         },
       },
     },

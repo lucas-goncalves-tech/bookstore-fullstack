@@ -13,7 +13,7 @@ export const createReviewDto = z.strictObject({
 
 export type CreateReviewDto = z.infer<typeof createReviewDto>;
 
-const reviewSchema = z.object({
+const review = z.object({
   id: z.uuid(),
   bookId: z.uuid(),
   rating: z.number().min(1).max(5),
@@ -25,26 +25,13 @@ const reviewSchema = z.object({
   }),
 });
 
-export const reviewResponseSchema = z.object({
-  reviews: z.array(reviewSchema),
-  averageRating: z.number(),
-  totalReviews: z.number(),
-});
-
 export const createReviewResponseSchema = z.object({
   message: z.string(),
-  data: z.object({
-    id: z.uuid(),
-    bookId: z.uuid(),
-    rating: z.number().min(1).max(5),
-    comment: z.string(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-  }),
+  data: review.omit({ user: true }),
 });
 
-export const listReviewsResponseSchema = z.object({
-  reviews: z.array(reviewResponseSchema),
+export const listReviewsResponse = z.object({
+  reviews: z.array(review),
   averageRating: z.number(),
   totalReviews: z.number(),
 });
@@ -66,7 +53,7 @@ const userReviewSchema = z.object({
   }),
 });
 
-export const findManyByUserIdResponseSchema = z.object({
+export const findManyByUserIdResponse = z.object({
   reviews: z.array(userReviewSchema),
   averageRating: z.number(),
   totalReviews: z.number(),
