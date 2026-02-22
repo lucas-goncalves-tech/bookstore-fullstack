@@ -1,12 +1,12 @@
 import z from "zod";
 
-export const dashboardDetailsSchema = z.object({
+export const dashboardDetailsResponse = z.object({
   revenue: z.number(),
   totalUsers: z.number(),
   sales: z.number(),
 });
 
-export const dashboardSalesSchema = z.object({
+export const dashboardSalesResponse = z.object({
   sales: z.array(
     z.object({
       id: z.string(),
@@ -36,4 +36,4 @@ export const dashboardSalesSchema = z.object({
   }),
 });
 
-export type DashboardSalesDto = z.infer<typeof dashboardSalesSchema>;
+export type DashboardSalesResponse = z.infer<typeof dashboardSalesResponse>;

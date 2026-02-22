@@ -4,7 +4,7 @@ import {
   unauthorizedResponse,
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
-import { createUserDto, loginDto, registerResponseDto } from "./dto/auth.dto";
+import { createUserDto, loginDto, registerResponse } from "./dto/auth.dto";
 
 registry.registerPath({
   method: "post",
@@ -57,7 +57,7 @@ registry.registerPath({
       description: "Usuário criado com sucesso",
       content: {
         "application/json": {
-          schema: registerResponseDto,
+          schema: registerResponse,
         },
       },
     },

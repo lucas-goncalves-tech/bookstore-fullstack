@@ -23,10 +23,9 @@ export const loginDto = z.strictObject({
 });
 
 export type LoginDTO = z.infer<typeof loginDto>;
-
 export type CreateUserDto = z.infer<typeof createUserDto>;
 
-export const registerResponseDto = z.object({
+export const registerResponse = z.object({
   message: z.string(),
   data: z.object({
     name: z.string(),
@@ -35,4 +34,4 @@ export const registerResponseDto = z.object({
   }),
 });
 
-export type RegisterResponseDto = z.infer<typeof registerResponseDto>;
+export type RegisterResponse = z.infer<typeof registerResponse>;

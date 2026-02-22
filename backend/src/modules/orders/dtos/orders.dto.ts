@@ -14,7 +14,7 @@ export const createOrderDto = z
 
 export type CreateOrderDto = z.infer<typeof createOrderDto>;
 
-export const orderItemResponseDto = z.object({
+const orderItem = z.object({
   priceAtTime: z.number(),
   quantity: z.number(),
   book: z.object({
@@ -28,7 +28,7 @@ export const orderItemResponseDto = z.object({
   }),
 });
 
-export const orderResponseDto = z.object({
+const order = z.object({
   id: z.string(),
   userId: z.string(),
   total: z.number(),
@@ -36,19 +36,19 @@ export const orderResponseDto = z.object({
   createdAt: z.date(),
 });
 
-export const createOrderResponseDto = z.object({
+export const createOrderResponse = z.object({
   message: z.string(),
-  data: orderResponseDto,
+  data: order,
 });
 
-export const findManyOrdersResponseDto = z.array(
-  orderResponseDto.extend({
+export const findManyOrdersResponse = z.array(
+  order.extend({
     _count: z.object({
       orderItem: z.number(),
     }),
   }),
 );
 
-export const findOrderByIdResponseDto = orderResponseDto.extend({
-  orderItem: z.array(orderItemResponseDto),
+export const findOrderByIdResponse = order.extend({
+  orderItem: z.array(orderItem),
 });

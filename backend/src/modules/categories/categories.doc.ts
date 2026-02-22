@@ -5,8 +5,8 @@ import {
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
 import {
-  categoryFindManyResponseSchema,
-  categoryResponseSchema,
+  findManyCategoriesResponse,
+  findCategoryById,
   createCategoryDto,
   updateCategoryDto,
 } from "./dtos/category.dto";
@@ -21,7 +21,7 @@ registry.registerPath({
       description: "Sucesso",
       content: {
         "application/json": {
-          schema: categoryFindManyResponseSchema,
+          schema: findManyCategoriesResponse,
         },
       },
     },
@@ -54,7 +54,7 @@ registry.registerPath({
       description: "Sucesso",
       content: {
         "application/json": {
-          schema: categoryResponseSchema,
+          schema: findCategoryById,
         },
       },
     },
@@ -100,7 +100,7 @@ registry.registerPath({
       description: "Sucesso",
       content: {
         "application/json": {
-          schema: categoryResponseSchema,
+          schema: findCategoryById,
         },
       },
     },

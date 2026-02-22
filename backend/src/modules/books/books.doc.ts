@@ -10,13 +10,13 @@ import {
   createReviewResponseSchema,
 } from "../reviews/dtos/review.dto";
 import {
-  booksResponseSchema,
-  bookResponseSchema,
+  findManyBooksReponse,
+  findBookByIdResponse,
   createBookDto,
-  createBookResponseSchema,
-  uploadBookCoverResponseSchema,
+  createBookResponse,
+  uploadBookCoverResponse,
   updateBookDto,
-  updateBookResponseSchema,
+  updateBookResponse,
 } from "./dtos/book.dto";
 
 registry.registerPath({
@@ -79,7 +79,7 @@ registry.registerPath({
       description: "Livros listados com sucesso",
       content: {
         "application/json": {
-          schema: booksResponseSchema,
+          schema: findManyBooksReponse,
         },
       },
     },
@@ -107,7 +107,7 @@ registry.registerPath({
       description: "Livro encontrado com sucesso",
       content: {
         "application/json": {
-          schema: bookResponseSchema,
+          schema: findBookByIdResponse,
         },
       },
     },
@@ -170,7 +170,7 @@ registry.registerPath({
       description: "Livro criado com sucesso",
       content: {
         "application/json": {
-          schema: createBookResponseSchema,
+          schema: createBookResponse,
         },
       },
     },
@@ -262,7 +262,7 @@ registry.registerPath({
       description: "Capa do livro enviada com sucesso",
       content: {
         "application/json": {
-          schema: uploadBookCoverResponseSchema,
+          schema: uploadBookCoverResponse,
         },
       },
     },
@@ -304,7 +304,7 @@ registry.registerPath({
       description: "Livro atualizado com sucesso",
       content: {
         "application/json": {
-          schema: updateBookResponseSchema,
+          schema: updateBookResponse,
         },
       },
     },

@@ -4,8 +4,8 @@ import {
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
 import {
-  dashboardDetailsSchema,
-  dashboardSalesSchema,
+  dashboardDetailsResponse,
+  dashboardSalesResponse,
 } from "./dtos/dashboard.dto";
 
 registry.registerPath({
@@ -19,7 +19,7 @@ registry.registerPath({
       description: "Todos os detalhes do dashboard",
       content: {
         "application/json": {
-          schema: dashboardDetailsSchema,
+          schema: dashboardDetailsResponse,
         },
       },
     },
@@ -49,7 +49,7 @@ registry.registerPath({
       description: "Todas as vendas do BookStore",
       content: {
         "application/json": {
-          schema: dashboardSalesSchema,
+          schema: dashboardSalesResponse,
         },
       },
     },

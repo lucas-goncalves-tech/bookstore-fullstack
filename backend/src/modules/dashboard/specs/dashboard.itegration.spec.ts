@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { createBook } from "../../../tests/factories/book.factory";
 import { createOrderWithItem } from "../../../tests/factories/order.factory";
-import { DashboardSalesDto } from "../dtos/dashboard.dto";
+import { DashboardSalesResponse } from "../dtos/dashboard.dto";
 import { req } from "../../../tests/helpers/commom.helper";
 
 describe("DashboardIntegration", () => {
@@ -65,7 +65,7 @@ describe("DashboardIntegration", () => {
 
       const { body } = await reqAgent.get(BASE_URL + "/sales").expect(200);
 
-      const expected: DashboardSalesDto = {
+      const expected: DashboardSalesResponse = {
         sales: [
           {
             id: expect.any(String),
@@ -117,7 +117,7 @@ describe("DashboardIntegration", () => {
         .get(BASE_URL + "/sales?page=2")
         .expect(200);
 
-      const expected: DashboardSalesDto = {
+      const expected: DashboardSalesResponse = {
         sales: [],
         metadata: {
           page: 2,

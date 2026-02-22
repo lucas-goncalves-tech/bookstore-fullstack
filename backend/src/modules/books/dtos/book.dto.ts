@@ -25,7 +25,7 @@ export const updateBookDto = createBookDto.partial().extend({
 export type CreateBookDto = z.infer<typeof createBookDto>;
 export type UpdateBookDto = z.infer<typeof updateBookDto>;
 
-export const bookResponseSchema = z.object({
+export const findBookByIdResponse = z.object({
   id: z.uuid(),
   author: z.string(),
   title: z.string(),
@@ -40,7 +40,7 @@ export const bookResponseSchema = z.object({
 });
 
 const booksData = z.array(
-  bookResponseSchema.extend({
+  findBookByIdResponse.extend({
     averageRating: z.number(),
     category: z.object({
       name: z.string().nullable(),
@@ -55,17 +55,17 @@ const bookMetadata = z.object({
   totalPages: z.number(),
 });
 
-export const booksResponseSchema = z.object({
+export const findManyBooksReponse = z.object({
   data: booksData,
   metadata: bookMetadata,
 });
 
-export const createBookResponseSchema = z.object({
+export const createBookResponse = z.object({
   message: z.string(),
-  data: bookResponseSchema,
+  data: findBookByIdResponse,
 });
 
-export const uploadBookCoverResponseSchema = z.object({
+export const uploadBookCoverResponse = z.object({
   message: z.string(),
   data: z.object({
     coverUrl: z.string(),
@@ -73,7 +73,7 @@ export const uploadBookCoverResponseSchema = z.object({
   }),
 });
 
-export const updateBookResponseSchema = z.object({
+export const updateBookResponse = z.object({
   message: z.string(),
-  data: bookResponseSchema,
+  data: findBookByIdResponse,
 });

@@ -7,9 +7,9 @@ import {
 import { registry } from "../../docs/openapi.registry";
 import {
   createOrderDto,
-  createOrderResponseDto,
-  findManyOrdersResponseDto,
-  findOrderByIdResponseDto,
+  createOrderResponse,
+  findManyOrdersResponse,
+  findOrderByIdResponse,
 } from "./dtos/orders.dto";
 
 registry.registerPath({
@@ -36,7 +36,7 @@ registry.registerPath({
       description: "Pedido criado com sucesso",
       content: {
         "application/json": {
-          schema: createOrderResponseDto,
+          schema: createOrderResponse,
         },
       },
     },
@@ -58,7 +58,7 @@ registry.registerPath({
       description: "Lista de pedidos",
       content: {
         "application/json": {
-          schema: findManyOrdersResponseDto,
+          schema: findManyOrdersResponse,
         },
       },
     },
@@ -88,7 +88,7 @@ registry.registerPath({
       description: "Pedido encontrado",
       content: {
         "application/json": {
-          schema: findOrderByIdResponseDto,
+          schema: findOrderByIdResponse,
         },
       },
     },
