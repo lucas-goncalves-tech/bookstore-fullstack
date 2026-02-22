@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { postNewUser, BASE_URL } from "../../../tests/helpers/auth.helper";
 import { req } from "../../../tests/helpers/commom.helper";
 import { createUser } from "../../../tests/factories/user.factory";
+import { prisma_test } from "../../../tests/setup";
 
 describe(`POST ${BASE_URL}/register`, () => {
   it("should return 201 and register user when body contains valid data", async () => {
@@ -16,6 +17,18 @@ describe(`POST ${BASE_URL}/register`, () => {
     });
     expect(registerBody.data).not.toHaveProperty("id");
     expect(registerBody.data).not.toHaveProperty("passwordHash");
+
+    const user = await prisma_test.user.findUnique({
+      where: {
+        email: newUser.email,
+      },
+    });
+    expect(user).toBeTruthy();
+    expect(user?.email).toEqual(newUser.email);
+    expect(user?.name).toEqual(newUser.name);
+    expect(user?.role).toEqual("USER");
+    expect(user?.passwordHash).toBeDefined();
+    expect(user?.passwordHash).not.toEqual(newUser.password);
   });
 
   it("should return 409 Conflict when email is already registered", async () => {
