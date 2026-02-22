@@ -1,3 +1,5 @@
+import "./dashboard.doc";
+
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";

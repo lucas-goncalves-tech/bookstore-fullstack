@@ -10,7 +10,7 @@ FROM base AS dev
 CMD ["npm", "run", "dev"]
 
 FROM base AS prod
+RUN npx prisma generate --no-engine
 RUN npm run build
-RUN mkdir -p /app/uploads && chown -R node:node /app/uploads
 USER node
 CMD ["npm", "run", "start"]

@@ -1,3 +1,5 @@
+import "./books.doc";
+
 import { container, injectable } from "tsyringe";
 import { BookController } from "./books.controller";
 import { Router } from "express";

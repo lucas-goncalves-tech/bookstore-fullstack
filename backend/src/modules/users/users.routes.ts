@@ -1,3 +1,5 @@
+import "./users.doc";
+
 import { Router } from "express";
 import { container } from "tsyringe";
 import { UsersController } from "./users.controller";

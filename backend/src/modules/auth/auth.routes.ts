@@ -1,3 +1,5 @@
+import "./auth.doc";
+
 import { container, injectable } from "tsyringe";
 import { AuthController } from "./auth.controller";
 import { Router } from "express";

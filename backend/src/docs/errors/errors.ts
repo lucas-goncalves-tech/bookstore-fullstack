@@ -25,7 +25,7 @@ export const unauthorizedResponse = {
 
 export const forbiddenResponse = {
   403: {
-    description: "Acesso negado. Requer permissão de ADMIN",
+    description: "Acesso negado",
     content: {
       "application/json": {
         schema: commomError,

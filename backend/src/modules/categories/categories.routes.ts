@@ -1,3 +1,5 @@
+import "./categories.doc";
+
 import { Router } from "express";
 import { container } from "tsyringe";
 import { CategoriesController } from "./categories.controller";

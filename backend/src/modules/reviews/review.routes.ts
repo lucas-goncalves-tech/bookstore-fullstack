@@ -1,3 +1,5 @@
+import "./review.doc";
+
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
 import { ReviewController } from "./review.controller";

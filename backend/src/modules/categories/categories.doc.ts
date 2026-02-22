@@ -31,10 +31,10 @@ registry.registerPath({
 registry.registerPath({
   method: "post",
   path: "/categories",
-  tags: ["Categories"],
+  tags: ["Admin - Categories"],
   security: [{ cookieAuth: [] }],
-  summary: "Criação de categoria (ADMIN)",
-  description: "Cria uma nova categoria, Apenas para administradores.",
+  summary: "Criação de categoria",
+  description: "Cria uma nova categoria.",
   request: {
     body: {
       content: {
@@ -67,10 +67,10 @@ registry.registerPath({
 registry.registerPath({
   method: "put",
   path: "/categories/{id}",
-  tags: ["Categories"],
+  tags: ["Admin - Categories"],
   security: [{ cookieAuth: [] }],
-  summary: "Atualização de categoria (ADMIN)",
-  description: "Atualiza uma categoria, Apenas para administradores.",
+  summary: "Atualização de categoria",
+  description: "Atualiza uma categoria.",
   parameters: [
     {
       name: "id",
@@ -113,10 +113,10 @@ registry.registerPath({
 registry.registerPath({
   method: "delete",
   path: "/categories/{id}",
-  tags: ["Categories"],
+  tags: ["Admin - Categories"],
   security: [{ cookieAuth: [] }],
-  summary: "Deletar categoria (ADMIN)",
-  description: "Deleta uma categoria, Apenas para administradores.",
+  summary: "Deletar categoria",
+  description: "Deleta uma categoria.",
   parameters: [
     {
       name: "id",

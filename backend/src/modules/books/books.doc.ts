@@ -144,10 +144,10 @@ registry.registerPath({
 registry.registerPath({
   method: "post",
   path: "/books",
-  tags: ["Books"],
+  tags: ["Admin - Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Criar livro (ADMIN)",
-  description: "Cria um novo livro, apenas para administradores.",
+  summary: "Criar livro",
+  description: "Cria um novo livro.",
   request: {
     body: {
       content: {
@@ -224,10 +224,10 @@ registry.registerPath({
 registry.registerPath({
   method: "post",
   path: "/books/{id}/cover",
-  tags: ["Books"],
+  tags: ["Admin - Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Upload de capa de livro (ADMIN)",
-  description: "Upload de capa de livro, apenas para administradores.",
+  summary: "Upload de capa de livro",
+  description: "Upload de capa de livro.",
   parameters: [
     {
       name: "id",
@@ -275,10 +275,10 @@ registry.registerPath({
 registry.registerPath({
   method: "put",
   path: "/books/{id}",
-  tags: ["Books"],
+  tags: ["Admin - Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Atualizar livro (ADMIN)",
-  description: "Atualiza um livro do sistema, apenas para administradores.",
+  summary: "Atualizar livro",
+  description: "Atualiza um livro do sistema.",
   parameters: [
     {
       name: "id",
@@ -317,10 +317,10 @@ registry.registerPath({
 registry.registerPath({
   method: "delete",
   path: "/books/{id}",
-  tags: ["Books"],
+  tags: ["Admin - Books"],
   security: [{ cookieAuth: [] }],
-  summary: "Deletar livro (ADMIN)",
-  description: "Remove um livro do sistema, apenas para administradores.",
+  summary: "Deletar livro",
+  description: "Remove um livro do sistema.",
   parameters: [
     {
       name: "id",

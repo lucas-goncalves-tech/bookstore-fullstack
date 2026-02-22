@@ -11,7 +11,7 @@ import {
 registry.registerPath({
   method: "get",
   path: "/dashboard/details",
-  tags: ["Dashboard"],
+  tags: ["Admin - Dashboard"],
   security: [{ cookieAuth: [] }],
   summary: "Mostra os detalhes do dashboard",
   responses: {
@@ -31,7 +31,7 @@ registry.registerPath({
 registry.registerPath({
   method: "get",
   path: "/dashboard/sales",
-  tags: ["Dashboard"],
+  tags: ["Admin - Dashboard"],
   security: [{ cookieAuth: [] }],
   summary: "Mostra as ultimas vendas do BookStore",
   parameters: [

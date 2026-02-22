@@ -1,3 +1,5 @@
+import "./orders.doc";
+
 import { container, injectable } from "tsyringe";
 import { OrderController } from "./orders.controller";
 import { Router } from "express";
