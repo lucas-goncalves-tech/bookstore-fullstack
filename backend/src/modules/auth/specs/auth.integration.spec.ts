@@ -4,107 +4,109 @@ import { req } from "../../../tests/helpers/commom.helper";
 import { createUser } from "../../../tests/factories/user.factory";
 import { prisma_test } from "../../../tests/setup";
 
-describe(`POST ${BASE_URL}/register`, () => {
-  it("should return 201 and register user when body contains valid data", async () => {
-    const { registerBody, registerStatus, newUser } = await postNewUser();
+describe("AuthIntegration", () => {
+  describe(`POST ${BASE_URL}/register`, () => {
+    it("should return 201 and register user when body contains valid data", async () => {
+      const { registerBody, registerStatus, newUser } = await postNewUser();
 
-    expect(registerStatus).toBe(201);
-    expect(registerBody).toHaveProperty("message");
-    expect(registerBody.data).toMatchObject({
-      email: newUser.email,
-      name: newUser.name,
-      role: "USER",
-    });
-    expect(registerBody.data).not.toHaveProperty("id");
-    expect(registerBody.data).not.toHaveProperty("passwordHash");
-
-    const user = await prisma_test.user.findUnique({
-      where: {
+      expect(registerStatus).toBe(201);
+      expect(registerBody).toHaveProperty("message");
+      expect(registerBody.data).toMatchObject({
         email: newUser.email,
-      },
-    });
-    expect(user).toBeTruthy();
-    expect(user?.email).toEqual(newUser.email);
-    expect(user?.name).toEqual(newUser.name);
-    expect(user?.role).toEqual("USER");
-    expect(user?.passwordHash).toBeDefined();
-    expect(user?.passwordHash).not.toEqual(newUser.password);
-  });
+        name: newUser.name,
+        role: "USER",
+      });
+      expect(registerBody.data).not.toHaveProperty("id");
+      expect(registerBody.data).not.toHaveProperty("passwordHash");
 
-  it("should return 409 Conflict when email is already registered", async () => {
-    const email = "user@exist.com";
-    await postNewUser({
-      email,
-    });
-    const { registerBody, registerStatus } = await postNewUser({
-      email,
-    });
-
-    expect(registerStatus).toBe(409);
-    expect(registerBody).toHaveProperty("message");
-  });
-
-  it("should return 400 BadRequest when body contains invalid fields", async () => {
-    const { registerStatus, registerBody } = await postNewUser({
-      name: "\u200B\u200B\u200B",
-      email: "not-valid-com",
-      password: "1234567",
-      confirmPassword: "123456789",
+      const user = await prisma_test.user.findUnique({
+        where: {
+          email: newUser.email,
+        },
+      });
+      expect(user).toBeTruthy();
+      expect(user?.email).toEqual(newUser.email);
+      expect(user?.name).toEqual(newUser.name);
+      expect(user?.role).toEqual("USER");
+      expect(user?.passwordHash).toBeDefined();
+      expect(user?.passwordHash).not.toEqual(newUser.password);
     });
 
-    const errors = registerBody.errors.map((e: object) => Object.keys(e)[0]);
+    it("should return 409 Conflict when email is already registered", async () => {
+      const email = "user@exist.com";
+      await postNewUser({
+        email,
+      });
+      const { registerBody, registerStatus } = await postNewUser({
+        email,
+      });
 
-    expect(registerStatus).toBe(400);
-    expect(registerBody).toHaveProperty("message");
-    expect(errors).toContain("name");
-    expect(errors).toContain("email");
-    expect(errors).toContain("password");
-    expect(errors).toContain("confirmPassword");
-  });
-});
+      expect(registerStatus).toBe(409);
+      expect(registerBody).toHaveProperty("message");
+    });
 
-describe(`POST ${BASE_URL}/login`, () => {
-  it("should return 204 and set HttpOnly cookies when credentials are valid", async () => {
-    const user = await createUser();
-
-    const { headers, body } = await req
-      .post(BASE_URL + "/login")
-      .send({
-        email: user.email,
-        password: "password",
-      })
-      .expect(204);
-    const cookies = headers["set-cookie"][0];
-
-    expect(body).toEqual({});
-    expect(cookies).contains("sid");
-    expect(cookies).contains("HttpOnly");
-  });
-
-  it("should return 401 Unauthorized when credentials are invalid", async () => {
-    const { body } = await req
-      .post(BASE_URL + "/login")
-      .send({
-        email: "invalid@test.com",
-        password: "12345678",
-      })
-      .expect(401);
-
-    expect(body).toHaveProperty("message");
-  });
-
-  it("should return 400 BadRequest when body contains invalid fields", async () => {
-    const { body } = await req
-      .post(BASE_URL + "/login")
-      .send({
+    it("should return 400 BadRequest when body contains invalid fields", async () => {
+      const { registerStatus, registerBody } = await postNewUser({
+        name: "\u200B\u200B\u200B",
         email: "not-valid-com",
-        password: "123",
-      })
-      .expect(400);
-    const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+        password: "1234567",
+        confirmPassword: "123456789",
+      });
 
-    expect(body).toHaveProperty("message");
-    expect(errors).toContain("email");
-    expect(errors).toContain("password");
+      const errors = registerBody.errors.map((e: object) => Object.keys(e)[0]);
+
+      expect(registerStatus).toBe(400);
+      expect(registerBody).toHaveProperty("message");
+      expect(errors).toContain("name");
+      expect(errors).toContain("email");
+      expect(errors).toContain("password");
+      expect(errors).toContain("confirmPassword");
+    });
+  });
+
+  describe(`POST ${BASE_URL}/login`, () => {
+    it("should return 204 and set HttpOnly cookies when credentials are valid", async () => {
+      const user = await createUser();
+
+      const { headers, body } = await req
+        .post(BASE_URL + "/login")
+        .send({
+          email: user.email,
+          password: "password",
+        })
+        .expect(204);
+      const cookies = headers["set-cookie"][0];
+
+      expect(body).toEqual({});
+      expect(cookies).contains("sid");
+      expect(cookies).contains("HttpOnly");
+    });
+
+    it("should return 401 Unauthorized when credentials are invalid", async () => {
+      const { body } = await req
+        .post(BASE_URL + "/login")
+        .send({
+          email: "invalid@test.com",
+          password: "12345678",
+        })
+        .expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 400 BadRequest when body contains invalid fields", async () => {
+      const { body } = await req
+        .post(BASE_URL + "/login")
+        .send({
+          email: "not-valid-com",
+          password: "123",
+        })
+        .expect(400);
+      const errors = body.errors.map((e: object) => Object.keys(e)[0]);
+
+      expect(body).toHaveProperty("message");
+      expect(errors).toContain("email");
+      expect(errors).toContain("password");
+    });
   });
 });
