@@ -11,12 +11,14 @@ import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middlew
 import { bookParamsDto } from "./dtos/book-params";
 import { uploadMiddleware } from "../../shared/middlewares/upload.middleware";
 import { fileTypeMiddleware } from "../../shared/middlewares/file-type.middleware";
-import { createReviewDto } from "../reviews/dtos/review.dto";
+import { BookReviewsRoutes } from "./book-reviews.routes";
 
 @injectable()
 export class BookRoutes {
   private readonly controller: BookController;
   private readonly router: Router;
+  private readonly bookReviewsRoutes = container.resolve(BookReviewsRoutes);
+
   constructor() {
     this.controller = container.resolve(BookController);
     this.router = Router();
@@ -29,22 +31,13 @@ export class BookRoutes {
       validateMiddleware({ query: bookQueryDto }),
       this.controller.findMany,
     );
+    this.router.use("/", this.bookReviewsRoutes.routes);
     this.router.get(
       "/:id",
       validateMiddleware({ params: bookParamsDto }),
       this.controller.findById,
     );
-    this.router.get(
-      "/:id/reviews",
-      validateMiddleware({ params: bookParamsDto }),
-      this.controller.findReviewsByBookId,
-    );
-    this.router.post(
-      "/:id/reviews",
-      authMiddleware,
-      validateMiddleware({ params: bookParamsDto, body: createReviewDto }),
-      this.controller.createReview,
-    );
+
     this.router.post(
       "/",
       authMiddleware,

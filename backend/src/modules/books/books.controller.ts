@@ -5,28 +5,16 @@ import { BookQueryDTO } from "./dtos/book-query.dto";
 import { CreateBookDto, UpdateBookDto } from "./dtos/book.dto";
 import { BookParamsDto } from "./dtos/book-params";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
-import { ReviewService } from "../reviews/review.service";
-import { CreateReviewDto } from "../reviews/dtos/review.dto";
-import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 
 @injectable()
 export class BookController {
-  constructor(
-    @inject(BookService) private readonly bookService: BookService,
-    @inject(ReviewService) private readonly reviewService: ReviewService,
-  ) {}
+  constructor(@inject(BookService) private readonly bookService: BookService) {}
 
   findById = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
     const result = await this.bookService.findById(id);
 
     res.json(result);
-  };
-
-  findReviewsByBookId = async (req: Request, res: Response) => {
-    const { id } = req.safeParams as BookParamsDto;
-    const reviews = await this.reviewService.findByBookId(id);
-    return res.status(200).json(reviews);
   };
 
   findMany = async (req: Request, res: Response) => {
@@ -43,21 +31,6 @@ export class BookController {
     res.status(201).json({
       message: `Livro ${result.title} criado com sucesso`,
       data: result,
-    });
-  };
-
-  createReview = async (req: Request, res: Response) => {
-    const { id } = req.safeParams as BookParamsDto;
-    const data = req.safeBody as CreateReviewDto;
-    const userId = req.user?.sub;
-
-    if (!userId) {
-      throw new UnauthorizedError("Usuário não autenticado");
-    }
-    const review = await this.reviewService.create(userId, id, data);
-    return res.status(201).json({
-      message: `Avaliação do livro ${review.bookId} criada com sucesso`,
-      data: review,
     });
   };
 
