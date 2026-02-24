@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { loginWithUser } from "../../../tests/helpers/auth.helper";
-import { createBook } from "../../../tests/factories/book.factory";
-import { createOrderWithItem } from "../../../tests/factories/order.factory";
+import { loginWithUser } from "../../../../tests/helpers/auth.helper";
+import { createBook } from "../../../../tests/factories/book.factory";
+import { createOrderWithItem } from "../../../../tests/factories/order.factory";
 import { DashboardSalesResponse } from "../dtos/dashboard.dto";
-import { req } from "../../../tests/helpers/commom.helper";
+import { req } from "../../../../tests/helpers/commom.helper";
 
 describe("DashboardIntegration", () => {
-  const BASE_URL = "/api/v1/dashboard";
+  const BASE_URL = "/api/v1/admin/dashboard";
 
   describe(`GET ${BASE_URL}/details`, () => {
     it("should return revenue, sales, totalUsers when is ADMIN", async () => {

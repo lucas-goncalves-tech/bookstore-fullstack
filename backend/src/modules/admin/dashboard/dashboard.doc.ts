@@ -1,8 +1,8 @@
 import {
   forbiddenResponse,
   unauthorizedResponse,
-} from "../../docs/errors/errors";
-import { registry } from "../../docs/openapi.registry";
+} from "../../../docs/errors/errors";
+import { registry } from "../../../docs/openapi.registry";
 import {
   dashboardDetailsResponse,
   dashboardSalesResponse,
@@ -10,7 +10,7 @@ import {
 
 registry.registerPath({
   method: "get",
-  path: "/dashboard/details",
+  path: "/admin/dashboard/details",
   tags: ["Admin - Dashboard"],
   security: [{ cookieAuth: [] }],
   summary: "Mostra os detalhes do dashboard",
@@ -30,7 +30,7 @@ registry.registerPath({
 
 registry.registerPath({
   method: "get",
-  path: "/dashboard/sales",
+  path: "/admin/dashboard/sales",
   tags: ["Admin - Dashboard"],
   security: [{ cookieAuth: [] }],
   summary: "Mostra as ultimas vendas do BookStore",

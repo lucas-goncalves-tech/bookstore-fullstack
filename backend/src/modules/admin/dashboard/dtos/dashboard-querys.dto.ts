@@ -1,5 +1,5 @@
 import z from "zod";
-import { zodCoerceNumber } from "../../../shared/validators/comom.validators";
+import { zodCoerceNumber } from "../../../../shared/validators/comom.validators";
 
 export const dashboardQueryDto = z.strictObject({
   page: zodCoerceNumber.default(1),

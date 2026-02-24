@@ -7,7 +7,7 @@ import { CategoriesRoutes } from "../modules/categories/categories.routes";
 import { UsersRoutes } from "../modules/users/users.routes";
 import { OrderRoutes } from "../modules/orders/orders.routes";
 import { ReviewsRoutes } from "../modules/reviews/review.routes";
-import { DashboardRoutes } from "../modules/dashboard/dashboard.routes";
+import { AdminRoutes } from "../modules/admin/admin.routes";
 
 @injectable()
 export class Routes {
@@ -23,8 +23,8 @@ export class Routes {
     private readonly orderRoutes: OrderRoutes,
     @inject(ReviewsRoutes)
     private readonly reviewsRoutes: ReviewsRoutes,
-    @inject(DashboardRoutes)
-    private readonly dashboardRoutes: DashboardRoutes,
+    @inject(AdminRoutes)
+    private readonly adminRoutes: AdminRoutes,
   ) {
     this.router = Router();
     this.routes();
@@ -37,7 +37,7 @@ export class Routes {
     this.router.use("/users", this.usersRoutes.routes);
     this.router.use("/orders", this.orderRoutes.routes);
     this.router.use("/reviews", this.reviewsRoutes.routes);
-    this.router.use("/dashboard", this.dashboardRoutes.routes);
+    this.router.use("/admin", this.adminRoutes.routes);
 
     // not found
     this.router.use((req, res) => {
