@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import { ICreateUserInput } from "../../modules/users/interfaces/user.interface";
 import { Role, User } from "@prisma/client";
 import { prisma_test } from "../setup";
-import { req, reqAgent } from "./commom.helper";
+import { app, req } from "./commom.helper";
+import { agent } from "supertest";
 
 export function generateNewUser(
   override?: Record<string, unknown>,
@@ -50,9 +51,10 @@ const passwordHash = bcrypt.hashSync("12345678", 5);
 export async function loginWithUser(
   userType: "user" | "user-second" | "admin" = "user",
 ) {
+  const reqAgent = agent(app);
   const role: Role = userType === "admin" ? "ADMIN" : "USER";
   const email = `test@${userType}.com`;
-  await prisma_test.user.create({
+  const user = await prisma_test.user.create({
     data: {
       email,
       passwordHash,
@@ -65,14 +67,6 @@ export async function loginWithUser(
     email,
     password: "12345678",
   });
-
-  const user = await prisma_test.user.findUnique({
-    where: { email },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
 
   return {
     loginBody: body,
