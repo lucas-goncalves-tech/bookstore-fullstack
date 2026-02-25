@@ -15,14 +15,17 @@ const updateBook = async ({
 }): Promise<Book> => {
   const { coverImage, ...bookData } = data;
 
-  const { data: updatedBook } = await api.put<Book>(`/books/${id}`, bookData);
+  const { data: updatedBook } = await api.put<Book>(
+    `/admin/books/${id}`,
+    bookData,
+  );
 
   if (coverImage && coverImage.length > 0) {
     const formData = new FormData();
     formData.append("cover", coverImage[0]);
 
     const { data: bookWithCover } = await api.post<Book>(
-      `/books/${id}/cover`,
+      `/admin/books/${id}/cover`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

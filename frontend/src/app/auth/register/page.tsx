@@ -1,5 +1,6 @@
 import { RegisterForm } from "@/modules/register/components/register-form";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Comece sua História | Bookstore",
@@ -11,14 +12,16 @@ export default function RegisterPage() {
     <div className="flex flex-1 w-full min-h-screen">
       {/* Left Side: Image Panel */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-[#a77d52]/20">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA--5wmjvJsG3qsNzSbOzAeboz6Zf7Gra69Y5H-t-T62vVZvDTTAmtu_JKelZHAiqEvdbQGuWnQm_t4GAZHfkVNxLfEYiLP1xwPGMffZHb7GYUC3iTmh0RAoWK85xlaZabgNR5AsnSIUeSiYoGLETaUlrtot04KqtUyRJuTAApTnZEbsUXso1UtAjHFyVY6TiOskVjVdrdt55oI4qQown0O9kCVSdfL4cT3dGzOaV_elY49CQQQzy0OXHI7vsBNdozHL7TEnoAbY-vK')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0">
+          <Image
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA--5wmjvJsG3qsNzSbOzAeboz6Zf7Gra69Y5H-t-T62vVZvDTTAmtu_JKelZHAiqEvdbQGuWnQm_t4GAZHfkVNxLfEYiLP1xwPGMffZHb7GYUC3iTmh0RAoWK85xlaZabgNR5AsnSIUeSiYoGLETaUlrtot04KqtUyRJuTAApTnZEbsUXso1UtAjHFyVY6TiOskVjVdrdt55oI4qQown0O9kCVSdfL4cT3dGzOaV_elY49CQQQzy0OXHI7vsBNdozHL7TEnoAbY-vK"
+            alt="Biblioteca Aberta"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 0vw, 50vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
         <div className="relative z-10 flex flex-col justify-end p-12 text-white">
           <blockquote className="font-serif text-3xl italic leading-snug mb-4">

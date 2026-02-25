@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const [detailsData, salesData] = await Promise.all([
-    serverGet<DashboardDetails>("/dashboard/details"),
-    serverGet<DashboardSales>("/dashboard/sales"),
+    serverGet<DashboardDetails>("/admin/dashboard/details"),
+    serverGet<DashboardSales>("/admin/dashboard/sales"),
   ]);
 
   return (

@@ -15,7 +15,7 @@ const createBook = async (data: BookFormValues) => {
   const { coverImage, ...bookData } = data;
 
   const { data: createdBook } = await api.post<CreateBookData>(
-    "/books",
+    "/admin/books",
     bookData,
   );
 
@@ -24,7 +24,7 @@ const createBook = async (data: BookFormValues) => {
     formData.append("cover", coverImage[0]);
 
     const { data: bookWithCover } = await api.post<Book>(
-      `/books/${createdBook.data.id}/cover`,
+      `/admin/books/${createdBook.data.id}/cover`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

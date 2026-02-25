@@ -12,7 +12,7 @@ export function useMyReviews(initialData?: MyReviewsResponse | null) {
   return useQuery({
     queryKey: myReviewsQueryKeys.list(),
     queryFn: async () => {
-      const { data } = await api.get<MyReviewsResponse>("/reviews");
+      const { data } = await api.get<MyReviewsResponse>("/users/me/reviews");
       return myReviewsResponseSchema.parse(data);
     },
     initialData: initialData ?? undefined,

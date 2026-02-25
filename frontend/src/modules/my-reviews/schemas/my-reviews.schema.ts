@@ -5,12 +5,13 @@ export const userReviewSchema = z.object({
   rating: z.number(),
   comment: z.string(),
   createdAt: z.string(),
+  updatedAt: z.string(),
   bookId: z.string(),
   book: z.object({
     title: z.string(),
     author: z.string(),
     coverUrl: z.string().nullable(),
-    category: z.object({ name: z.string() }).nullable(),
+    category: z.object({ name: z.string() }),
   }),
 });
 

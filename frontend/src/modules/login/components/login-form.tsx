@@ -5,18 +5,29 @@ import { Input } from "@/components/ui/input";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useLoginViewModel } from "../hooks/use-login.viewmodel";
+import { useLogin } from "../hooks/use-login";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginFormData, loginSchema } from "../schemas/login.schema";
 
 export function LoginForm() {
-  const { form, onSubmit, isLoading } = useLoginViewModel();
+  const { mutateAsync: login, isPending: isLoading } = useLogin();
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
-  } = form;
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    await login(data);
+  };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       {/* Email Field */}
       <div className="flex flex-col gap-2">
         <label

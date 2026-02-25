@@ -60,15 +60,8 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
         <div className="relative mb-4 aspect-4/3 w-full overflow-hidden rounded-lg shadow-md">
           <div
             className={cn(
-              "absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110",
-              !book.coverThumbUrl &&
-                "bg-muted flex items-center justify-center",
+              "absolute inset-0 bg-muted flex items-center justify-center transition-transform duration-500 group-hover:scale-110",
             )}
-            style={
-              book.coverThumbUrl
-                ? { backgroundImage: `url("${book.coverThumbUrl}")` }
-                : undefined
-            }
             aria-label={`Capa do livro: ${book.title}`}
           >
             {book.coverThumbUrl ? (
@@ -76,10 +69,11 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
                 src={book.coverThumbUrl}
                 alt={book.title}
                 fill
+                className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
-              <span className="text-4xl text-muted-foreground">📚</span>
+              <span className="text-4xl text-muted-foreground z-10">📚</span>
             )}
           </div>
         </div>
@@ -119,8 +113,7 @@ export function BookCard({ book, onAddToCart }: BookCardProps) {
 
         {/* Add to Cart Button */}
         <Button
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
             onAddToCart?.(book);
           }}
           className="rounded-lg flex w-full items-center justify-center gap-2 relative z-10"

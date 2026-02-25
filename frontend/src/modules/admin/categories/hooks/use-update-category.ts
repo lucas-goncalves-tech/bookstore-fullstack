@@ -12,7 +12,10 @@ const updateCategory = async ({
   id: string;
   data: Partial<Category>;
 }): Promise<Category> => {
-  const { data: response } = await api.put<Category>(`/categories/${id}`, data);
+  const { data: response } = await api.put<Category>(
+    `/admin/categories/${id}`,
+    data,
+  );
   return response;
 };
 

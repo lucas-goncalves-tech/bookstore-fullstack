@@ -1,5 +1,3 @@
-"use client";
-
 import { Sparkles } from "lucide-react";
 import { BookCard } from "./book-card";
 import type { Book } from "../schemas/book.schema";

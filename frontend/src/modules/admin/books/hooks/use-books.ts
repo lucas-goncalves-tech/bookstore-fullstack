@@ -5,7 +5,7 @@ import { adminBookKeys } from "./query-keys";
 
 // Fetch books with pagination
 const fetchBooks = async (page = 1, limit = 10): Promise<BooksResponse> => {
-  const { data } = await api.get<BooksResponse>("/books", {
+  const { data } = await api.get<BooksResponse>("/admin/books", {
     params: { page, limit },
   });
   return data;

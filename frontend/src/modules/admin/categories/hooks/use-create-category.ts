@@ -6,7 +6,10 @@ import { adminCategoryKeys } from "./query-keys";
 import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 
 const createCategory = async (data: Partial<Category>): Promise<Category> => {
-  const { data: response } = await api.post<Category>("/categories", data);
+  const { data: response } = await api.post<Category>(
+    "/admin/categories",
+    data,
+  );
   return response;
 };
 

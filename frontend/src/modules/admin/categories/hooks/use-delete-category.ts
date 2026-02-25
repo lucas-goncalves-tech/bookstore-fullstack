@@ -5,7 +5,7 @@ import { adminCategoryKeys } from "./query-keys";
 import { homeQueryKeys } from "@/modules/home/hooks/query-keys";
 
 const deleteCategory = async (id: string): Promise<void> => {
-  await api.delete(`/categories/${id}`);
+  await api.delete(`/admin/categories/${id}`);
 };
 
 export function useDeleteCategory() {

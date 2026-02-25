@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function OrderHistoryPage() {
-  const initialData = await serverGet<OrderResponse>("/orders");
+  const initialData = await serverGet<OrderResponse>("/users/me/orders");
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-serif">

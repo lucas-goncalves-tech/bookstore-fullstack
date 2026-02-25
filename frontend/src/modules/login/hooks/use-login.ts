@@ -1,19 +1,15 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { LoginFormData, loginSchema } from "../schemas/login.schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi, resetRefreshState } from "@/lib/axios";
+import { LoginFormData } from "../schemas/login.schema";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
-export function useLoginViewModel() {
+export function useLogin() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMutation({
+  return useMutation({
     mutationFn: async (data: LoginFormData) => {
       await authApi.post("/auth/login", data);
     },
@@ -31,22 +27,4 @@ export function useLoginViewModel() {
       }
     },
   });
-
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const onSubmit = async (data: LoginFormData) => {
-    await mutateAsync(data);
-  };
-
-  return {
-    form,
-    onSubmit: form.handleSubmit(onSubmit),
-    isLoading: form.formState.isSubmitting,
-  };
 }

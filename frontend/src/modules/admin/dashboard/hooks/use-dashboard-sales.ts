@@ -16,7 +16,7 @@ export function useDashboardSales(options: UseDashboardSalesOptions = {}) {
   return useInfiniteQuery({
     queryKey: adminDashboardKeys.sales(),
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await api.get("/dashboard/sales", {
+      const response = await api.get("/admin/dashboard/sales", {
         params: { page: pageParam },
       });
       return dashboardSalesSchema.parse(response.data);

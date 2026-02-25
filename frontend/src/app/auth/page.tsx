@@ -1,20 +1,24 @@
 "use client";
 
 import { LoginForm } from "@/modules/login/components/login-form";
+import Image from "next/image";
 
 export default function AuthPage() {
   return (
     <div className="flex min-h-screen w-full overflow-hidden">
       {/* Left Side: Hero Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden bg-background-dark">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
-          style={{
-            backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCG__H1aQRbPeaSgisnUg7cMgt6ClPFMnmtu9oK15BnqTS6tlPBvN-CZa2J4PrAvcw9jdkB-DrFvsG18CmkXxvnfoNxfwBAqTB9gRD1Yh8MNKFLXWcI9ntXvIkKZDxjVWgYezj7iGl-ftlEyXyvGQ56oj7pGOSYocYd_v-vqEQuSJnA-B805lcSi7QBhbX5ubzZ2PFtK3UktVKp7ip1sNYpWsYDXCMU7iZ29DRan8h7e2JHkE6Lhi3t04wQC-pQ7HoVLEG0unKJ0zkl')",
-          }}
-        />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 transition-transform duration-700 hover:scale-105">
+          <Image
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG__H1aQRbPeaSgisnUg7cMgt6ClPFMnmtu9oK15BnqTS6tlPBvN-CZa2J4PrAvcw9jdkB-DrFvsG18CmkXxvnfoNxfwBAqTB9gRD1Yh8MNKFLXWcI9ntXvIkKZDxjVWgYezj7iGl-ftlEyXyvGQ56oj7pGOSYocYd_v-vqEQuSJnA-B805lcSi7QBhbX5ubzZ2PFtK3UktVKp7ip1sNYpWsYDXCMU7iZ29DRan8h7e2JHkE6Lhi3t04wQC-pQ7HoVLEG0unKJ0zkl"
+            alt="Biblioteca"
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 0vw, 50vw"
+            priority
+          />
+        </div>
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 h-full flex flex-col justify-end p-12 text-white">
           <blockquote className="text-3xl font-serif italic mb-4 leading-snug">
             &quot;Um quarto sem livros é como um corpo sem alma.&quot;

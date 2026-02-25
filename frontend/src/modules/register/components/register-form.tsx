@@ -4,19 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRegisterViewModel } from "../hooks/use-register.viewmodel";
+import { useRegister } from "../hooks/use-register";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterFormData, registerSchema } from "../schemas/register.schema";
 import { ErrorMessage } from "@/components/ui/error-message";
 
 export function RegisterForm() {
-  const { form, onSubmit, isLoading } = useRegisterViewModel();
+  const { mutateAsync: registerUser, isPending: isLoading } = useRegister();
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
-  } = form;
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (data: RegisterFormData) => {
+    await registerUser(data);
+  };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 mt-8">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
       {/* Name Input */}
       <div className="space-y-2">
         <label

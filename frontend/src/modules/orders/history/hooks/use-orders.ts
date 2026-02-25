@@ -15,7 +15,7 @@ export function useOrders(options: UseOrdersOptions = {}) {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const response = await api.get("/orders");
+      const response = await api.get("/users/me/orders");
       return ordersResponseSchema.parse(response.data);
     },
     initialData: options.initialData ?? undefined,

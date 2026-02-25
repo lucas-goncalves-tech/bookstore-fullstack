@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function MyReviewsPage() {
-  const initialData = await serverGet<MyReviewsResponse>("/reviews");
+  const initialData = await serverGet<MyReviewsResponse>("/users/me/reviews");
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-serif">

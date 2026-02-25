@@ -59,14 +59,14 @@ export function Header() {
         </Link>
 
         {/* User Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Admin Link */}
           {isAuthenticated && user?.role === "ADMIN" && (
             <Button
               variant="ghost"
               size="icon"
               asChild
-              className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
+              className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary hidden sm:inline-flex"
               aria-label="Painel Administrativo"
             >
               <Link href="/admin">
@@ -107,7 +107,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary"
+            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary hidden sm:inline-flex"
             aria-label="Home"
             asChild
           >
@@ -117,7 +117,7 @@ export function Header() {
           </Button>
 
           {/* Auth Buttons or User Profile */}
-          <div className="flex items-center gap-3 border-l border-border pl-4">
+          <div className="flex items-center gap-2 sm:gap-3 border-l border-border pl-2 sm:pl-4">
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -134,12 +134,12 @@ export function Header() {
                         {user.name.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col items-start text-left ml-1">
+                    <div className="flex-col items-start text-left ml-1 hidden md:flex">
                       <p className="text-sm font-medium leading-none">
                         {user.name}
                       </p>
                     </div>
-                    <ChevronDown className="ml-1 h-3 w-3 text-muted-foreground" />
+                    <ChevronDown className="ml-1 h-3 w-3 text-muted-foreground hidden md:block" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
@@ -178,7 +178,7 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
                   <Link href="/auth">Entrar</Link>
                 </Button>
                 <Button size="sm" asChild>

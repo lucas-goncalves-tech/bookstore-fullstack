@@ -8,7 +8,7 @@ export function useOrderDetails(id: string) {
   return useQuery({
     queryKey: ["order", id],
     queryFn: async () => {
-      const response = await api.get(`/orders/${id}`);
+      const response = await api.get(`/users/me/orders/${id}`);
       return orderDetailResponseSchema.parse(response.data);
     },
     enabled: !!id,

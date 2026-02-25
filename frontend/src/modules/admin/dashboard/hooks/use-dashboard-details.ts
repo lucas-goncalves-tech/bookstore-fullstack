@@ -16,7 +16,7 @@ export function useDashboardDetails(options: UseDashboardDetailsOptions = {}) {
   return useQuery({
     queryKey: adminDashboardKeys.details(),
     queryFn: async () => {
-      const response = await api.get("/dashboard/details");
+      const response = await api.get("/admin/dashboard/details");
       return dashboardDetailsSchema.parse(response.data);
     },
     initialData: options.initialData || undefined,

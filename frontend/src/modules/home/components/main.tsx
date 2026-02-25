@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { HeroSection } from "./hero-section";
+
 import { BookFilter, type PriceSortOrder } from "./book-filter";
 import { BookGrid } from "./book-grid";
 import { useBooks } from "../hooks/use-books";
@@ -103,7 +103,6 @@ export function HomeMain({ initialBooks }: HomeMainProps) {
 
   return (
     <main className="flex min-h-screen flex-1 flex-col">
-      <HeroSection />
       <BookFilter categories={categories} />
       <BookGrid
         books={books}
