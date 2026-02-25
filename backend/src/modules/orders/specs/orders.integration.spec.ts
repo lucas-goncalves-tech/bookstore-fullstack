@@ -172,7 +172,7 @@ describe("OrdersIntegration", () => {
     });
   });
 
-  describe(`GET ${BASE_URL}`, () => {
+  describe(`GET /api/v1/users/me/orders`, () => {
     it("returns a list of orders when user is authenticated", async () => {
       const { reqAgent, user } = await loginWithUser("user");
       const book = await createBook({ stock: 3 });
@@ -183,7 +183,9 @@ describe("OrdersIntegration", () => {
         priceAtTime: book.price,
       });
 
-      const { body } = await reqAgent.get(BASE_URL).expect(200);
+      const { body } = await reqAgent
+        .get("/api/v1/users/me/orders")
+        .expect(200);
 
       expect(body).toHaveLength(1);
       expect(body[0]).toMatchObject({
@@ -196,13 +198,13 @@ describe("OrdersIntegration", () => {
     });
 
     it("returns 401 for unauthenticated requests", async () => {
-      const { body } = await req.get(BASE_URL).expect(401);
+      const { body } = await req.get("/api/v1/users/me/orders").expect(401);
 
       expect(body).toHaveProperty("message");
     });
   });
 
-  describe(`GET ${BASE_URL}/:id`, () => {
+  describe(`GET /api/v1/users/me/orders/:id`, () => {
     it("returns an order by id when user is authenticated", async () => {
       const { reqAgent, user } = await loginWithUser("user");
       const book = await createBook({ stock: 3 });
@@ -214,7 +216,7 @@ describe("OrdersIntegration", () => {
       });
 
       const { body } = await reqAgent
-        .get(`${BASE_URL}/${order.id}`)
+        .get(`/api/v1/users/me/orders/${order.id}`)
         .expect(200);
 
       expect(body).toMatchObject({
@@ -240,7 +242,7 @@ describe("OrdersIntegration", () => {
     it("returns 404 when order does not exist", async () => {
       const { reqAgent } = await loginWithUser("user");
       const { body } = await reqAgent
-        .get(`${BASE_URL}/${crypto.randomUUID()}`)
+        .get(`/api/v1/users/me/orders/${crypto.randomUUID()}`)
         .expect(404);
 
       expect(body).toHaveProperty("message");

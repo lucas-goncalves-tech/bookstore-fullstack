@@ -5,12 +5,7 @@ import {
   conflictResponse,
 } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
-import {
-  createOrderDto,
-  createOrderResponse,
-  findManyOrdersResponse,
-  findOrderByIdResponse,
-} from "./dtos/orders.dto";
+import { createOrderDto, createOrderResponse } from "./dtos/orders.dto";
 
 registry.registerPath({
   method: "post",
@@ -44,55 +39,5 @@ registry.registerPath({
     ...unauthorizedResponse,
     ...notFoundResponse,
     ...conflictResponse,
-  },
-});
-
-registry.registerPath({
-  method: "get",
-  path: "/orders",
-  security: [{ cookieAuth: [] }],
-  tags: ["Orders"],
-  summary: "Listar pedidos do usuário",
-  responses: {
-    200: {
-      description: "Lista de pedidos",
-      content: {
-        "application/json": {
-          schema: findManyOrdersResponse,
-        },
-      },
-    },
-    ...unauthorizedResponse,
-  },
-});
-
-registry.registerPath({
-  method: "get",
-  path: "/orders/{id}",
-  security: [{ cookieAuth: [] }],
-  tags: ["Orders"],
-  summary: "Buscar pedido por ID",
-  parameters: [
-    {
-      name: "id",
-      in: "path",
-      required: true,
-      schema: {
-        type: "string",
-        format: "uuid",
-      },
-    },
-  ],
-  responses: {
-    200: {
-      description: "Pedido encontrado",
-      content: {
-        "application/json": {
-          schema: findOrderByIdResponse,
-        },
-      },
-    },
-    ...unauthorizedResponse,
-    ...notFoundResponse,
   },
 });

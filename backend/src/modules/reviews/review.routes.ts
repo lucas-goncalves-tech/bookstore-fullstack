@@ -1,25 +1,18 @@
 import "./review.doc";
 
 import { Router } from "express";
-import { container, injectable } from "tsyringe";
-import { ReviewController } from "./review.controller";
-import { authMiddleware } from "../../shared/middlewares/auth.middleware";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class ReviewsRoutes {
   private readonly router = Router();
-  private readonly reviewController = container.resolve(ReviewController);
 
   constructor() {
     this.setupRoutes();
   }
 
   private setupRoutes() {
-    this.router.get(
-      "/",
-      authMiddleware,
-      this.reviewController.findManyByUserId,
-    );
+    // Currently no endpoints remaining; reserved for future admin scoping
   }
 
   get routes() {
