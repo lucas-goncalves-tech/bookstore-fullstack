@@ -34,7 +34,7 @@ function BookGridSkeleton() {
 
 export function BookGrid({ books, isLoading, onAddToCart }: BookGridProps) {
   return (
-    <section className="w-full px-6 pb-20">
+    <section className="w-full px-4 md:px-6 pb-20">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -48,7 +48,7 @@ export function BookGrid({ books, isLoading, onAddToCart }: BookGridProps) {
         {isLoading ? (
           <BookGridSkeleton />
         ) : books.length === 0 ? (
-          <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-border bg-card/50">
+          <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-border bg-card/50 p-6 text-center">
             <p className="text-muted-foreground">
               Nenhum livro encontrado. Tente ajustar os filtros.
             </p>

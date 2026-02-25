@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function HeroSection() {
   return (
-    <section className="relative w-full px-6 py-8">
+    <section className="relative w-full px-4 md:px-6 py-4 md:py-8">
       <div className="mx-auto max-w-7xl">
         <div className="group relative min-h-[400px] md:h-[500px] w-full overflow-hidden rounded-lg shadow-lg">
           {/* Background Image */}

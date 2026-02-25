@@ -12,6 +12,7 @@ import {
   ShoppingBag,
   Star,
   ChevronDown,
+  UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
@@ -48,7 +49,7 @@ export function Header() {
     <>
       <LoadingScreen isLoading={isLoading} />
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 shadow-sm backdrop-blur-sm">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="group flex cursor-pointer items-center gap-3">
           <BookOpen className="size-8 text-primary" />
@@ -157,12 +158,33 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-                  <Link href="/auth">Entrar</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link href="/auth/register">Cadastrar</Link>
-                </Button>
+                <div className="hidden sm:flex items-center gap-2">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link href="/auth">Entrar</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link href="/auth/register">Cadastrar</Link>
+                  </Button>
+                </div>
+                
+                {/* Mobile Unauthenticated Menu */}
+                <div className="sm:hidden">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="rounded-full">
+                        <UserCircle className="size-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link href="/auth" className="cursor-pointer">Entrar</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/auth/register" className="cursor-pointer">Cadastrar</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </>
             )}
           </div>

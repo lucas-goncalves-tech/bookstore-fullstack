@@ -119,7 +119,7 @@ export function BookFilter({ categories }: BookFilterProps) {
     }).format(value);
 
   return (
-    <section className="mb-8 w-full px-6">
+    <section className="mb-8 w-full px-4 md:px-6">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 rounded-lg border border-border bg-card p-6 shadow-sm lg:flex-row lg:items-center">
           {/* Search */}
