@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Separator } from "@/components/ui/separator";
 import { StatusBadge } from "@/components/ui/status-badge";
+import Image from "next/image";
 
 interface SaleDetailsDialogProps {
   sale: DashboardSaleItem | null;
@@ -78,13 +79,18 @@ export function SaleDetailsDialog({
             {sale.orderItem.map((item, index) => (
               <div key={index} className="flex gap-4 items-center">
                 <div
-                  className="size-16 rounded bg-muted bg-cover bg-center shrink-0 border border-border"
-                  style={{
-                    backgroundImage: item.book.coverThumbUrl
-                      ? `url(${item.book.coverThumbUrl})`
-                      : "none",
-                  }}
-                />
+                  className="relative size-16 rounded bg-muted shrink-0 border border-border overflow-hidden"
+                >
+                  {item.book.coverThumbUrl ? (
+                    <Image
+                      src={item.book.coverThumbUrl}
+                      alt={item.book.title}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  ) : null}
+                </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-bold text-card-foreground line-clamp-1">
                     {item.book.title}

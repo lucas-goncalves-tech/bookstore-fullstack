@@ -12,6 +12,7 @@ import {
   DashboardSales,
 } from "../schemas/dashboard-sales.schema";
 import { StatusBadge } from "@/components/ui/status-badge";
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -117,13 +118,18 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <div
-                            className="h-12 w-9 rounded bg-muted bg-cover bg-center shadow-sm"
-                            style={{
-                              backgroundImage: firstItem?.book.coverThumbUrl
-                                ? `url(${firstItem.book.coverThumbUrl})`
-                                : "none",
-                            }}
-                          />
+                            className="relative h-12 w-9 rounded bg-muted overflow-hidden shadow-sm shrink-0"
+                          >
+                            {firstItem?.book.coverThumbUrl ? (
+                              <Image 
+                                src={firstItem.book.coverThumbUrl}
+                                alt={firstItem.book.title}
+                                fill
+                                className="object-cover"
+                                sizes="40px"
+                              />
+                            ) : null}
+                          </div>
                           <div className="flex flex-col">
                             <span className="text-sm font-bold text-card-foreground line-clamp-1">
                               {firstItem?.book.title || "N/A"}
