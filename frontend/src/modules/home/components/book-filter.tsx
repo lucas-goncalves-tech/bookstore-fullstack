@@ -2,9 +2,16 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search, ChevronDown, ArrowUpDown } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Category } from "../schemas/category.schema";
 
 export type PriceSortOrder = "none" | "asc" | "desc";
@@ -126,7 +133,7 @@ export function BookFilter({ categories }: BookFilterProps) {
                 placeholder="Buscar livro, autor..."
                 value={localSearch}
                 onChange={(e) => setLocalSearch(e.target.value)}
-                className="h-12 pr-12"
+                className="h-12 pr-12 bg-background/50 hover:bg-background/80 transition-colors"
               />
               <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary">
                 <Search className="size-5" />
@@ -139,25 +146,24 @@ export function BookFilter({ categories }: BookFilterProps) {
             <label className="mb-2 block text-sm font-bold text-muted-foreground">
               Categoria
             </label>
-            <div className="relative">
-              <select
-                value={categorySlug}
-                onChange={(e) =>
-                  updateParams({ categorySlug: e.target.value || undefined })
-                }
-                className="h-12 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background px-4 pr-10 text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-ring"
-              >
-                <option value="">Todas as categorias</option>
+            <Select
+              value={categorySlug || "all"}
+              onValueChange={(value) =>
+                updateParams({ categorySlug: value === "all" ? undefined : value })
+              }
+            >
+              <SelectTrigger className="h-12 w-full bg-background/50 hover:bg-background/80 transition-colors">
+                <SelectValue placeholder="Todas as categorias" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as categorias</SelectItem>
                 {categories.map((category) => (
-                  <option key={category.slug} value={category.slug}>
+                  <SelectItem key={category.slug} value={category.slug}>
                     {category.name}
-                  </option>
+                  </SelectItem>
                 ))}
-              </select>
-              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                <ChevronDown className="size-5" />
-              </div>
-            </div>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Price Sort */}
@@ -165,22 +171,19 @@ export function BookFilter({ categories }: BookFilterProps) {
             <label className="mb-2 block text-sm font-bold text-muted-foreground">
               Ordenar
             </label>
-            <div className="relative">
-              <select
-                value={sortOrder}
-                onChange={(e) =>
-                  updateParams({ sort: e.target.value || undefined })
-                }
-                className="h-12 w-full cursor-pointer appearance-none rounded-lg border border-input bg-background px-4 pr-10 text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-ring lg:w-44"
-              >
-                <option value="none">Sem ordenar</option>
-                <option value="asc">Menor preço</option>
-                <option value="desc">Maior preço</option>
-              </select>
-              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                <ArrowUpDown className="size-5" />
-              </div>
-            </div>
+            <Select
+              value={sortOrder}
+              onValueChange={(value) => updateParams({ sort: value })}
+            >
+              <SelectTrigger className="h-12 w-full lg:w-44 bg-background/50 hover:bg-background/80 transition-colors">
+                <SelectValue placeholder="Ordenar por" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Sem ordenar</SelectItem>
+                <SelectItem value="asc">Menor preço</SelectItem>
+                <SelectItem value="desc">Maior preço</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Price Range */}
