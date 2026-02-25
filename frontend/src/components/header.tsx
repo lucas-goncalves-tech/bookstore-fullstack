@@ -12,7 +12,6 @@ import {
   ShoppingBag,
   Star,
   ChevronDown,
-  Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
@@ -60,21 +59,6 @@ export function Header() {
 
         {/* User Actions */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Admin Link */}
-          {isAuthenticated && user?.role === "ADMIN" && (
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary hidden sm:inline-flex"
-              aria-label="Painel Administrativo"
-            >
-              <Link href="/admin">
-                <LayoutDashboard className="size-5" />
-              </Link>
-            </Button>
-          )}
-
           {/* Theme Toggle */}
           <Button
             variant="ghost"
@@ -101,19 +85,6 @@ export function Header() {
                 {totalItems}
               </span>
             )}
-          </Button>
-
-          {/* Home button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full relative p-2 text-muted-foreground transition-colors hover:text-primary hidden sm:inline-flex"
-            aria-label="Home"
-            asChild
-          >
-            <Link href="/">
-              <Home className="size-5" />
-            </Link>
           </Button>
 
           {/* Auth Buttons or User Profile */}
@@ -154,6 +125,14 @@ export function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {user.role === "ADMIN" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        <span>Painel Admin</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/orders" className="cursor-pointer">
                       <ShoppingBag className="mr-2 h-4 w-4" />
