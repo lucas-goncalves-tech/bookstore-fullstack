@@ -4,6 +4,7 @@ import { req } from "../../../tests/helpers/commom.helper";
 import { Decimal } from "@prisma/client/runtime/library";
 import { createBook } from "../../../tests/factories/book.factory";
 import { expectecBookShape } from "../../../tests/helpers/book.helper";
+import { Book } from "@prisma/client";
 
 describe("BooksIntegration", () => {
   const BASE_URL = "/api/v1/books";
@@ -32,6 +33,28 @@ describe("BooksIntegration", () => {
         total: 6,
         totalPages: 1,
       });
+    });
+
+    it("does NOT return books that are out of stock or soft-deleted", async () => {
+      const activeBook = await createBook({ title: "Active Book", stock: 10 });
+
+      const deletedBook = await createBook({
+        title: "Deleted Book",
+        stock: 10,
+        deletedAt: new Date(),
+      });
+      const noStockBook = await createBook({
+        title: "No Stock Book",
+        stock: 0,
+      });
+
+      const { body } = await req.get(BASE_URL).expect(200);
+
+      const returnedIds = body.data.map((b: Book) => b.id);
+      expect(returnedIds).not.toContain(deletedBook.id);
+      expect(returnedIds).not.toContain(noStockBook.id);
+
+      expect(returnedIds).toContain(activeBook.id);
     });
 
     it("returns remaining items when requesting page 2", async () => {
