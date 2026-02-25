@@ -29,7 +29,7 @@ function generateCategory(
 
 describe("AdminCategoriesIntegration", () => {
   describe(`POST ${BASE_URL}`, () => {
-    it("should return 201 and create category when ADMIN sends valid data", async () => {
+    it("creates a category when data is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const newCategory = generateCategory();
 
@@ -52,7 +52,7 @@ describe("AdminCategoriesIntegration", () => {
       expect(categoryFromDb?.description).toEqual(newCategory.description);
     });
 
-    it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { reqAgent } = await loginWithUser("admin");
 
       const { body } = await reqAgent
@@ -71,14 +71,14 @@ describe("AdminCategoriesIntegration", () => {
       expect(errors).toContain("description");
     });
 
-    it("should return 403 Forbidden when USER tries to create a category", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
       const { body } = await reqAgent.post(BASE_URL).expect(403);
 
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to create a category", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req.post(BASE_URL).expect(401);
 
       expect(body).toHaveProperty("message");
@@ -86,7 +86,7 @@ describe("AdminCategoriesIntegration", () => {
   });
 
   describe(`PUT ${BASE_URL}/:id`, () => {
-    it("should return 200 and update category when ADMIN sends valid data", async () => {
+    it("updates the category when data is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const category = await createCategory();
       const newCategory = generateCategory({
@@ -117,7 +117,7 @@ describe("AdminCategoriesIntegration", () => {
       expect(categoryFromDb?.description).toEqual(newCategory.description);
     });
 
-    it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const category = await createCategory();
 
@@ -137,7 +137,7 @@ describe("AdminCategoriesIntegration", () => {
       expect(errors).toContain("description");
     });
 
-    it("should return 404 NotFound when ADMIN tries to update non-existent category", async () => {
+    it("returns 404 when category does not exist", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const newCategory = generateCategory();
       const UUID = crypto.randomUUID();
@@ -150,14 +150,14 @@ describe("AdminCategoriesIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 403 Forbidden when USER tries to update a category", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
       const { body } = await reqAgent.put(BASE_URL + "/1234").expect(403);
 
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to update a category", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req.put(BASE_URL + "/1234").expect(401);
 
       expect(body).toHaveProperty("message");
@@ -165,7 +165,7 @@ describe("AdminCategoriesIntegration", () => {
   });
 
   describe(`DELETE ${BASE_URL}/:id`, () => {
-    it("should return 204 and delete category when ADMIN sends valid ID", async () => {
+    it("deletes the category when id is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const category = await createCategory();
 
@@ -179,7 +179,7 @@ describe("AdminCategoriesIntegration", () => {
       expect(categoryFromDb).toBeFalsy();
     });
 
-    it("should return 404 NotFound when ADMIN tries to delete non-existent category", async () => {
+    it("returns 404 when category does not exist", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const UUID = crypto.randomUUID();
 
@@ -188,14 +188,14 @@ describe("AdminCategoriesIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 403 Forbidden when USER tries to delete a category", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
       const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
 
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to delete a category", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req.delete(BASE_URL + "/1234").expect(401);
 
       expect(body).toHaveProperty("message");

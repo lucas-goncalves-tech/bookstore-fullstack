@@ -6,7 +6,7 @@ import { prisma_test } from "../../../tests/setup";
 
 describe("AuthIntegration", () => {
   describe(`POST ${BASE_URL}/register`, () => {
-    it("should return 201 and register user when body contains valid data", async () => {
+    it("registers a user when data is valid", async () => {
       const { registerBody, registerStatus, newUser } = await postNewUser();
 
       expect(registerStatus).toBe(201);
@@ -32,7 +32,7 @@ describe("AuthIntegration", () => {
       expect(user?.passwordHash).not.toEqual(newUser.password);
     });
 
-    it("should return 409 Conflict when email is already registered", async () => {
+    it("returns 409 when email is already registered", async () => {
       const email = "user@exist.com";
       await postNewUser({
         email,
@@ -45,7 +45,7 @@ describe("AuthIntegration", () => {
       expect(registerBody).toHaveProperty("message");
     });
 
-    it("should return 400 BadRequest when body contains invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { registerStatus, registerBody } = await postNewUser({
         name: "\u200B\u200B\u200B",
         email: "not-valid-com",
@@ -65,7 +65,7 @@ describe("AuthIntegration", () => {
   });
 
   describe(`POST ${BASE_URL}/login`, () => {
-    it("should return 204 and set HttpOnly cookies when credentials are valid", async () => {
+    it("logs in and sets cookies when credentials are valid", async () => {
       const user = await createUser();
 
       const { headers, body } = await req
@@ -82,7 +82,7 @@ describe("AuthIntegration", () => {
       expect(cookies).contains("HttpOnly");
     });
 
-    it("should return 401 Unauthorized when credentials are invalid", async () => {
+    it("returns 401 for invalid credentials", async () => {
       const { body } = await req
         .post(BASE_URL + "/login")
         .send({
@@ -94,7 +94,7 @@ describe("AuthIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 400 BadRequest when body contains invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { body } = await req
         .post(BASE_URL + "/login")
         .send({

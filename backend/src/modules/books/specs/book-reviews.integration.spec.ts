@@ -32,7 +32,7 @@ describe("BookReviewsIntegration", () => {
   }
 
   describe(`GET ${BASE_URL}/:id/reviews`, () => {
-    it("should return all reviews from a book", async () => {
+    it("returns all reviews from a book", async () => {
       const review = await createReview();
 
       const { body } = await req
@@ -45,7 +45,7 @@ describe("BookReviewsIntegration", () => {
       );
     });
 
-    it("should return empty array when user has not reviewed the book", async () => {
+    it("returns empty array when user has not reviewed the book", async () => {
       const book = await createBook();
       const { reqAgent } = await loginWithUser("user");
 
@@ -56,7 +56,7 @@ describe("BookReviewsIntegration", () => {
       expect(body.reviews).toEqual([]);
     });
 
-    it("should return 404 NotFound when book ID does not exist", async () => {
+    it("returns 404 when book ID does not exist", async () => {
       const UUID = crypto.randomUUID();
       const { body } = await req
         .get(BASE_URL + "/" + UUID + "/reviews")
@@ -67,7 +67,7 @@ describe("BookReviewsIntegration", () => {
   });
 
   describe(`POST ${BASE_URL}/:id/reviews`, () => {
-    it("should create a review when user is authenticated", async () => {
+    it("creates a review when user is authenticated", async () => {
       const book = await createBook();
       const { reqAgent } = await loginWithUser("user");
       const review = generateReviewData();
@@ -98,7 +98,7 @@ describe("BookReviewsIntegration", () => {
       expect(reviewFromDb?.bookId).toEqual(book.id);
     });
 
-    it("should return 400 BadRequest when body is invalid", async () => {
+    it("returns 400 when body is invalid", async () => {
       const book = await createBook();
       const { reqAgent } = await loginWithUser("user");
       const review = generateReviewData({
@@ -117,7 +117,7 @@ describe("BookReviewsIntegration", () => {
       expect(errors).toContain("comment");
     });
 
-    it("should return 401 Unauthorized when user is not authenticated", async () => {
+    it("returns 401 when user is not authenticated", async () => {
       const book = await createBook();
       const review = generateReviewData();
 
@@ -129,7 +129,7 @@ describe("BookReviewsIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 404 NotFound when book does not exist", async () => {
+    it("returns 404 when book does not exist", async () => {
       const { reqAgent } = await loginWithUser("user");
       const review = generateReviewData();
       const UUID = crypto.randomUUID();

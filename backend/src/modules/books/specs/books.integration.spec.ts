@@ -39,7 +39,7 @@ describe("BooksIntegration", () => {
       );
     });
 
-    it("should return 200 and paginated books with default limit of 10", async () => {
+    it("returns paginated books with default limit of 10", async () => {
       const { body } = await req.get(BASE_URL).expect(200);
 
       expect(body.data).toHaveLength(10);
@@ -52,7 +52,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and remaining items when requesting page 2", async () => {
+    it("returns remaining items when requesting page 2", async () => {
       const { body } = await req.get(BASE_URL + "?page=2").expect(200);
 
       expect(body.data).toHaveLength(5);
@@ -65,7 +65,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and paginated books when custom limit is provided", async () => {
+    it("returns paginated books when custom limit is provided", async () => {
       const { body } = await req.get(BASE_URL + "?limit=5").expect(200);
 
       expect(body.data).toHaveLength(5);
@@ -78,7 +78,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and empty array when page exceeds total pages", async () => {
+    it("returns empty array when page exceeds total pages", async () => {
       const { body } = await req.get(BASE_URL + "?page=5").expect(200);
 
       expect(body.data).toHaveLength(0);
@@ -92,7 +92,7 @@ describe("BooksIntegration", () => {
   });
 
   describe(`GET ${BASE_URL} - Filters`, () => {
-    it("should return 200 and filtered books when categorySlug is provided", async () => {
+    it("returns filtered books when categorySlug is provided", async () => {
       const adventure = await createCategory({
         name: "adventure",
         slug: "adventure",
@@ -126,7 +126,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and filtered books when search query matches title", async () => {
+    it("returns filtered books when search query matches title", async () => {
       const title = "Lord of the ring";
 
       await createBook({
@@ -150,7 +150,7 @@ describe("BooksIntegration", () => {
     });
 
     // ✅ 1 teste de combinação
-    it("should return 200 and filtered paginated books when combining search with pagination", async () => {
+    it("returns filtered paginated books when combining search with pagination", async () => {
       const title = "Lord of the ring";
       for (let i = 1; i <= 15; i++) {
         await createBook({
@@ -177,7 +177,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and filtered books when minPrice is provided", async () => {
+    it("returns filtered books when minPrice is provided", async () => {
       for (let i = 1; i <= 5; i++) {
         await createBook({
           price: new Decimal("10.00"),
@@ -205,7 +205,7 @@ describe("BooksIntegration", () => {
       });
     });
 
-    it("should return 200 and filtered books when maxPrice is provided", async () => {
+    it("returns filtered books when maxPrice is provided", async () => {
       for (let i = 1; i <= 5; i++) {
         await createBook({
           price: new Decimal("10.00"),
@@ -235,7 +235,7 @@ describe("BooksIntegration", () => {
   });
 
   describe(`GET ${BASE_URL}/:id`, () => {
-    it("should return 200 and book data when valid ID is provided", async () => {
+    it("returns book data when valid ID is provided", async () => {
       const book = await createBook();
       const { body } = await req.get(BASE_URL + "/" + book.id).expect(200);
 
@@ -243,14 +243,14 @@ describe("BooksIntegration", () => {
       expect(body.id).toBe(book.id);
     });
 
-    it("should return 404 NotFound when book ID does not exist", async () => {
+    it("returns 404 when book ID does not exist", async () => {
       const UUID = crypto.randomUUID();
       const { body } = await req.get(BASE_URL + "/" + UUID).expect(404);
 
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 400 BadRequest when ID is not a valid UUID", async () => {
+    it("returns 400 when ID is not a valid UUID", async () => {
       const { body } = await req.get(BASE_URL + "/invalid-uuid").expect(400);
       const errors = body.errors.map((e: object) => Object.keys(e)[0]);
 

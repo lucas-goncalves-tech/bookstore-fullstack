@@ -48,7 +48,7 @@ describe("AdminBooksIntegration", () => {
   }
 
   describe(`POST ${BASE_URL}`, () => {
-    it("should return 201 and create book when ADMIN sends valid data", async () => {
+    it("creates a book when data is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const newBook = await generateNewBook();
 
@@ -73,7 +73,7 @@ describe("AdminBooksIntegration", () => {
       expect(book?.categoryId).toEqual(newBook.categoryId);
     });
 
-    it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const newBook = await generateNewBook({
         title: "",
@@ -96,7 +96,7 @@ describe("AdminBooksIntegration", () => {
       expect(errors).toContain("categoryId");
     });
 
-    it("should return 403 Forbidden when USER tries to create a book", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
       const newBook = generateNewBook();
 
@@ -105,7 +105,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to create a book", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const newBook = generateNewBook();
 
       const { body } = await req.post(BASE_URL).send(newBook).expect(401);
@@ -115,7 +115,7 @@ describe("AdminBooksIntegration", () => {
   });
 
   describe(`POST ${BASE_URL}/:id/cover`, () => {
-    it("should return 201 and upload cover when ADMIN attaches valid image", async () => {
+    it("uploads a cover when image is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
       const coverPath = path.resolve(
@@ -144,7 +144,7 @@ describe("AdminBooksIntegration", () => {
       expect(bookFromDb?.coverThumbUrl).toEqual(body.data.coverThumbUrl);
     });
 
-    it("should return 400 BadRequest when no file is attached", async () => {
+    it("returns 400 when no file is attached", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
 
@@ -156,7 +156,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("errors");
     });
 
-    it("should return 400 BadRequest when file type is not allowed (only jpeg, jpg, png, webp)", async () => {
+    it("returns 400 when file type is not allowed (only jpeg, jpg, png, webp)", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
       const coverPath = path.resolve(
@@ -173,7 +173,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("errors");
     });
 
-    it("should return 404 NotFound when book ID does not exist", async () => {
+    it("returns 404 when book does not exist", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const UUID = crypto.randomUUID();
       const file = path.resolve(
@@ -189,7 +189,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 403 Forbidden when USER tries to upload cover", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
 
       const { body } = await reqAgent
@@ -199,7 +199,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to upload cover", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req
         .post(BASE_URL + "/" + "invalid-uuid" + "/cover")
         .expect(401);
@@ -209,7 +209,7 @@ describe("AdminBooksIntegration", () => {
   });
 
   describe(`PUT ${BASE_URL}/:id`, () => {
-    it("should return 200 and update book when ADMIN sends valid data", async () => {
+    it("updates the book when data is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
       const updatedBook = await generateNewBook({
@@ -239,7 +239,7 @@ describe("AdminBooksIntegration", () => {
       expect(bookFromDb?.description).toEqual(updatedBook.description);
     });
 
-    it("should return 400 BadRequest when ADMIN sends invalid fields", async () => {
+    it("returns 400 for invalid fields", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
       const updatedBook = await generateNewBook({
@@ -266,7 +266,7 @@ describe("AdminBooksIntegration", () => {
       expect(errors).toContain("categoryId");
     });
 
-    it("should return 404 NotFound when ADMIN tries to update non-existent book", async () => {
+    it("returns 404 when book does not exist", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const UUID = crypto.randomUUID();
       const updatedBook = await generateNewBook({
@@ -283,7 +283,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 403 Forbidden when USER tries to update a book", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
       const book = await createBook();
       const updatedBook = await generateNewBook({
@@ -300,7 +300,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to update a book", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req.put(BASE_URL + "/1234").expect(401);
 
       expect(body).toHaveProperty("message");
@@ -308,7 +308,7 @@ describe("AdminBooksIntegration", () => {
   });
 
   describe(`DELETE ${BASE_URL}/:id`, () => {
-    it("should return 204 and soft delete book when ADMIN sends valid ID", async () => {
+    it("deletes the book when id is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const book = await createBook();
 
@@ -322,7 +322,7 @@ describe("AdminBooksIntegration", () => {
       expect(bookFromDb?.deletedAt).toBeTruthy();
     });
 
-    it("should return 400 BadRequest when ADMIN sends invalid UUID", async () => {
+    it("returns 400 when id is invalid", async () => {
       const { reqAgent } = await loginWithUser("admin");
 
       const { body } = await reqAgent
@@ -333,7 +333,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("errors");
     });
 
-    it("should return 404 NotFound when ADMIN tries to delete non-existent book", async () => {
+    it("returns 404 when book does not exist", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const UUID = crypto.randomUUID();
 
@@ -342,7 +342,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 403 Forbidden when USER tries to delete a book", async () => {
+    it("returns 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
 
       const { body } = await reqAgent.delete(BASE_URL + "/1234").expect(403);
@@ -350,7 +350,7 @@ describe("AdminBooksIntegration", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 Unauthorized when unauthenticated user tries to delete a book", async () => {
+    it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req
         .delete(BASE_URL + "/" + "invalid-uuid")
         .expect(401);
