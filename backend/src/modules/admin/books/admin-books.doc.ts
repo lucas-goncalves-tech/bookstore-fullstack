@@ -58,17 +58,6 @@ registry.registerPath({
   security: [{ cookieAuth: [] }],
   summary: "Upload de capa de livro",
   description: "Upload de capa de livro.",
-  parameters: [
-    {
-      name: "id",
-      in: "path",
-      required: true,
-      schema: {
-        type: "string",
-        format: "uuid",
-      },
-    },
-  ],
   request: {
     body: {
       content: {
@@ -109,17 +98,6 @@ registry.registerPath({
   security: [{ cookieAuth: [] }],
   summary: "Atualizar livro",
   description: "Atualiza um livro do sistema.",
-  parameters: [
-    {
-      name: "id",
-      in: "path",
-      required: true,
-      schema: {
-        type: "string",
-        format: "uuid",
-      },
-    },
-  ],
   request: {
     body: {
       content: {
@@ -145,23 +123,29 @@ registry.registerPath({
 });
 
 registry.registerPath({
+  method: "patch",
+  path: "/admin/books/{id}/restore",
+  tags: ["Admin - Books"],
+  security: [{ cookieAuth: [] }],
+  summary: "Reativar livro",
+  description: "Reativa um livro do sistema.",
+  responses: {
+    204: {
+      description: "Livro reativado com sucesso",
+    },
+    ...badRequestResponse,
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
   method: "delete",
   path: "/admin/books/{id}",
   tags: ["Admin - Books"],
   security: [{ cookieAuth: [] }],
   summary: "Deletar livro",
   description: "Remove um livro do sistema.",
-  parameters: [
-    {
-      name: "id",
-      in: "path",
-      required: true,
-      schema: {
-        type: "string",
-        format: "uuid",
-      },
-    },
-  ],
   responses: {
     204: {
       description: "Livro deletado com sucesso",

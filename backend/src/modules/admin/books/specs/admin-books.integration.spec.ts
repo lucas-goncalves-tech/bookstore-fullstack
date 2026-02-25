@@ -289,6 +289,62 @@ describe("AdminBooksIntegration", () => {
     });
   });
 
+  describe(`PATCH ${BASE_URL}/:id/restore`, () => {
+    it("restores the book when id is valid", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const book = await createBook({
+        deletedAt: new Date(),
+      });
+
+      await reqAgent.patch(BASE_URL + "/" + book.id + "/restore").expect(204);
+
+      const bookFromDb = await prisma_test.book.findUnique({
+        where: {
+          id: book.id,
+        },
+      });
+      expect(bookFromDb?.deletedAt).toBeFalsy();
+    });
+
+    it("returns 400 when id is invalid", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .patch(BASE_URL + "/invalid-uuid/restore")
+        .expect(400);
+
+      expect(body).toHaveProperty("message");
+      expect(body).toHaveProperty("errors");
+    });
+
+    it("returns 404 when book does not exist", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .patch(BASE_URL + "/" + UUID + "/restore")
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .patch(BASE_URL + "/1234/restore")
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 401 for unauthenticated requests", async () => {
+      const { body } = await req.patch(BASE_URL + "/1234/restore").expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
   describe(`DELETE ${BASE_URL}/:id`, () => {
     it("deletes the book when id is valid", async () => {
       const { reqAgent } = await loginWithUser("admin");

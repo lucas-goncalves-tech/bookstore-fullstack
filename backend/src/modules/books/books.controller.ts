@@ -61,6 +61,13 @@ export class BookController {
     });
   };
 
+  restore = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    await this.bookService.restore(id);
+
+    res.status(204).end();
+  };
+
   delete = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
     await this.bookService.delete(id);

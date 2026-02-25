@@ -7,6 +7,7 @@ export type ICreateBookInput = Omit<
 export type IUpdateBookInput = Partial<ICreateBookInput> & {
   coverUrl?: string;
   coverThumbUrl?: string;
+  deletedAt?: Date | null;
 };
 
 export interface IFindManyQuery {

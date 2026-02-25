@@ -7,6 +7,7 @@ import {
 } from "./interface/books.interface";
 import { NotFoundError } from "../../shared/errors/not-found-error";
 import { StorageProvider } from "../../services/contracts/storage.contract";
+import { BadRequestError } from "../../shared/errors/bad-request.error";
 
 @injectable()
 export class BookService {
@@ -106,6 +107,19 @@ export class BookService {
       throw new NotFoundError("Livro não encontrado");
     }
     return await this.bookRepository.update(id, data);
+  }
+
+  async restore(id: string) {
+    const bookExist = await this.bookRepository.findById(id);
+    if (!bookExist) {
+      throw new NotFoundError("Livro não encontrado");
+    }
+    if (bookExist.stock === 0) {
+      throw new BadRequestError("Não é possivel ativar livro sem estoque");
+    }
+    await this.bookRepository.update(id, {
+      deletedAt: null,
+    });
   }
 
   async delete(id: string) {

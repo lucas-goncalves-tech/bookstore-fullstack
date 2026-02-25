@@ -13,7 +13,7 @@ export const createBookDto = z.object({
   price: zodCoerceNumber
     .min(1, "Preço precisa ser maior que 0")
     .transform((value) => new Decimal(value)),
-  stock: zodCoerceNumber.min(1, "Estoque precisa ser maior que 0"),
+  stock: zodCoerceNumber.int().min(1, "Estoque precisa ser maior que 0"),
   categoryId: z.uuid().nullable(),
 });
 

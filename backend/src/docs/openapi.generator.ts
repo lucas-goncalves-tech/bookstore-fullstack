@@ -14,7 +14,7 @@ export function generateOpenAPISpec() {
     },
     servers: [
       {
-        url: env.OPENAPI_URL || "http://api:3333/api/v1",
+        url: env.OPENAPI_URL || "http://localhost:3333/api/v1",
         description: "Hospedagem",
       },
       {

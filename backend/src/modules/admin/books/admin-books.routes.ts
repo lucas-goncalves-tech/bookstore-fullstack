@@ -36,6 +36,11 @@ export class AdminBooksRoutes {
       validateMiddleware({ params: bookParamsDto, body: updateBookDto }),
       this.controller.update,
     );
+    this.router.patch(
+      "/:id/restore",
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.restore,
+    );
     this.router.delete(
       "/:id",
       validateMiddleware({ params: bookParamsDto }),
