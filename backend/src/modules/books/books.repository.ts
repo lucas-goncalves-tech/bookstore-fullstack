@@ -19,20 +19,25 @@ export class BookRepository implements IBookRepository {
     });
   }
 
-  async findMany({
-    page = 1,
-    limit = 10,
-    categorySlug,
-    search,
-    minPrice,
-    maxPrice,
-  }: IFindManyQuery): Promise<IFindMany> {
+  async findMany(
+    {
+      page = 1,
+      limit = 10,
+      categorySlug,
+      search,
+      minPrice,
+      maxPrice,
+    }: IFindManyQuery,
+    isAdmin = false,
+  ): Promise<IFindMany> {
     const skip = (page - 1) * limit;
     const safeLimit = limit > 100 ? 100 : limit;
     const where: Prisma.BookWhereInput = {};
 
-    where.deletedAt = null;
-    where.stock = { gt: 0 };
+    if (!isAdmin) {
+      where.deletedAt = null;
+      where.stock = { gt: 0 };
+    }
     if (categorySlug) where.category = { slug: categorySlug };
     if (search)
       where.OR = [

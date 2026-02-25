@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createCategory } from "../../../../tests/factories/categorie.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
+import { Book } from "@prisma/client";
 import { createBook } from "../../../../tests/factories/book.factory";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ICreateBookInput } from "../../../books/interface/books.interface";
@@ -285,6 +286,40 @@ describe("AdminBooksIntegration", () => {
     it("returns 401 for unauthenticated requests", async () => {
       const { body } = await req.put(BASE_URL + "/1234").expect(401);
 
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`GET ${BASE_URL}`, () => {
+    it("returns books that are out of stock or soft-deleted when ADMIN calls api", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const activeBook = await createBook({ title: "Livro Ativo", stock: 10 });
+      const deletedBook = await createBook({
+        title: "Livro Deletado",
+        stock: 10,
+        deletedAt: new Date(),
+      });
+      const noStockBook = await createBook({
+        title: "Livro Sem Estoque",
+        stock: 0,
+      });
+
+      const { body } = await reqAgent.get(BASE_URL).expect(200);
+
+      const returnedIds = body.data.map((b: Book) => b.id);
+      expect(returnedIds).toContain(deletedBook.id);
+      expect(returnedIds).toContain(noStockBook.id);
+      expect(returnedIds).toContain(activeBook.id);
+    });
+
+    it("returns 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+      const { body } = await reqAgent.get(BASE_URL).expect(403);
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 401 for unauthenticated requests", async () => {
+      const { body } = await req.get(BASE_URL).expect(401);
       expect(body).toHaveProperty("message");
     });
   });

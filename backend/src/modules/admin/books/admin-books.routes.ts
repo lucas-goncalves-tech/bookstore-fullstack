@@ -1,5 +1,8 @@
 import "./admin-books.doc";
 
+import { AdminBooksController } from "./admin-books.controller";
+import { bookQueryDto } from "../../books/dtos/book-query.dto";
+
 import { Router } from "express";
 import { container, injectable } from "tsyringe";
 import { BookController } from "../../books/books.controller";
@@ -13,12 +16,18 @@ import { fileTypeMiddleware } from "../../../shared/middlewares/file-type.middle
 export class AdminBooksRoutes {
   private readonly router = Router();
   private readonly controller = container.resolve(BookController);
+  private readonly adminController = container.resolve(AdminBooksController);
 
   constructor() {
     this.setupRoutes();
   }
 
   private setupRoutes() {
+    this.router.get(
+      "/",
+      validateMiddleware({ query: bookQueryDto }),
+      this.adminController.findMany,
+    );
     this.router.post(
       "/",
       validateMiddleware({ body: createBookDto }),

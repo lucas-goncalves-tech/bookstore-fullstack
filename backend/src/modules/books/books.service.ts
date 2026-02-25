@@ -45,8 +45,8 @@ export class BookService {
     return bookExist;
   }
 
-  async findMany(query: IFindManyQuery) {
-    const data = await this.bookRepository.findMany(query);
+  async findMany(query: IFindManyQuery, isAdmin = false) {
+    const data = await this.bookRepository.findMany(query, isAdmin);
     const dataWithRatings = data.data.map((book) => {
       const { review, ...bookData } = book;
       const averageRating =

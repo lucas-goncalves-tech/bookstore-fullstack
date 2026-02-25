@@ -34,7 +34,10 @@ export interface IFindMany {
 
 export abstract class IBookRepository {
   abstract create(data: ICreateBookInput): Promise<Book>;
-  abstract findMany(query: IFindManyQuery): Promise<IFindMany>;
+  abstract findMany(
+    query: IFindManyQuery,
+    isAdmin?: boolean,
+  ): Promise<IFindMany>;
   abstract findById(id: string): Promise<Book | null>;
   abstract update(id: string, data: IUpdateBookInput): Promise<Book>;
   abstract delete(id: string): Promise<void>;
