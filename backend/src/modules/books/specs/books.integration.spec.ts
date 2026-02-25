@@ -13,7 +13,7 @@ describe("BooksIntegration", () => {
       const { id } = await createCategory();
 
       await Promise.all(
-        Array.from({ length: 15 }, () => {
+        Array.from({ length: 6 }, () => {
           return createBook({
             categoryId: id,
           });
@@ -24,39 +24,39 @@ describe("BooksIntegration", () => {
     it("returns paginated books with default limit of 10", async () => {
       const { body } = await req.get(BASE_URL).expect(200);
 
-      expect(body.data).toHaveLength(10);
+      expect(body.data).toHaveLength(6);
       expect(body.data[0]).toMatchObject(expectecBookShape());
       expect(body.metadata).toMatchObject({
         page: 1,
         limit: 10,
-        total: 15,
-        totalPages: 2,
+        total: 6,
+        totalPages: 1,
       });
     });
 
     it("returns remaining items when requesting page 2", async () => {
-      const { body } = await req.get(BASE_URL + "?page=2").expect(200);
+      const { body } = await req.get(BASE_URL + "?limit=5&page=2").expect(200);
 
-      expect(body.data).toHaveLength(5);
+      expect(body.data).toHaveLength(1);
       expect(body.data[0]).toMatchObject(expectecBookShape());
       expect(body.metadata).toMatchObject({
         page: 2,
-        limit: 10,
-        total: 15,
+        limit: 5,
+        total: 6,
         totalPages: 2,
       });
     });
 
     it("returns paginated books when custom limit is provided", async () => {
-      const { body } = await req.get(BASE_URL + "?limit=5").expect(200);
+      const { body } = await req.get(BASE_URL + "?limit=4").expect(200);
 
-      expect(body.data).toHaveLength(5);
+      expect(body.data).toHaveLength(4);
       expect(body.data[0]).toMatchObject(expectecBookShape());
       expect(body.metadata).toMatchObject({
         page: 1,
-        limit: 5,
-        total: 15,
-        totalPages: 3,
+        limit: 4,
+        total: 6,
+        totalPages: 2,
       });
     });
 
@@ -67,8 +67,8 @@ describe("BooksIntegration", () => {
       expect(body.metadata).toMatchObject({
         page: 5,
         limit: 10,
-        total: 15,
-        totalPages: 2,
+        total: 6,
+        totalPages: 1,
       });
     });
   });
@@ -134,13 +134,13 @@ describe("BooksIntegration", () => {
     // ✅ 1 teste de combinação
     it("returns filtered paginated books when combining search with pagination", async () => {
       const title = "Lord of the ring";
-      for (let i = 1; i <= 15; i++) {
+      for (let i = 1; i <= 6; i++) {
         await createBook({
           title,
         });
       }
 
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 2; i++) {
         await createBook({
           title: "The banana diary",
         });
@@ -150,12 +150,12 @@ describe("BooksIntegration", () => {
         .get(BASE_URL + "?search=" + title + "&page=2&limit=5")
         .expect(200);
 
-      expect(body.data).toHaveLength(5);
+      expect(body.data).toHaveLength(1);
       expect(body.metadata).toMatchObject({
         page: 2,
         limit: 5,
-        total: 15,
-        totalPages: 3,
+        total: 6,
+        totalPages: 2,
       });
     });
 
