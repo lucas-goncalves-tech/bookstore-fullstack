@@ -71,12 +71,12 @@ export async function serverFetch<T>(
   try {
     // Get cookies (Next.js 15: cookies() returns a Promise)
     const cookieStore = await cookies();
-    
+
     // Cookie names (diferentes para dev e produção)
     const isProd = process.env.NODE_ENV === "production";
     const accessCookieName = isProd ? "__Secure-sid" : "sid";
     const refreshCookieName = isProd ? "__Secure-refresh-sid" : "refresh-sid";
-    
+
     const accessToken = cookieStore.get(accessCookieName)?.value;
     const refreshToken = cookieStore.get(refreshCookieName)?.value;
 
@@ -91,7 +91,6 @@ export async function serverFetch<T>(
 
     // If no access token and endpoint requires auth, return null (client will handle)
     if (!accessToken && !isPublic) {
-      console.log("[serverFetch] No access token found, returning null");
       return null;
     }
 
@@ -123,11 +122,6 @@ export async function serverFetch<T>(
     // Make request
     const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
     const url = `${apiUrl}${endpoint}`;
-
-    console.log(`[serverFetch] ${method} ${url}`, {
-      hasAccessToken: !!accessToken,
-      cookies: cookieHeader.join("; ") || "none",
-    });
 
     const response = await fetch(url, fetchOptions);
 

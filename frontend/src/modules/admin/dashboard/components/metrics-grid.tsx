@@ -25,7 +25,6 @@ export function MetricsGrid({ initialData }: MetricsGridProps) {
     totalUsers: rawData?.totalUsers ?? 0,
   };
 
-  console.log(rawData);
 
   const metrics = [
     {
