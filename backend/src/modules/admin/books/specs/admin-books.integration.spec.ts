@@ -1,34 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { createCategory } from "../../../../tests/factories/categorie.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
-import { Book } from "@prisma/client";
 import { createBook } from "../../../../tests/factories/book.factory";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ICreateBookInput } from "../../../books/interface/books.interface";
 import { loginWithUser } from "../../../../tests/helpers/auth.helper";
 import path from "node:path";
 import { prisma_test } from "../../../../tests/setup";
+import { expectecBookShape } from "../../../../tests/helpers/book.helper";
 
 describe("AdminBooksIntegration", () => {
   const BASE_URL = "/api/v1/admin/books";
-
-  function expectecBookShape(): Book {
-    return {
-      id: expect.any(String),
-      title: expect.any(String),
-      description: expect.any(String),
-      author: expect.any(String),
-      price: expect.any(String),
-      stock: expect.any(Number),
-      coverUrl: expect.toSatisfy((v) => v === null || typeof v === "string"),
-      coverThumbUrl: expect.toSatisfy(
-        (v) => v === null || typeof v === "string",
-      ),
-      categoryId: expect.toSatisfy((v) => v === null || typeof v === "string"),
-      createdAt: expect.anything(),
-      deletedAt: expect.toSatisfy((v) => v === null || typeof v === "string"),
-    };
-  }
 
   async function generateNewBook(
     overrides?: Partial<ICreateBookInput> | Record<string, unknown>,

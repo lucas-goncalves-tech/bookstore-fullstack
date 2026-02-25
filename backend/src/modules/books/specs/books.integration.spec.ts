@@ -1,30 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { createCategory } from "../../../tests/factories/categorie.factory";
 import { req } from "../../../tests/helpers/commom.helper";
-import { Book } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { createBook } from "../../../tests/factories/book.factory";
+import { expectecBookShape } from "../../../tests/helpers/book.helper";
 
 describe("BooksIntegration", () => {
   const BASE_URL = "/api/v1/books";
-
-  function expectecBookShape(): Book {
-    return {
-      id: expect.any(String),
-      title: expect.any(String),
-      description: expect.any(String),
-      author: expect.any(String),
-      price: expect.any(String),
-      stock: expect.any(Number),
-      coverUrl: expect.toSatisfy((v) => v === null || typeof v === "string"),
-      coverThumbUrl: expect.toSatisfy(
-        (v) => v === null || typeof v === "string",
-      ),
-      categoryId: expect.toSatisfy((v) => v === null || typeof v === "string"),
-      createdAt: expect.anything(),
-      deletedAt: expect.toSatisfy((v) => v === null || typeof v === "string"),
-    };
-  }
 
   describe(`GET ${BASE_URL} - Pagination`, () => {
     beforeEach(async () => {
