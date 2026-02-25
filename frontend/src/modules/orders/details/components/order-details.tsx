@@ -7,9 +7,15 @@ import { Loader2, ArrowLeft, Package, MapPin, CreditCard } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { StatusBadge } from "@/components/ui/status-badge";
+import type { OrderDetailResponse } from "../../schemas/order.response";
 
-export function OrderDetailsView({ orderId }: { orderId: string }) {
-  const { data: order, isLoading } = useOrderDetails(orderId);
+interface OrderDetailsViewProps {
+  orderId: string;
+  initialData?: OrderDetailResponse | null;
+}
+
+export function OrderDetailsView({ orderId, initialData }: OrderDetailsViewProps) {
+  const { data: order, isLoading } = useOrderDetails(orderId, initialData);
 
   if (isLoading) {
     return (
@@ -78,6 +84,7 @@ export function OrderDetailsView({ orderId }: { orderId: string }) {
                         alt={item.book.title}
                         fill
                         className="object-cover"
+                        sizes="64px"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
