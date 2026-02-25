@@ -25,9 +25,11 @@ import {
 import { useCategories } from "@/modules/home/hooks/use-categories";
 import { useCreateBook } from "../hooks/use-create-book";
 import { useUpdateBook } from "../hooks/use-update-book";
+import { useDeleteBook } from "../hooks/use-delete-book";
+import { useRestoreBook } from "../hooks/use-restore-book";
 import { Book } from "@/modules/home/schemas/book.schema";
 import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Archive, RefreshCcw } from "lucide-react";
 
 interface BookFormProps {
   initialData?: Book;
@@ -39,6 +41,8 @@ export function BookForm({ initialData, onSuccess }: BookFormProps) {
     useCategories();
   const createBook = useCreateBook();
   const updateBook = useUpdateBook();
+  const deleteBook = useDeleteBook();
+  const restoreBook = useRestoreBook();
 
   const defaultValues: Partial<BookFormValues> = {
     title: initialData?.title || "",
@@ -82,7 +86,22 @@ export function BookForm({ initialData, onSuccess }: BookFormProps) {
     }
   };
 
+  const handleToggleStatus = async () => {
+    if (!initialData) return;
+    try {
+      if (initialData.deletedAt) {
+        await restoreBook.mutateAsync(initialData.id);
+      } else {
+        await deleteBook.mutateAsync(initialData.id);
+      }
+      onSuccess?.();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const isLoading = createBook.isPending || updateBook.isPending;
+  const isTogglingStatus = deleteBook.isPending || restoreBook.isPending;
 
   return (
     <Form {...form}>
@@ -224,8 +243,27 @@ export function BookForm({ initialData, onSuccess }: BookFormProps) {
           }}
         />
 
-        <div className="flex justify-end gap-2">
-          <Button type="submit" disabled={isLoading}>
+        <div className="flex justify-between items-center gap-2 pt-4 border-t">
+          {initialData ? (
+            <Button
+              type="button"
+              variant={initialData.deletedAt ? "outline" : "destructive"}
+              onClick={handleToggleStatus}
+              disabled={isTogglingStatus || isLoading}
+            >
+              {isTogglingStatus ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : initialData.deletedAt ? (
+                <RefreshCcw className="mr-2 h-4 w-4" />
+              ) : (
+                <Archive className="mr-2 h-4 w-4" />
+              )}
+              {initialData.deletedAt ? "Restaurar Livro" : "Arquivar Livro"}
+            </Button>
+          ) : (
+            <div />
+          )}
+          <Button type="submit" disabled={isLoading || isTogglingStatus}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {initialData ? "Atualizar" : "Criar"}
           </Button>

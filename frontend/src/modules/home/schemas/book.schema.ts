@@ -34,6 +34,7 @@ export const bookSchema = z.object({
     .nullable()
     .optional(),
   createdAt: z.coerce.date(),
+  deletedAt: z.coerce.date().nullable().optional(),
 });
 
 export type Book = z.infer<typeof bookSchema>;

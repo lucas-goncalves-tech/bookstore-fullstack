@@ -56,7 +56,7 @@ export function SaleDetailsDialog({
             <span className="text-xs font-bold uppercase text-muted-foreground tracking-wider">
               Data do Pedido
             </span>
-            <span className="text-card-foreground font-medium">
+            <span className="text-card-foreground font-medium" suppressHydrationWarning>
               {format(
                 new Date(sale.createdAt),
                 "dd 'de' MMMM 'de' yyyy, HH:mm",

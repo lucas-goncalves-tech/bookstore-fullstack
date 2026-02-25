@@ -19,7 +19,7 @@ export default async function AdminLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full">
+      <main className="flex-1 w-full min-w-0">
         <div className="flex h-16 items-center gap-4 border-b px-6 bg-background">
           <SidebarTrigger />
           <AdminHeader />

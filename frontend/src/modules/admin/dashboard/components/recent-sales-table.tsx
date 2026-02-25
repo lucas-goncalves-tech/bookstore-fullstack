@@ -157,7 +157,7 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm text-muted-foreground font-sans">
+                      <TableCell className="text-sm text-muted-foreground font-sans" suppressHydrationWarning>
                         {isToday(new Date(sale.createdAt))
                           ? `Hoje, ${format(new Date(sale.createdAt), "HH:mm")}`
                           : isYesterday(new Date(sale.createdAt))
