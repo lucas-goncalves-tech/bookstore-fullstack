@@ -22,7 +22,7 @@ export default async function OrderDetailsPage({
   
   try {
     order = await serverGet<OrderDetailResponse>(`/users/me/orders/${id}`);
-  } catch (err) {
+  } catch {
     // Falls back gracefully on client error handling if API throws 404
   }
 
