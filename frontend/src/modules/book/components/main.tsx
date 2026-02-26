@@ -84,8 +84,8 @@ export function BookMain({
               author={book.author}
               description={book.description}
               categoryName={book.category?.name}
-              rating={reviewData?.averageRating ?? 0}
-              reviewCount={reviewData?.totalReviews ?? 0}
+              rating={reviewData?.pages?.[0]?.averageRating ?? 0}
+              reviewCount={reviewData?.pages?.[0]?.totalReviews ?? 0}
             >
               <BookPriceCard book={book} />
             </BookDetails>

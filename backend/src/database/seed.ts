@@ -316,7 +316,7 @@ async function main() {
       });
     }
     //eslint-disable-next-line
-    console.log(`15 Reviews criados com sucesso para o livro ${book.title}!`);
+    console.log(`Review criado com sucesso para o livro ${book.title}!`);
   }
 }
 

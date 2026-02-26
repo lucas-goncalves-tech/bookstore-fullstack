@@ -30,4 +30,10 @@ export interface BookReviewsResponse {
   reviews: Review[];
   averageRating: number;
   totalReviews: number;
+  metadata: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
