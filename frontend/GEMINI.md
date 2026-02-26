@@ -1,60 +1,62 @@
 # Project Context: Bookstore Frontend
 
-This project is a modern bookstore web application built with Next.js 15, focused on a modular architecture and robust state management.
+This project is a modern bookstore web application built with Next.js 15, focused on a modular architecture, robust state management, and enterprise-grade performance.
 
-## Important Note for AI Agents
+## Important Directives for AI Agents
 
-- **DO NOT** Create new components before check /src/components/\*\*
-- **DO NOT** edit ../backend/\*\* this is READ-ONLY for reference.
-- **ALWAYS** use the actual project files in `src/` as the source of truth for the project structure and implementation details.
-- **ALWAYS**: Use lucide icons and shadcn components. (if not installed use npx shadcn@latest add <component-name>)
-- **ALWAYS**: Implement SSR in /src/app
-- **ALWAYS**: Use /src/modules for client components for example:
-  - /src/modules/example/components/
-  - /src/modules/example/hooks/
-  - /src/modules/example/schemas/
-  - /src/modules/example/store/
-- **ALWAYS**: Use query-keys.ts for SST query keys for tanstack query;
-- **ALWAYS**: Check ../backend/src/modules/**/dto/** for create schemas for frontend;
-- **ALWAYS**: Check ../backend/src/modules/**/\*.repository.ts/** for create schemas response for frontend;
-- **ALWAYS**: user zod parse on return response.data on tanstack query hooks.
-- **ALWAYS**: use @ai-files for design reference.
-- **ALWAYS**: use ../backend/src/modules/**/\*.spec.ts/** for know how API works.
-- **ALWAYS**: use FrontEnd skills and MCPs for help.
-- **ALWAYS**: use fetch on SSR first and push to tanstack query with initial data.
-- **ALWAYS**: use "use client" for client components.
-- **ALWAYS**: use useRouter or Link from next/navigation for navigation.
-- **ALWAYS**: check @app and @modules for consistency deisgn and logic implementation.
+- **DO NOT** Create new components before checking `/src/components/**`
+- **DO NOT** edit `../backend/**` unless explicitly requested; it is READ-ONLY for reference.
+- **ALWAYS** use the actual project files in `src/` as the source of truth for the project structure.
+- **ALWAYS** use `lucide-react` icons and `shadcn/ui` components. (if not installed use `npx shadcn@latest add <component-name>`)
+- **ALWAYS** Implement Server-Side Rendering (SSR) in `/src/app`.
+- **ALWAYS** Use `/src/modules` for feature-specific client components. Example:
+  - `/src/modules/[module]/components/`
+  - `/src/modules/[module]/hooks/`
+  - `/src/modules/[module]/schemas/`
+  - `/src/modules/[module]/store/`
+- **ALWAYS** Use `query-keys.ts` for TanStack query keys.
+- **ALWAYS** Use Zod to parse returning API response payloads on TanStack query hooks.
+- **ALWAYS** Use `fetch` (via `serverGet`) on SSR first and pass `initialData` into TanStack Query for fast initial loads (Hydration).
+- **ALWAYS** Keep React Server Components (RSC) as default. Only attach `"use client"` when necessary (e.g., using `useState`, `useEffect`, or `onClick`).
 
-## Project Overview
+## Frontend Architecture & Best Practices
 
-- **Framework:** Next.js 15 (App Router)
+The frontend is driven by the following architectural skills and principles. Future agents must respect these paradigms:
+
+### 1. Next.js & React Best Practices (`@nextjs-best-practices` / `@react-best-practices`)
+
+- **Hydration Fidelity**: Timezones mismatch between Server (UTC) and Client (Local) can crash React Hydration. Add `suppressHydrationWarning` to date-sensitive elements (e.g., `isToday(new Date())`).
+- **Waterfalls & Image Optimization**: Avoid `style={{ backgroundImage }}` for remote assets. Always use the Next.js native `<Image />` component with properly defined `sizes` attributes (`sizes="(max-width: 1024px) 0vw, 50vw"`, `sizes="40px"`) to prevent payload bloat.
+- **Smart Data Prefetching**: Route segments (e.g., `app/admin/books/page.tsx`) must fetch data via `await serverGet('/api')` and pass it down as `initialData` to Client Components tracking state via `react-query`.
+
+### 2. Frontend Design & UX Tokens (`@frontend-design` / `@tailwind-patterns`)
+
+- **Responsive Piling**: Use fluid flex/grid constraints (e.g., `flex-1 w-full min-w-0` on wrappers, `max-w-[200px] truncate` on texts) to prevent element overflow or X-axis scrolling on smaller viewports.
+- **Accessibility**: Avoid nesting interactive logic (`e.stopPropagation()`) inside `<Link>` tags. Wrap `<Button>` actions safely outside navigation links. Avoid raw HTML `<select>` in favor of accessible Radix/Shadcn UI `<Select>` dropdowns.
+- **Cognitive Clarity**: Prefer hidden actions behind `<DropdownMenu>` (Meatball menus) over cluttered inline table buttons. Map status states to semantic `<Badge>` components (Active/Inactive, Disponível/Arquivado).
+
+### 3. Senior Fullstack Security Paradigms (`@senior-fullstack`)
+
+- **Backend-First Security**: Never trust Client-Side `useEffect` guards for Role-Based Access Control (RBAC). Always validate authorization inside the top-level Next.js layout (`app/admin/layout.tsx`) as a Server Component, intercepting unauthorized renders natively at the edge before JSON payloads are dispatched.
+
+### 4. Code Quality & Integration Assurances (`@lint-and-validate`)
+
+- **MANDATORY VERIFICATION**: After significant edits or component logic changes, you **MUST** ensure the frontend compiles gracefully.
+- Run the following terminal verification chain without exceptions:
+  `npm run lint && npm run build && npx tsc --noEmit`
+- Only consider a task stabilized if the Next.js `build` phase exits with status Code 0 (meaning zero TypeScript and CSS collision errors).
+
+## Tech Stack Overview
+
+- **Framework:** Next.js 15 (App Router - Turbopack)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS 4, Shadcn UI (Radix UI + Lucide Icons)
-- **Data Fetching:** TanStack Query (React Query) with Axios
-- **State Management:** Zustand (Client-side state, specifically for the Shopping Cart)
-- **Form Handling:** React Hook Form with Zod validation
-- **Authentication:** Session-based (Cookies) with a centralized `useUser` hook.
+- **Data Fetching:** TanStack Query (React Query) + Custom `serverGet` for SSR
+- **State Management:** Zustand (Client-side localized states like Cart)
+- **Form Handling:** React Hook Form + Zod mapping exactly backend DTO signatures
+- **Authentication:** HttpOnly Session Cookies. Current session state retrieved via `useUser` hook.
 
-## Architecture and Directory Structure
-
-The project follows a modular, feature-based structure located in `src/modules`.
-
-- `src/app/`: Next.js App Router routes and layouts.
-- `src/components/`:
-  - `ui/`: Base UI components (mostly Shadcn UI).
-  - Shared components like `header.tsx` and `footer.tsx`.
-- `src/modules/`: Feature-specific logic. Each module (e.g., `book`, `cart`, `admin`) typically contains:
-  - `components/`: UI components specific to the feature.
-  - `hooks/`: React Query hooks for data operations.
-  - `schemas/`: Zod schemas for type safety and validation.
-  - `store/`: Zustand stores if needed (e.g., `cart`).
-- `src/lib/`: Shared utility libraries (e.g., Axios instance in `axios.ts`).
-- `src/hooks/`: Global React hooks (e.g., `use-user.ts`).
-- `src/providers/`: React Context providers (Query, Theme).
-- `ai-files/`: Contains design mockups and reference HTML/CSS for implementation.
-
-## Building and Running
+## Building and Verification Commands
 
 ### Development
 
@@ -62,44 +64,18 @@ The project follows a modular, feature-based structure located in `src/modules`.
 npm run dev
 ```
 
-Starts the development server with Turbopack.
-
-### Production
+### CI / Quality Gates (Agent Verification Routine)
 
 ```bash
-npm run build
-npm run start
+npm run lint && npm run build && npx tsc --noEmit
 ```
 
-Builds the application for production and starts the server.
+## Backend Integration Details
 
-### Linting
-
-```bash
-npm run lint
-```
-
-Runs ESLint for code quality checks.
-
-## Development Conventions
-
-- **Modular Design:** Always group feature-specific logic within `src/modules`. Avoid cluttering `src/components` with domain-specific components.
-- **Type Safety:** Use Zod schemas in `src/modules/[module]/schemas` to define domain entities and validate API responses.
-- **Data Fetching:** Prefer TanStack Query hooks for all server state. Use the `api` instance from `@/lib/axios`.
-- **UI Components:** Use and extend existing Shadcn UI components in `src/components/ui`.
-- **Environment Variables:**
-  - `NEXT_PUBLIC_API_URL`: The base URL for the backend API (accessible on client and server).
-  - `API_URL`: The internal URL for the backend API (server-side only, used for SSR/ISR).
-
-## Backend Integration
-
-The frontend communicates with a REST API. Authentication is handled via cookies (`withCredentials: true`). The `useUser` hook provides the current user's state and logout functionality.
-
-## Protected Routes (Middleware)
-
-The following routes require authentication (defined in `src/middleware.ts`):
-
-- `/orders` - Order history and details
-- `/checkout` - Checkout flow
-- `/admin` - Admin panel
-- `/my-reviews` - User reviews page
+- Authentication is handled via cookies (`withCredentials: true`).
+- **Protected Routes (Middleware)**:
+  - `/orders` - Order history and details
+  - `/checkout` - Checkout flow
+  - `/admin` - Admin panel
+  - `/my-reviews` - User reviews page
+- Reference `../backend/src/modules/**/{*.spec.ts, *.routes.ts}` to observe the API contracts when bridging new Frontend services.
