@@ -10,12 +10,12 @@ export class UsersService {
     private readonly usersRepository: IUsersRepository,
   ) {}
 
-  async me(id: string) {
-    const user = await this.usersRepository.findByKey("id", id);
+  async me(userId: string) {
+    const user = await this.usersRepository.findByKey("id", userId);
     if (!user) throw new NotFoundError("Usuário não encontrado");
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { passwordHash, ...userWithoutPassword } = user;
+    const { passwordHash, id, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
 }
