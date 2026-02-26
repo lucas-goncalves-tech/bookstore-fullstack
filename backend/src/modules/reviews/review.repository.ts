@@ -11,6 +11,9 @@ export class ReviewRepository {
       where: {
         userId_bookId: { userId, bookId },
       },
+      omit: {
+        userId: true,
+      },
     });
   }
 

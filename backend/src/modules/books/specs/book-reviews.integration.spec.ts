@@ -120,6 +120,63 @@ describe("BookReviewsIntegration", () => {
     });
   });
 
+  describe(`GET ${BASE_URL}/:id/reviews/me`, () => {
+    it("returns null when user has not reviewed the book", async () => {
+      const book = await createBook();
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .get(`${BASE_URL}/${book.id}/reviews/me`)
+        .expect(200);
+
+      expect(body).toBeNull();
+    });
+
+    it("returns the review when user has reviewed the book", async () => {
+      const { reqAgent, user } = await loginWithUser("user");
+      const book = await createBook();
+      const rating = 4;
+      const comment = "Very good!";
+      const review = await createReview({
+        bookId: book.id,
+        userId: user.id,
+        rating,
+        comment,
+      });
+
+      const { body } = await reqAgent
+        .get(`${BASE_URL}/${book.id}/reviews/me`)
+        .expect(200);
+
+      expect(body).toMatchObject({
+        id: review.id,
+        rating,
+        comment,
+        bookId: book.id,
+      });
+      expect(body).not.toHaveProperty("userId");
+    });
+
+    it("returns 401 when user is not authenticated", async () => {
+      const { body } = await req
+        .get(`${BASE_URL}/invalid-uuid/reviews/me`)
+        .expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 404 when book does not exist", async () => {
+      const { reqAgent } = await loginWithUser("user");
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .get(`${BASE_URL}/${UUID}/reviews/me`)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
   describe(`POST ${BASE_URL}/:id/reviews`, () => {
     it("creates a review when user is authenticated", async () => {
       const book = await createBook();

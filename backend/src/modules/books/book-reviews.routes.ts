@@ -25,6 +25,13 @@ export class BookReviewsRoutes {
       this.controller.findReviewsByBookId,
     );
 
+    this.router.get(
+      "/:id/reviews/me",
+      authMiddleware,
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.findMyReview,
+    );
+
     this.router.post(
       "/:id/reviews",
       authMiddleware,

@@ -19,6 +19,18 @@ export class BookReviewsController {
     return res.status(200).json(reviews);
   };
 
+  findMyReview = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    const userId = req.user?.sub;
+
+    if (!userId) {
+      throw new UnauthorizedError("Usuário não autenticado");
+    }
+
+    const review = await this.reviewService.findMyReview(userId, id);
+    return res.status(200).json(review);
+  };
+
   createReview = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
     const data = req.safeBody as CreateReviewDto;

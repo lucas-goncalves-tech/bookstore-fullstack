@@ -28,6 +28,18 @@ export class ReviewService {
     );
   }
 
+  async findMyReview(userId: string, bookId: string) {
+    const book = await this.bookRepository.findById(bookId);
+    if (!book) {
+      throw new NotFoundError("Livro não encontrado");
+    }
+    const review = await this.reviewRepository.findUniqueByBookId(
+      userId,
+      bookId,
+    );
+    return review;
+  }
+
   async findManyByUserId(userId: string) {
     return await this.reviewRepository.findManyByUserId(userId);
   }
