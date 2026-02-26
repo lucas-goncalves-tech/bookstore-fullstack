@@ -10,5 +10,6 @@ export const bookQueryKeys = {
   reviews: {
     all: ["book", "reviews"] as const,
     list: (bookId: string) => ["book", "reviews", "list", bookId] as const,
+    me: (bookId: string) => ["book", "reviews", "me", bookId] as const,
   },
 } as const;

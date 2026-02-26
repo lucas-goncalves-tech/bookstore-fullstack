@@ -4,11 +4,11 @@ import {
   CreateReviewSchema,
   createReviewSchema,
 } from "../schemas/review.schema";
-import { useCreateReview } from "../hooks/use-reviews";
+import { useCreateReview, useMyReview, useDeleteReview } from "../hooks/use-reviews";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Star } from "lucide-react";
-import { useState } from "react";
+import { Star, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -25,7 +25,10 @@ interface ReviewFormProps {
 export function ReviewForm({ bookId }: ReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
+  
+  const { data: myReview, isLoading: isLoadingReview } = useMyReview(bookId);
   const { mutate, isPending } = useCreateReview(bookId);
+  const { mutate: deleteMutate, isPending: isDeleting } = useDeleteReview(bookId);
 
   const form = useForm<CreateReviewSchema>({
     resolver: zodResolver(createReviewSchema),
@@ -36,26 +39,47 @@ export function ReviewForm({ bookId }: ReviewFormProps) {
     mode: "onChange",
   });
 
+  useEffect(() => {
+    if (myReview) {
+      form.reset({
+        rating: myReview.rating,
+        comment: myReview.comment,
+      });
+      setRating(myReview.rating);
+    } else {
+      form.reset({
+        rating: 0,
+        comment: "",
+      });
+      setRating(0);
+    }
+  }, [myReview, form]);
+
   const onSubmit = (data: CreateReviewSchema) => {
     if (data.rating === 0) {
       toast.error("Por favor, selecione uma nota.");
       return;
     }
-    mutate(data, {
-      onSuccess: () => {
-        form.reset({
-          rating: 0,
-          comment: "",
-        });
-        setRating(0);
-        setHoverRating(0);
-      },
-    });
+    mutate(data);
   };
+
+  const handleDelete = () => {
+    deleteMutate();
+  };
+
+  if (isLoadingReview) {
+    return (
+      <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
+        <div className="h-32 animate-pulse bg-muted rounded-md" />
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
-      <h4 className="mb-4 text-lg font-bold">Escreva sua avaliação</h4>
+      <h4 className="mb-4 text-lg font-bold">
+        {myReview ? "Sua avaliação" : "Escreva sua avaliação"}
+      </h4>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -108,9 +132,23 @@ export function ReviewForm({ bookId }: ReviewFormProps) {
             )}
           />
 
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Enviando..." : "Enviar Avaliação"}
-          </Button>
+          <div className="flex gap-4 items-center">
+            <Button type="submit" disabled={isPending || isDeleting}>
+              {isPending ? "Enviando..." : (myReview ? "Atualizar Avaliação" : "Enviar Avaliação")}
+            </Button>
+            
+            {myReview && (
+              <Button 
+                type="button" 
+                variant="destructive" 
+                onClick={handleDelete} 
+                disabled={isPending || isDeleting}
+              >
+                <Trash2 className="size-4 mr-2" />
+                {isDeleting ? "Excluindo..." : "Excluir Avaliação"}
+              </Button>
+            )}
+          </div>
         </form>
       </Form>
     </div>

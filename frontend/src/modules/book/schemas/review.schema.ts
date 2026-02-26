@@ -23,7 +23,7 @@ export interface Review {
   comment: string;
   createdAt: string;
   bookId: string;
-  user: ReviewUser;
+  user?: ReviewUser;
 }
 
 export interface BookReviewsResponse {

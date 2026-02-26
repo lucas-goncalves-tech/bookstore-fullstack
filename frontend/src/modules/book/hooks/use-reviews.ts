@@ -2,6 +2,7 @@ import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
+  useQuery,
 } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { bookQueryKeys } from "./query-keys";
@@ -13,30 +14,6 @@ import {
 } from "../schemas/review.schema";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { z } from "zod";
-
-const reviewSchema = z.object({
-  id: z.string(),
-  rating: z.number(),
-  comment: z.string(),
-  createdAt: z.string(),
-  bookId: z.string(),
-  user: z.object({
-    name: z.string(),
-  }),
-});
-
-const bookReviewsResponseSchema = z.object({
-  reviews: z.array(reviewSchema),
-  averageRating: z.number(),
-  totalReviews: z.number(),
-  metadata: z.object({
-    page: z.number(),
-    limit: z.number(),
-    total: z.number(),
-    totalPages: z.number(),
-  }),
-});
 
 export function useBookReviews(
   bookId: string,
@@ -50,7 +27,7 @@ export function useBookReviews(
         `/books/${bookId}/reviews`,
         { params: { page: pageParam, limit } },
       );
-      return bookReviewsResponseSchema.parse(data);
+      return data;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
@@ -86,6 +63,11 @@ export function useCreateReview(bookId: string) {
         queryKey: bookQueryKeys.reviews.list(bookId),
       });
 
+      // Invalida a própria query 'me' para parar o loading e injetar os dados no form
+      queryClient.invalidateQueries({
+        queryKey: bookQueryKeys.reviews.me(bookId),
+      });
+
       // Invalida os detalhes do livro (para atualizar o rating médio)
       queryClient.invalidateQueries({
         queryKey: bookQueryKeys.detail(bookId),
@@ -102,6 +84,61 @@ export function useCreateReview(bookId: string) {
       if (error instanceof AxiosError) {
         toast.error(
           error.response?.data?.message || "Erro ao enviar avaliação.",
+        );
+      } else {
+        toast.error("Ocorreu um erro inesperado.");
+      }
+    },
+  });
+}
+
+export function useMyReview(bookId: string) {
+  return useQuery({
+    queryKey: bookQueryKeys.reviews.me(bookId),
+    queryFn: async () => {
+      const { data } = await api.get<Review | null>(
+        `/books/${bookId}/reviews/me`,
+      );
+      if (!data) return null;
+      return data;
+    },
+    enabled: !!bookId,
+  });
+}
+
+export function useDeleteReview(bookId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      await api.delete(`/books/${bookId}/reviews`);
+    },
+    onSuccess: () => {
+      // Invalida a lista de reviews do livro
+      queryClient.invalidateQueries({
+        queryKey: bookQueryKeys.reviews.list(bookId),
+      });
+
+      // Invalida a avaliação do usuário
+      queryClient.invalidateQueries({
+        queryKey: bookQueryKeys.reviews.me(bookId),
+      });
+
+      // Invalida os detalhes do livro
+      queryClient.invalidateQueries({
+        queryKey: bookQueryKeys.detail(bookId),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: homeQueryKeys.books.all,
+      });
+
+      toast.success("Avaliação apagada com sucesso!");
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(
+          error.response?.data?.message || "Erro ao apagar avaliação.",
         );
       } else {
         toast.error("Ocorreu um erro inesperado.");

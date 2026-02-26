@@ -9,7 +9,8 @@ interface ReviewItemProps {
 }
 
 export function ReviewItem({ review }: ReviewItemProps) {
-  const initials = review.user.name
+  const userName = review.user?.name || "Você";
+  const initials = userName
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -25,7 +26,7 @@ export function ReviewItem({ review }: ReviewItemProps) {
           </Avatar>
           <div>
             <p className="text-sm font-bold text-foreground">
-              {review.user.name}
+              {userName}
             </p>
             <p className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(review.createdAt), {
