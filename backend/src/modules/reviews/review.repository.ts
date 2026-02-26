@@ -14,7 +14,7 @@ export class ReviewRepository {
     });
   }
 
-  async findManyByBookId(bookId: string, page = 1, limit = 5) {
+  async findManyByBookId(bookId: string, page = 1, limit = 10) {
     const skip = (page - 1) * limit;
     const safeLimit = limit > 100 ? 100 : limit;
     const [reviews, total, stats] = await Promise.all([
@@ -24,6 +24,9 @@ export class ReviewRepository {
         },
         omit: {
           userId: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         skip,
         take: safeLimit,
