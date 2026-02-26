@@ -10,7 +10,80 @@ import {
   uploadBookCoverResponse,
   updateBookDto,
   updateBookResponse,
+  findManyBooksReponse,
 } from "../../books/dtos/book.dto";
+
+registry.registerPath({
+  method: "get",
+  path: "/admin/books",
+  tags: ["Admin - Books"],
+  security: [{ cookieAuth: [] }],
+  summary: "Listar livros (Admin)",
+  description:
+    "Retorna a lista de todos os livros no sistema. Opcionalmente, pode-se usar paginação e filtros. Diferente da rota pública, esta rota retorna também os livros sem estoque (stock = 0) e os livros deletados logicamente (onde `deletedAt` não é nulo).",
+  parameters: [
+    {
+      name: "limit",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "page",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "search",
+      in: "query",
+      required: false,
+      schema: {
+        type: "string",
+      },
+    },
+    {
+      name: "categorySlug",
+      in: "query",
+      required: false,
+      schema: {
+        type: "string",
+      },
+    },
+    {
+      name: "minPrice",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+    {
+      name: "maxPrice",
+      in: "query",
+      required: false,
+      schema: {
+        type: "integer",
+      },
+    },
+  ],
+  responses: {
+    200: {
+      description: "Livros listados com sucesso",
+      content: {
+        "application/json": {
+          schema: findManyBooksReponse,
+        },
+      },
+    },
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
+  },
+});
 
 registry.registerPath({
   method: "post",
