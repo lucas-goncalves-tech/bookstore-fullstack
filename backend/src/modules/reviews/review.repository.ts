@@ -107,4 +107,12 @@ export class ReviewRepository {
       },
     });
   }
+
+  async delete(bookId: string, userId: string) {
+    await this.prisma.review.delete({
+      where: {
+        userId_bookId: { userId, bookId },
+      },
+    });
+  }
 }

@@ -31,4 +31,15 @@ export class BookReviewsController {
       data: review,
     });
   };
+
+  deleteReview = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as BookParamsDto;
+    const userId = req.user?.sub;
+
+    if (!userId) {
+      throw new UnauthorizedError("Usuário não autenticado");
+    }
+    await this.reviewService.delete(id, userId);
+    return res.status(204).end();
+  };
 }

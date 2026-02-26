@@ -30,6 +30,13 @@ export class BookReviewsRoutes {
       validateMiddleware({ params: bookParamsDto, body: createReviewDto }),
       this.controller.createReview,
     );
+
+    this.router.delete(
+      "/:id/reviews",
+      authMiddleware,
+      validateMiddleware({ params: bookParamsDto }),
+      this.controller.deleteReview,
+    );
   }
 
   get routes() {

@@ -142,4 +142,58 @@ describe("BookReviewsIntegration", () => {
       expect(body).toHaveProperty("message");
     });
   });
+
+  describe(`DELETE ${BASE_URL}/:id/reviews`, () => {
+    it("deletes a review when user is authenticated", async () => {
+      const { reqAgent, user } = await loginWithUser("user");
+      const book = await createBook();
+      const review = await createReview({
+        bookId: book.id,
+        userId: user.id,
+      });
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${book.id}/reviews`)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const reviewFromDb = await prisma_test.review.findUnique({
+        where: {
+          id: review.id,
+        },
+      });
+      expect(reviewFromDb).toBeFalsy();
+    });
+
+    it("returns 401 when user is not authenticated", async () => {
+      const { body } = await req
+        .delete(`${BASE_URL}/invalid-uuid/reviews`)
+        .expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 404 when book does not exist", async () => {
+      const { reqAgent } = await loginWithUser("user");
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${UUID}/reviews`)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 404 when review does not exist", async () => {
+      const book = await createBook();
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${book.id}/reviews`)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
 });

@@ -32,4 +32,19 @@ export class ReviewService {
     }
     return await this.reviewRepository.create(userId, bookId, data);
   }
+
+  async delete(bookId: string, userId: string) {
+    const book = await this.bookRepository.findById(bookId);
+    if (!book) {
+      throw new NotFoundError("Livro não encontrado");
+    }
+    const review = await this.reviewRepository.findUniqueByBookId(
+      userId,
+      bookId,
+    );
+    if (!review) {
+      throw new NotFoundError("Avaliação não encontrada");
+    }
+    await this.reviewRepository.delete(book.id, userId);
+  }
 }
