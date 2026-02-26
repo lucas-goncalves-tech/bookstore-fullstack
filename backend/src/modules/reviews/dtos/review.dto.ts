@@ -36,7 +36,7 @@ export const listReviewsResponse = z.object({
   totalReviews: z.number(),
 });
 
-const userReviewSchema = z.object({
+export const userReviewSchema = z.object({
   id: z.uuid(),
   bookId: z.uuid(),
   rating: z.number().min(1).max(5),
@@ -45,9 +45,11 @@ const userReviewSchema = z.object({
   updatedAt: z.coerce.date(),
   book: z.object({
     title: z.string(),
-    category: z.object({
-      name: z.string(),
-    }),
+    category: z
+      .object({
+        name: z.string(),
+      })
+      .nullable(),
     coverUrl: z.string().nullable(),
     author: z.string(),
   }),
@@ -58,3 +60,5 @@ export const findManyByUserIdResponse = z.object({
   averageRating: z.number(),
   totalReviews: z.number(),
 });
+
+export type UserReviewSchema = z.infer<typeof userReviewSchema>;
