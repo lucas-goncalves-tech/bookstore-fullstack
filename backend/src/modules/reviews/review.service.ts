@@ -1,6 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { ReviewRepository } from "./review.repository";
-import { ICreateReviewInput } from "./interface/review.interface";
+import {
+  ICreateReviewInput,
+  IQueryReviewInput,
+} from "./interface/review.interface";
 import { NotFoundError } from "../../shared/errors/not-found-error";
 import { BookRepository } from "../books/books.repository";
 
@@ -13,12 +16,16 @@ export class ReviewService {
     private readonly bookRepository: BookRepository,
   ) {}
 
-  async findByBookId(bookId: string) {
+  async findManyByBookId(bookId: string, query: IQueryReviewInput) {
     const book = await this.bookRepository.findById(bookId);
     if (!book) {
       throw new NotFoundError("Livro não encontrado");
     }
-    return await this.reviewRepository.findManyByBookId(bookId);
+    return await this.reviewRepository.findManyByBookId(
+      bookId,
+      query.page,
+      query.limit,
+    );
   }
 
   async findManyByUserId(userId: string) {

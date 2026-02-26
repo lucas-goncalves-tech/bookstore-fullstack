@@ -5,6 +5,7 @@ import { createBook } from "../../../tests/factories/book.factory";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { createReview } from "../../../tests/factories/review.factory";
 import { prisma_test } from "../../../tests/setup";
+import { createUser } from "../../../tests/factories/user.factory";
 
 describe("BookReviewsIntegration", () => {
   const BASE_URL = "/api/v1/books";
@@ -33,7 +34,12 @@ describe("BookReviewsIntegration", () => {
 
   describe(`GET ${BASE_URL}/:id/reviews`, () => {
     it("returns all reviews from a book", async () => {
-      const review = await createReview();
+      const rating = 5;
+      const comment = "Great book!";
+      const review = await createReview({
+        rating,
+        comment,
+      });
 
       const { body } = await req
         .get(`${BASE_URL}/${review.bookId}/reviews`)
@@ -43,9 +49,57 @@ describe("BookReviewsIntegration", () => {
       expect(body.reviews).toEqual(
         expect.arrayContaining([expectedReviewShape()]),
       );
+      expect(body.averageRating).toBe(rating);
+      expect(body.totalReviews).toBe(1);
     });
 
-    it("returns empty array when user has not reviewed the book", async () => {
+    it("returns all reviews from a book with pagination", async () => {
+      const book = await createBook();
+      const rating = 5;
+      for (let i = 1; i <= 15; i++) {
+        const user = await createUser();
+        await createReview({ userId: user.id, bookId: book.id, rating });
+      }
+
+      const { body } = await req
+        .get(`${BASE_URL}/${book.id}/reviews?page=1&limit=5`)
+        .expect(200);
+
+      expect(body.reviews).toHaveLength(5);
+      expect(body.reviews).toEqual(
+        expect.arrayContaining([expectedReviewShape()]),
+      );
+      expect(body.averageRating).toBe(rating);
+      expect(body.totalReviews).toBe(15);
+      expect(body.metadata).toEqual({
+        page: 1,
+        limit: 5,
+        total: 15,
+        totalPages: 3,
+      });
+    });
+
+    it("return empty array when page is greater than total pages", async () => {
+      const book = await createBook();
+      for (let i = 1; i <= 5; i++) {
+        const user = await createUser();
+        await createReview({ userId: user.id, bookId: book.id });
+      }
+
+      const { body } = await req
+        .get(`${BASE_URL}/${book.id}/reviews?page=3&limit=3`)
+        .expect(200);
+
+      expect(body.reviews).toEqual([]);
+      expect(body.metadata).toEqual({
+        page: 3,
+        limit: 3,
+        total: 5,
+        totalPages: 2,
+      });
+    });
+
+    it("returns empty array when book has no reviews", async () => {
       const book = await createBook();
       const { reqAgent } = await loginWithUser("user");
 

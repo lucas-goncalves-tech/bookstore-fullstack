@@ -7,6 +7,7 @@ import { validateMiddleware } from "../../shared/middlewares/validate.middleware
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { bookParamsDto } from "./dtos/book-params";
 import { createReviewDto } from "../reviews/dtos/review.dto";
+import { bookReviewsQueryDto } from "./dtos/book-query.dto";
 
 @injectable()
 export class BookReviewsRoutes {
@@ -20,7 +21,7 @@ export class BookReviewsRoutes {
   private setupRoutes() {
     this.router.get(
       "/:id/reviews",
-      validateMiddleware({ params: bookParamsDto }),
+      validateMiddleware({ query: bookReviewsQueryDto, params: bookParamsDto }),
       this.controller.findReviewsByBookId,
     );
 

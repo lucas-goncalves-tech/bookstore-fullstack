@@ -14,8 +14,10 @@ export class ReviewRepository {
     });
   }
 
-  async findManyByBookId(bookId: string) {
-    const [reviews, stats] = await Promise.all([
+  async findManyByBookId(bookId: string, page = 1, limit = 5) {
+    const skip = (page - 1) * limit;
+    const safeLimit = limit > 100 ? 100 : limit;
+    const [reviews, total, stats] = await Promise.all([
       this.prisma.review.findMany({
         where: {
           bookId,
@@ -23,12 +25,19 @@ export class ReviewRepository {
         omit: {
           userId: true,
         },
+        skip,
+        take: safeLimit,
         include: {
           user: {
             select: {
               name: true,
             },
           },
+        },
+      }),
+      this.prisma.review.count({
+        where: {
+          bookId,
         },
       }),
       this.prisma.review.aggregate({
@@ -48,6 +57,12 @@ export class ReviewRepository {
       reviews,
       averageRating: stats._avg.rating ?? 0,
       totalReviews: stats._count.rating,
+      metadata: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / safeLimit),
+      },
     };
   }
 

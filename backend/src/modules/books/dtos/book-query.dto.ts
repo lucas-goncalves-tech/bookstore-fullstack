@@ -14,4 +14,10 @@ export const bookQueryDto = z.strictObject({
   maxPrice: zodCoerceNumber.int().optional(),
 });
 
+export const bookReviewsQueryDto = z.object({
+  page: zodCoerceNumber.int().optional(),
+  limit: zodCoerceNumber.int().optional(),
+});
+
 export type BookQueryDTO = z.infer<typeof bookQueryDto>;
+export type BookReviewsQueryDTO = z.infer<typeof bookReviewsQueryDto>;

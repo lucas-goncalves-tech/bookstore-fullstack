@@ -4,6 +4,7 @@ import { BookParamsDto } from "./dtos/book-params";
 import { ReviewService } from "../reviews/review.service";
 import { CreateReviewDto } from "../reviews/dtos/review.dto";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
+import { BookReviewsQueryDTO } from "./dtos/book-query.dto";
 
 @injectable()
 export class BookReviewsController {
@@ -13,7 +14,8 @@ export class BookReviewsController {
 
   findReviewsByBookId = async (req: Request, res: Response) => {
     const { id } = req.safeParams as BookParamsDto;
-    const reviews = await this.reviewService.findByBookId(id);
+    const query = req.safeQuery as BookReviewsQueryDTO;
+    const reviews = await this.reviewService.findManyByBookId(id, query);
     return res.status(200).json(reviews);
   };
 

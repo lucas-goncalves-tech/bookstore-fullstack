@@ -256,16 +256,20 @@ async function main() {
     },
   });
 
-  const userJubileu = await prisma_seed.user.upsert({
-    where: { email: "jubileu@user.com" },
-    update: {},
-    create: {
-      email: "jubileu@user.com",
-      name: "Jubileu",
-      passwordHash: hashUser,
-      role: "USER",
-    },
-  });
+  const reviewUsers: string[] = [];
+  for (let i = 1; i <= 15; i++) {
+    const user = await prisma_seed.user.upsert({
+      where: { email: `leitor${i}@user.com` },
+      update: {},
+      create: {
+        email: `leitor${i}@user.com`,
+        name: `Leitor ${i}`,
+        passwordHash: hashUser,
+        role: "USER",
+      },
+    });
+    reviewUsers.push(user.id);
+  }
 
   //eslint-disable-next-line
   console.log(`Usuário Admin ${adminName} criado com sucesso!`);
@@ -299,18 +303,20 @@ async function main() {
     //eslint-disable-next-line
     console.log(`Livro ${book.title} criado com sucesso!`);
 
-    const randomComments =
-      comments[Math.floor(Math.random() * comments.length)];
-    await prisma_seed.review.create({
-      data: {
-        bookId: bookCreated.id,
-        userId: userJubileu.id,
-        rating: Math.floor(Math.random() * 5) + 1,
-        comment: randomComments,
-      },
-    });
+    for (const userId of reviewUsers) {
+      const randomComments =
+        comments[Math.floor(Math.random() * comments.length)];
+      await prisma_seed.review.create({
+        data: {
+          bookId: bookCreated.id,
+          userId: userId,
+          rating: Math.floor(Math.random() * 5) + 1,
+          comment: randomComments,
+        },
+      });
+    }
     //eslint-disable-next-line
-    console.log(`Review para o livro ${book.title} criado com sucesso!`);
+    console.log(`15 Reviews criados com sucesso para o livro ${book.title}!`);
   }
 }
 
