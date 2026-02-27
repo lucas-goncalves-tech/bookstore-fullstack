@@ -10,3 +10,24 @@ export const findManyForAdminQueryDto = z.object({
 });
 
 export type FindManyForAdminQueryDto = z.infer<typeof findManyForAdminQueryDto>;
+
+export const userResponse = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string(),
+  role: z.string(),
+  banReason: z.string().nullable(),
+  bannedAt: z.date().nullable(),
+});
+
+export const metadataResponse = z.object({
+  page: z.number(),
+  limit: z.number(),
+  total: z.number(),
+  totalPages: z.number(),
+});
+
+export const findManyUserForAdminResponse = z.object({
+  data: z.array(userResponse),
+  metadata: metadataResponse,
+});

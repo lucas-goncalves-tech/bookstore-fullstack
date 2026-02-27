@@ -1,3 +1,5 @@
+import "./admin-users.doc";
+
 import { container, injectable } from "tsyringe";
 import { AdminUsersController } from "./admin-users.controller";
 import { Router } from "express";
