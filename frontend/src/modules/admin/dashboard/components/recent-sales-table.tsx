@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale";
 import { SkeletonSales } from "./skeleton-sales";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { SaleDetailsDialog } from "./sale-details-dialog";
 import {
   DashboardSaleItem,
@@ -192,9 +193,15 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
               variant="ghost"
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
-              className="text-xs font-bold text-muted-foreground uppercase hover:text-primary transition-colors"
             >
-              {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+              {isFetchingNextPage ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin inline" /> 
+                  Carregando...
+                </>
+              ) : (
+                "Carregar mais"
+              )}
             </Button>
           </div>
         )}

@@ -27,6 +27,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { LoadingScreen } from "@/components/loading-screen";
+
 const routeMap: Record<string, string> = {
   admin: "Dashboard",
   books: "Livros",
@@ -40,15 +42,17 @@ export function AdminHeader() {
   const pathname = usePathname();
   const paths = pathname.split("/").filter(Boolean);
   const { theme, setTheme } = useTheme();
-  const { user, logout } = useUser();
+  const { user, logout, isLoading } = useUser();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
-    <div className="flex flex-1 items-center justify-between">
-      <Breadcrumb className="hidden md:block">
+    <>
+      <LoadingScreen isLoading={isLoading} />
+      <div className="flex flex-1 items-center justify-between">
+        <Breadcrumb className="hidden md:block">
         <BreadcrumbList>
           {paths.map((path, index) => {
             const isLast = index === paths.length - 1;
@@ -129,6 +133,7 @@ export function AdminHeader() {
           </AlertDialog>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

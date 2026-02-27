@@ -1,6 +1,7 @@
 import { Sparkles } from "lucide-react";
 import { BookCard } from "./book-card";
 import type { Book } from "../schemas/book.schema";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface BookGridProps {
   books: Book[];
@@ -8,23 +9,20 @@ interface BookGridProps {
   onAddToCart?: (book: Book) => void;
 }
 
-function BookGridSkeleton() {
+export function BookGridSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div
-          key={i}
-          className="flex animate-pulse flex-col rounded-lg bg-card p-4"
-        >
-          <div className="mb-4 aspect-2/3 w-full rounded-lg bg-muted" />
-          <div className="mb-2 h-5 w-3/4 rounded bg-muted" />
-          <div className="mb-3 h-4 w-1/2 rounded bg-muted" />
+        <div key={i} className="flex flex-col rounded-lg bg-card p-4 border border-border">
+          <Skeleton className="mb-4 aspect-2/3 w-full rounded-lg" />
+          <Skeleton className="mb-2 h-5 w-3/4" />
+          <Skeleton className="mb-3 h-4 w-1/2" />
           <div className="mb-4 space-y-2">
-            <div className="h-3 w-full rounded bg-muted" />
-            <div className="h-3 w-5/6 rounded bg-muted" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-5/6" />
           </div>
           <div className="mt-auto border-t border-border pt-4">
-            <div className="h-6 w-1/3 rounded bg-muted" />
+            <Skeleton className="h-6 w-1/3" />
           </div>
         </div>
       ))}

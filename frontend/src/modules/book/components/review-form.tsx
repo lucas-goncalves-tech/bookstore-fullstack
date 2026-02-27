@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ReviewFormProps {
   bookId: string;
@@ -67,12 +68,14 @@ export function ReviewForm({ bookId }: ReviewFormProps) {
     deleteMutate();
   };
 
-  if (isLoadingReview) {
-    return (
-      <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
-        <div className="h-32 animate-pulse bg-muted rounded-md" />
-      </div>
-    );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || isLoadingReview) {
+    return <Skeleton className="h-[168px] w-full bg-muted" />;
   }
 
   return (

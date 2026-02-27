@@ -3,7 +3,8 @@
 import { useOrderDetails } from "../hooks/use-order-details";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, ArrowLeft, Package, MapPin, CreditCard } from "lucide-react";
+import { ArrowLeft, Package, MapPin, CreditCard } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import Image from "next/image";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -19,8 +20,74 @@ export function OrderDetailsView({ orderId, initialData }: OrderDetailsViewProps
 
   if (isLoading) {
     return (
-      <div className="flex justify-center p-12">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="space-y-8">
+        {/* Header Skeleton */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-6 w-20 rounded-full" />
+            </div>
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <Skeleton className="h-9 w-24" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Column Skeleton */}
+          <div className="md:col-span-2 space-y-6">
+            <div className="rounded-lg border bg-card overflow-hidden">
+              <div className="p-4 bg-muted/40 border-b">
+                <Skeleton className="h-5 w-40" />
+              </div>
+              <div className="divide-y">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="p-4 flex gap-4">
+                    <Skeleton className="w-16 h-24 rounded" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-5 w-3/4" />
+                      <Skeleton className="h-4 w-1/2" />
+                      <Skeleton className="h-4 w-24 mt-4" />
+                    </div>
+                    <Skeleton className="h-5 w-20" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column Skeleton */}
+          <div className="space-y-6">
+            <div className="rounded-lg border bg-card p-6">
+              <Skeleton className="h-5 w-32 mb-4" />
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+                <div className="my-2 border-t" />
+                <div className="flex justify-between">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-24" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="rounded-lg border bg-card p-6 space-y-4">
+              <div className="flex gap-3">
+                <Skeleton className="size-5 rounded-full" />
+                <div className="space-y-2 flex-1">
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-16 w-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

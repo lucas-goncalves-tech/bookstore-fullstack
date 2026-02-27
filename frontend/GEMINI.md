@@ -79,3 +79,58 @@ npm run lint && npm run build && npx tsc --noEmit
   - `/admin` - Admin panel
   - `/my-reviews` - User reviews page
 - Reference `../backend/src/modules/**/{*.spec.ts, *.routes.ts}` to observe the API contracts when bridging new Frontend services.
+
+## Mentioned Skills Context
+
+### @nextjs-best-practices
+
+Next.js App Router principles. Server Components, data fetching, routing patterns.
+
+- **Server vs Client Components**: Server by default. Use 'use client' only for interactivity (useState, useEffect, event handlers).
+- **Data Fetching Patterns**: Server Component fetch for database; fetch with caching for API.
+- **Routing Principles**: Use Next.js file conventions (page.tsx, layout.tsx, loading.tsx, error.tsx).
+- **Performance**: Use `next/image`, dynamic imports for heavy components.
+- **Caching & Revalidation**: Understand caching layers and time-based vs on-demand revalidation.
+
+### @react-best-practices
+
+React and Next.js performance optimization guidelines from Vercel.
+
+- **Eliminating Waterfalls** (CRITICAL): Use `Promise.all()` for independent operations, start promises early.
+- **Bundle Size Optimization** (CRITICAL): Import directly, use dynamic imports for heavy components.
+- **Server-Side Performance** (HIGH): Use `React.cache`, serialize minimal data to client components.
+- **Re-render Optimization** (MEDIUM): Use primitive dependencies in effects, extract expensive work into memoized components.
+
+### @frontend-design
+
+Create distinctive, production-grade frontend interfaces with intentional aesthetics.
+
+- **Core Design Mandate**: Avoid generic "AI UI" patterns. Establish a clear aesthetic point of view.
+- **Typography**: Avoid default system fonts (Inter, Roboto). Use 1 expressive display font and 1 restrained body font.
+- **Color & Theme**: Commit to a dominant color story, avoid evenly balanced palettes.
+- **Spatial Composition & Motion**: Break the grid intentionally, use meaningful whitespace. Keep motion purposeful and sparse.
+- **Implementation**: Real, working, accessible, and semantic HTML/CSS/JS code. No placeholders.
+
+### @tailwind-patterns
+
+Tailwind CSS v4 principles. CSS-first configuration, container queries, modern patterns.
+
+- **Tailwind v4 Architecture**: CSS-first configuration via `@theme` directive, Oxide engine.
+- **Container Queries**: Native support. Use `@container` on parents and `@sm:` etc., on children for component-level responsiveness.
+- **Mobile-First**: Write mobile styles first, add larger screen overrides.
+- **Modern Layouts**: Flexbox for 1D alignments, Grid for 2D. Prefer asymmetric layouts (Bento) over symmetric basic grids.
+- **Color Tokens**: Semantic naming (`--color-primary`) over raw values.
+
+### @senior-fullstack
+
+Comprehensive fullstack development principles.
+
+- **Architecture**: Emphasis on project scaffolding, code quality analysis, and best practices.
+- **Quality**: Measure before optimizing, validate all inputs, use parameterized queries, and document decisions.
+
+### @lint-and-validate
+
+Automatic quality control, linting, and static analysis procedures.
+
+- **MANDATORY**: Run appropriate validation tools (`npm run lint && npm run build && npx tsc --noEmit`) after EVERY code change.
+- Do not finish a task until the code is error-free. Submitting code with audit failures is not allowed.
