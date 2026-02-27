@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import {
   ICreateUser,
   IFindManyForAdminQuery,
+  ISafeUser,
   IUsersRepository,
 } from "./interfaces/user.interface";
 import { PrismaDB } from "../../database/prisma";
@@ -17,8 +18,11 @@ export class UsersRepository implements IUsersRepository {
     return await this.prisma.user.findUnique({ where });
   }
 
-  async create(data: ICreateUser): Promise<User> {
-    return await this.prisma.user.create({ data });
+  async create(data: ICreateUser): Promise<ISafeUser> {
+    return await this.prisma.user.create({
+      data,
+      omit: { passwordHash: true, id: true },
+    });
   }
 
   async findManyforAdmin({

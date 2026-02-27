@@ -1,15 +1,19 @@
 import { z } from "zod";
-import { zodCoerceNumber } from "../../../../shared/validators/comom.validators";
+import { zodPassword } from "../../../../shared/validators/comom.validators";
 import { zodSafeString } from "../../../../shared/validators/string.validator";
+import { zodSafeEmail } from "../../../../shared/validators/email.validator";
 
-export const findManyForAdminQueryDto = z.object({
-  page: zodCoerceNumber.int().optional(),
-  limit: zodCoerceNumber.int().optional(),
-  search: zodSafeString.optional(),
-  order: z.enum(["asc", "desc"]).default("desc"),
+export const adminCreateUserDto = z.object({
+  email: zodSafeEmail,
+  name: zodSafeString
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(100, "Nome deve ter no máximo 100 caracteres"),
+  password: zodPassword("Senha"),
+  confirmPassword: zodPassword("Confirmar senha"),
+  role: z.enum(["USER", "ADMIN"]),
 });
 
-export type FindManyForAdminQueryDto = z.infer<typeof findManyForAdminQueryDto>;
+export type AdminCreateUserDto = z.infer<typeof adminCreateUserDto>;
 
 export const userResponse = z.object({
   id: z.string(),

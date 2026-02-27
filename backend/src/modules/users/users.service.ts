@@ -1,11 +1,14 @@
 import { inject, injectable } from "tsyringe";
 import {
+  ICreateUser,
+  ICreateUserInput,
   IFindManyForAdminQuery,
   IUsersRepository,
 } from "./interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
 import { NotFoundError } from "../../shared/errors/not-found-error";
-
+import { ConflictError } from "../../shared/errors/conflict.error";
+import bcrypt from "bcrypt";
 @injectable()
 export class UsersService {
   constructor(
@@ -22,7 +25,23 @@ export class UsersService {
     return userWithoutPassword;
   }
 
-  findManyforAdmin(query: IFindManyForAdminQuery) {
-    return this.usersRepository.findManyforAdmin(query);
+  async findManyforAdmin(query: IFindManyForAdminQuery) {
+    return await this.usersRepository.findManyforAdmin(query);
+  }
+
+  async createuserForAdmin(data: ICreateUserInput) {
+    const emailExist = await this.usersRepository.findByKey(
+      "email",
+      data.email,
+    );
+    if (emailExist) throw new ConflictError("Email já cadastrado");
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    const newUser: ICreateUser = {
+      email: data.email,
+      name: data.name,
+      passwordHash,
+      role: data.role,
+    };
+    return await this.usersRepository.create(newUser);
   }
 }

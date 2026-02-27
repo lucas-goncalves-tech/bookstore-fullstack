@@ -45,9 +45,7 @@ export class AuthService {
 
     const result = await this.usersRepository.create(newUser);
 
-    //eslint-disable-next-line
-    const { id, passwordHash, ...safe } = result;
-    return safe;
+    return result;
   }
 
   async login(

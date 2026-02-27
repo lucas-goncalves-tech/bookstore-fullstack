@@ -50,7 +50,8 @@ describe("AuthIntegration", () => {
         name: "\u200B\u200B\u200B",
         email: "not-valid-com",
         password: "1234567",
-        confirmPassword: "123456789",
+        confirmPassword: "12345",
+        role: "ADMIN",
       });
 
       const errors = registerBody.errors.map((e: object) => Object.keys(e)[0]);
@@ -61,6 +62,7 @@ describe("AuthIntegration", () => {
       expect(errors).toContain("email");
       expect(errors).toContain("password");
       expect(errors).toContain("confirmPassword");
+      expect(errors).toContain("");
     });
   });
 

@@ -1,9 +1,12 @@
 import { User } from "@prisma/client";
 
-export type ICreateUser = Pick<User, "email" | "name" | "passwordHash">;
+export type ICreateUser = Pick<User, "email" | "name" | "passwordHash"> & {
+  role?: User["role"];
+};
 export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
   password: string;
   confirmPassword: string;
+  role?: User["role"];
 };
 
 export type ISafeUser = Omit<User, "passwordHash" | "id">;
@@ -15,7 +18,7 @@ export interface IFindManyForAdminQuery {
 }
 
 export abstract class IUsersRepository {
-  abstract create(data: ICreateUser): Promise<User>;
+  abstract create(data: ICreateUser): Promise<ISafeUser>;
   abstract findByKey(key: "id" | "email", value: string): Promise<User | null>;
   abstract findManyforAdmin(query: IFindManyForAdminQuery): Promise<{
     data: Omit<User, "passwordHash">[];
