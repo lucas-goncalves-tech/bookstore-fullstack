@@ -10,11 +10,9 @@ export default defineConfig({
       reporter: ["text", "json", "json-summary"],
       reportOnFailure: true,
     },
-    globalSetup: ["./src/tests/global-setup.js"],
     setupFiles: ["./src/tests/setup.ts"],
     env: {
       NODE_ENV: "test",
     },
-    maxWorkers: 1,
   },
 });

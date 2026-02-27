@@ -6,10 +6,12 @@ import { PrismaDB } from "../database/prisma";
 import { env } from "../core/config/env";
 import { PrismaClient } from "@prisma/client";
 
+const workerId = process.env.VITEST_POOL_ID || "1";
+const dbUrl = `${env.DATABASE_TEST_URL}?schema=${workerId}`;
 export const prisma_test = new PrismaClient({
   datasources: {
     db: {
-      url: env.DATABASE_TEST_URL,
+      url: dbUrl,
     },
   },
 });
