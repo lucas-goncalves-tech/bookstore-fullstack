@@ -3,7 +3,7 @@ import { zodPassword } from "../../../../shared/validators/comom.validators";
 import { zodSafeString } from "../../../../shared/validators/string.validator";
 import { zodSafeEmail } from "../../../../shared/validators/email.validator";
 
-export const adminCreateUserDto = z.object({
+const adminUserBaseDto = z.object({
   email: zodSafeEmail,
   name: zodSafeString
     .min(3, "Nome deve ter pelo menos 3 caracteres")
@@ -13,7 +13,31 @@ export const adminCreateUserDto = z.object({
   role: z.enum(["USER", "ADMIN"]),
 });
 
+export const adminCreateUserDto = adminUserBaseDto.refine(
+  (data) => data.password === data.confirmPassword,
+  {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  }
+);
+
+export const adminUpdateUserDto = adminUserBaseDto.partial().refine(
+  (data) => {
+    if (data.password === undefined && data.confirmPassword === undefined) {
+      return true;
+    }
+    return data.password === data.confirmPassword;
+  },
+  {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  }
+);
+
 export type AdminCreateUserDto = z.infer<typeof adminCreateUserDto>;
+export type AdminUpdateUserDto = z.infer<typeof adminUpdateUserDto>;
+
+
 
 export const userResponse = z.object({
   id: z.string(),

@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import { loginWithUser } from "../../../../tests/helpers/auth.helper";
 import { createUser } from "../../../../tests/factories/user.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
-import { AdminCreateUserDto } from "../dtos/admin-users.dto";
+import {
+  AdminCreateUserDto,
+  AdminUpdateUserDto,
+} from "../dtos/admin-users.dto";
 import { prisma_test } from "../../../../tests/setup";
 
 describe("Admin User Integration tests", () => {
@@ -81,7 +84,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        }),
+        })
       );
     });
 
@@ -108,7 +111,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        }),
+        })
       );
     });
 
@@ -276,6 +279,129 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.post(BASE_URL).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`PUT ${BASE_URL}/:id`, async () => {
+    it("should update a user", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const email = "newEmail@example.com";
+      const name = "John Doe 55";
+      const password = "passwordvalid";
+      const validBody: AdminUpdateUserDto = {
+        email,
+        name,
+        password,
+        confirmPassword: password,
+        role: "USER",
+      };
+
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${user.id}`)
+        .send(validBody)
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        email,
+        name,
+        role: "USER",
+        banReason: null,
+        bannedAt: null,
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        email,
+        name,
+        role: "USER",
+        banReason: null,
+        bannedAt: null,
+      });
+    });
+
+    it("should update a user to ADMIN role", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const email = "newEmail@example.com";
+      const name = "John Doe 55";
+      const password = "passwordvalid";
+      const role = "ADMIN";
+      const validBody: AdminUpdateUserDto = {
+        email,
+        name,
+        password,
+        confirmPassword: password,
+        role,
+      };
+
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${user.id}`)
+        .send(validBody)
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        email,
+        name,
+        role,
+        banReason: null,
+        bannedAt: null,
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        email,
+        name,
+        role,
+        banReason: null,
+        bannedAt: null,
+      });
+    });
+
+    it("should return 400 when body is invalid", async () => {
+      const UUID = crypto.randomUUID()
+      const { reqAgent } = await loginWithUser("admin");
+      const invalidBody = {
+        email: "invalidEmail",
+        name: "in",
+        password: "invalid",
+        confirmPassword: "invalid",
+        role: "invalid",
+      };
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${UUID}`)
+        .send(invalidBody)
+        .expect(400); 
+      const errors = body.errors?.map((e: object) => Object.keys(e)[0]);
+
+      expect(body).toHaveProperty("message");
+      expect(errors).toContain("email");
+      expect(errors).toContain("name");
+      expect(errors).toContain("password");
+      expect(errors).toContain("confirmPassword");
+      expect(errors).toContain("role");
+    });
+
+    it("should return 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent.put(`${BASE_URL}/1`).expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.put(`${BASE_URL}/1`).expect(401);
 
       expect(body).toHaveProperty("message");
     });
