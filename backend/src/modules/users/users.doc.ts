@@ -8,7 +8,7 @@ import {
   findManyOrdersResponse,
   findOrderByIdResponse,
 } from "../orders/dtos/orders.dto";
-import { findManyByUserIdResponse } from "../reviews/dtos/review.dto";
+import { findManyByUserIdResponse } from "../reviews/dtos/reviews.dto";
 
 registry.registerPath({
   method: "get",

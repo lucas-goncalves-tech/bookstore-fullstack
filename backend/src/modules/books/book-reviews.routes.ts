@@ -6,7 +6,7 @@ import { BookReviewsController } from "./book-reviews.controller";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { bookParamsDto } from "./dtos/book-params";
-import { createReviewDto } from "../reviews/dtos/review.dto";
+import { createReviewDto } from "../reviews/dtos/reviews.dto";
 import { bookReviewsQueryDto } from "./dtos/book-query.dto";
 
 @injectable()

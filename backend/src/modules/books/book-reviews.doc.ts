@@ -7,7 +7,7 @@ import { registry } from "../../docs/openapi.registry";
 import {
   createReviewDto,
   createReviewResponseSchema,
-} from "../reviews/dtos/review.dto";
+} from "../reviews/dtos/reviews.dto";
 
 registry.registerPath({
   method: "get",

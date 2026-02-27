@@ -11,7 +11,7 @@ import {
   updateBookDto,
   updateBookResponse,
   findManyBooksReponse,
-} from "../../books/dtos/book.dto";
+} from "../../books/dtos/books.dto";
 
 registry.registerPath({
   method: "get",

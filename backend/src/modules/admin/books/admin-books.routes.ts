@@ -7,7 +7,7 @@ import { Router } from "express";
 import { container, injectable } from "tsyringe";
 import { BookController } from "../../books/books.controller";
 import { validateMiddleware } from "../../../shared/middlewares/validate.middleware";
-import { createBookDto, updateBookDto } from "../../books/dtos/book.dto";
+import { createBookDto, updateBookDto } from "../../books/dtos/books.dto";
 import { bookParamsDto } from "../../books/dtos/book-params";
 import { uploadMiddleware } from "../../../shared/middlewares/upload.middleware";
 import { fileTypeMiddleware } from "../../../shared/middlewares/file-type.middleware";

@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { ReviewService } from "./review.service";
+import { ReviewService } from "./reviews.service";
 import { Request, Response } from "express";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 

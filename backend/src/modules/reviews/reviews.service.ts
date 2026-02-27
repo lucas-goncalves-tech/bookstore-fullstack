@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { ReviewRepository } from "./review.repository";
+import { ReviewRepository } from "./reviews.repository";
 import {
   ICreateReviewInput,
   IQueryReviewInput,
-} from "./interface/review.interface";
+} from "./interface/reviews.interface";
 import { NotFoundError } from "../../shared/errors/not-found-error";
 import { BookRepository } from "../books/books.repository";
 

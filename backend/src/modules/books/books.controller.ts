@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { BookService } from "./books.service";
 import { Request, Response } from "express";
 import { BookQueryDTO } from "./dtos/book-query.dto";
-import { CreateBookDto, UpdateBookDto } from "./dtos/book.dto";
+import { CreateBookDto, UpdateBookDto } from "./dtos/books.dto";
 import { BookParamsDto } from "./dtos/book-params";
 import { BadRequestError } from "../../shared/errors/bad-request.error";
 

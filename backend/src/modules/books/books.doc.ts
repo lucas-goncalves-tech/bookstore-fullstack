@@ -1,7 +1,7 @@
 import { badRequestResponse, notFoundResponse } from "../../docs/errors/errors";
 import { registry } from "../../docs/openapi.registry";
 
-import { findManyBooksReponse, findBookByIdResponse } from "./dtos/book.dto";
+import { findManyBooksReponse, findBookByIdResponse } from "./dtos/books.dto";
 
 registry.registerPath({
   method: "get",

@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
 import { BookParamsDto } from "./dtos/book-params";
-import { ReviewService } from "../reviews/review.service";
-import { CreateReviewDto } from "../reviews/dtos/review.dto";
+import { ReviewService } from "../reviews/reviews.service";
+import { CreateReviewDto } from "../reviews/dtos/reviews.dto";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 import { BookReviewsQueryDTO } from "./dtos/book-query.dto";
 

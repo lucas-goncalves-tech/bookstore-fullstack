@@ -4,10 +4,10 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import { UsersController } from "./users.controller";
 import { OrderController } from "../orders/orders.controller";
-import { ReviewController } from "../reviews/review.controller";
+import { ReviewController } from "../reviews/reviews.controller";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
-import { orderParamsDto } from "../orders/dtos/order-params.dto";
+import { orderParamsDto } from "../orders/dtos/orders-params.dto";
 
 export class UsersRoutes {
   private readonly router = Router();

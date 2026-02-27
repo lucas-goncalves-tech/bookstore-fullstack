@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { PrismaDB } from "../../database/prisma";
-import { ICreateReviewInput } from "./interface/review.interface";
+import { ICreateReviewInput } from "./interface/reviews.interface";
 
 @injectable()
 export class ReviewRepository {

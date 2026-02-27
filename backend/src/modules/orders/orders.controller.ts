@@ -3,7 +3,7 @@ import { OrderService } from "./orders.service";
 import { Request, Response } from "express";
 import { UnauthorizedError } from "../../shared/errors/unauthorized.error";
 import { CreateOrderDto } from "./dtos/orders.dto";
-import { OrderParamsDto } from "./dtos/order-params.dto";
+import { OrderParamsDto } from "./dtos/orders-params.dto";
 
 @injectable()
 export class OrderController {
