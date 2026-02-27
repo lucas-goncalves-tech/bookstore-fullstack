@@ -4,7 +4,7 @@ import { loginWithUser } from "../../../tests/helpers/auth.helper";
 describe("Users Integration Tests", () => {
   const BASE_URL = "/api/v1/users";
   describe(`GET ${BASE_URL}`, () => {
-    it("should return user data", async () => {
+    it("should return users data", async () => {
       const { reqAgent } = await loginWithUser();
 
       const { body } = await reqAgent.get(BASE_URL + "/me").expect(200);
@@ -15,7 +15,7 @@ describe("Users Integration Tests", () => {
       });
       expect(body).not.toHaveProperty("id");
       expect(body).not.toHaveProperty("password");
-      expect(body).not.toHaveProperty("password_hash");
+      expect(body).not.toHaveProperty("passwordHash");
     });
   });
 });

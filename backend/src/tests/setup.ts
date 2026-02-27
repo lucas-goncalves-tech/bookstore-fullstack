@@ -6,8 +6,7 @@ import { PrismaDB } from "../database/prisma";
 import { env } from "../core/config/env";
 import { PrismaClient } from "@prisma/client";
 
-const workerId = process.env.VITEST_POOL_ID || "1";
-const dbUrl = `${env.DATABASE_TEST_URL}?schema=${workerId}`;
+const dbUrl = `${env.DATABASE_TEST_URL}?schema=test_${process.env.VITEST_POOL_ID}`;
 export const prisma_test = new PrismaClient({
   datasources: {
     db: {
@@ -18,7 +17,6 @@ export const prisma_test = new PrismaClient({
 
 container.registerInstance(PrismaDB, prisma_test);
 
-// Mock do StorageProvider para testes (evita chamadas reais ao Cloudinary)
 container.register("StorageProvider", {
   useValue: {
     uploadCover: async () => ({

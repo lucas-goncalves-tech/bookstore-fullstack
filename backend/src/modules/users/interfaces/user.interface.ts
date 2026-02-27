@@ -7,8 +7,23 @@ export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
 };
 
 export type ISafeUser = Omit<User, "passwordHash" | "id">;
+export interface IFindManyForAdminQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  order: "asc" | "desc";
+}
 
 export abstract class IUsersRepository {
   abstract create(data: ICreateUser): Promise<User>;
   abstract findByKey(key: "id" | "email", value: string): Promise<User | null>;
+  abstract findManyforAdmin(query: IFindManyForAdminQuery): Promise<{
+    data: Omit<User, "passwordHash">[];
+    metadata: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
+  }>;
 }

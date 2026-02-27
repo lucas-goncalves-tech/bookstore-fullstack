@@ -1,5 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { ICreateUser, IUsersRepository } from "./interfaces/user.interface";
+import {
+  ICreateUser,
+  IFindManyForAdminQuery,
+  IUsersRepository,
+} from "./interfaces/user.interface";
 import { PrismaDB } from "../../database/prisma";
 import { Prisma, User } from "@prisma/client";
 
@@ -15,5 +19,49 @@ export class UsersRepository implements IUsersRepository {
 
   async create(data: ICreateUser): Promise<User> {
     return await this.prisma.user.create({ data });
+  }
+
+  async findManyforAdmin({
+    page = 1,
+    limit = 10,
+    search,
+    order = "desc",
+  }: IFindManyForAdminQuery) {
+    const skip = (page - 1) * limit;
+    const take = limit > 100 ? 100 : limit;
+    let where: Prisma.UserWhereInput = {};
+    if (search) {
+      where = {
+        OR: [
+          { email: { contains: search, mode: "insensitive" } },
+          { name: { contains: search, mode: "insensitive" } },
+        ],
+      };
+    }
+
+    const [users, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
+        orderBy: {
+          createdAt: order,
+        },
+        skip,
+        take,
+        omit: {
+          passwordHash: true,
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      data: users,
+      metadata: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }

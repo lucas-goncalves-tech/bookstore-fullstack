@@ -5,6 +5,7 @@ import { adminOnlyMiddleware } from "../../shared/middlewares/admin-only.middlew
 import { DashboardRoutes } from "./dashboard/dashboard.routes";
 import { AdminCategoriesRoutes } from "./categories/admin-categories.routes";
 import { AdminBooksRoutes } from "./books/admin-books.routes";
+import { AdminUsersRoutes } from "./user/admin-users.routes";
 
 @injectable()
 export class AdminRoutes {
@@ -17,6 +18,8 @@ export class AdminRoutes {
     private readonly categoriesRoutes: AdminCategoriesRoutes,
     @inject(AdminBooksRoutes)
     private readonly booksRoutes: AdminBooksRoutes,
+    @inject(AdminUsersRoutes)
+    private readonly usersRoutes: AdminUsersRoutes,
   ) {
     this.setupRoutes();
   }
@@ -26,6 +29,7 @@ export class AdminRoutes {
     this.router.use("/dashboard", this.dashboardRoutes.routes);
     this.router.use("/categories", this.categoriesRoutes.routes);
     this.router.use("/books", this.booksRoutes.routes);
+    this.router.use("/users", this.usersRoutes.routes);
   }
 
   get routes() {

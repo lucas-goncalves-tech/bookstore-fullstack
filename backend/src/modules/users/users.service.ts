@@ -1,5 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IUsersRepository } from "./interfaces/user.interface";
+import {
+  IFindManyForAdminQuery,
+  IUsersRepository,
+} from "./interfaces/user.interface";
 import { UsersRepository } from "./users.repository";
 import { NotFoundError } from "../../shared/errors/not-found-error";
 
@@ -17,5 +20,9 @@ export class UsersService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, id, ...userWithoutPassword } = user;
     return userWithoutPassword;
+  }
+
+  findManyforAdmin(query: IFindManyForAdminQuery) {
+    return this.usersRepository.findManyforAdmin(query);
   }
 }

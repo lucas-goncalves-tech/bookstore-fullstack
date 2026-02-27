@@ -53,7 +53,8 @@ export async function loginWithUser(
 ) {
   const reqAgent = agent(app);
   const role: Role = userType === "admin" ? "ADMIN" : "USER";
-  const email = `test@${userType}.com`;
+  const UUID = crypto.randomUUID();
+  const email = `${UUID}@${userType}.com`;
   const user = await prisma_test.user.create({
     data: {
       email,
