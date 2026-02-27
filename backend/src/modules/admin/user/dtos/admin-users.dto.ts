@@ -35,3 +35,10 @@ export const findManyUserForAdminResponse = z.object({
   data: z.array(userResponse),
   metadata: metadataResponse,
 });
+
+export const createUserforAdminResponse = z.object({
+  message: z.string(),
+  data: userResponse.omit({
+    id: true,
+  }),
+});
