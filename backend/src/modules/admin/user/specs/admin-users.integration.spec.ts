@@ -390,6 +390,23 @@ describe("Admin User Integration tests", () => {
       expect(errors).toContain("role");
     });
 
+    it("should return 404 when user not exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const validBody: AdminUpdateUserDto = {
+        email: "newemail@example.com",
+        name: "John Doe 55",
+        role: "USER",
+      };
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${UUID}`)
+        .send(validBody)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
     it("should return 403 for unauthorized roles", async () => {
       const { reqAgent } = await loginWithUser("user");
 
@@ -400,6 +417,76 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.put(`${BASE_URL}/1`).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`DELETE ${BASE_URL}/:id`, async () => {
+    it("should delete a user", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const banReason = "test ban reason";
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}`)
+        .send({ banReason })
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        banReason: banReason,
+        bannedAt: expect.any(String),
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        banReason: banReason,
+        bannedAt: expect.any(Date),
+      });
+    });
+
+    it("should return 400 when banReason is invalid", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const banReason = "in";
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}`)
+        .send({ banReason })
+        .expect(400);
+      const errors = body.errors?.map((e: object) => Object.keys(e)[0]);
+
+      expect(body).toHaveProperty("message");
+      expect(errors).toContain("banReason");
+    });
+
+    it("should return 404 when user not exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const banReason = "test ban reason";
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${UUID}`)
+        .send({ banReason })
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent.delete(`${BASE_URL}/1`).expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.delete(`${BASE_URL}/1`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

@@ -76,4 +76,15 @@ export class UsersRepository implements IUsersRepository {
       omit: { passwordHash: true, id: true },
     });
   }
+
+  async delete(id: string, banReason: string) {
+    return await this.prisma.user.update({
+      where: { id },
+      data: {
+        bannedAt: new Date(),
+        banReason,
+      },
+      omit: { passwordHash: true, id: true },
+    });
+  }
 }

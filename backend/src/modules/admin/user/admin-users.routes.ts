@@ -5,7 +5,11 @@ import { AdminUsersController } from "./admin-users.controller";
 import { Router } from "express";
 import { validateMiddleware } from "../../../shared/middlewares/validate.middleware";
 import { findManyForAdminQueryDto } from "./dtos/admin-users-query.dto";
-import { adminCreateUserDto, adminUpdateUserDto } from "./dtos/admin-users.dto";
+import {
+  adminCreateUserDto,
+  adminDeleteUserDto,
+  adminUpdateUserDto,
+} from "./dtos/admin-users.dto";
 import { adminUserParamsDto } from "./dtos/admin-users-params.dto";
 
 @injectable()
@@ -33,6 +37,14 @@ export class AdminUsersRoutes {
         body: adminUpdateUserDto,
       }),
       this.controller.update,
+    );
+    this.router.delete(
+      "/:id",
+      validateMiddleware({
+        params: adminUserParamsDto,
+        body: adminDeleteUserDto,
+      }),
+      this.controller.delete,
     );
   }
   get routes() {

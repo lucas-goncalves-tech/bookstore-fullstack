@@ -52,4 +52,10 @@ export class AdminUsersService {
     }
     return await this.usersRepository.update(id, data);
   }
+
+  async delete(id: string, banReason: string) {
+    const user = await this.usersRepository.findByKey("id", id);
+    if (!user) throw new NotFoundError("Usuário não encontrado");
+    return await this.usersRepository.delete(id, banReason);
+  }
 }

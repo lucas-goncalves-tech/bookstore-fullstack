@@ -1,12 +1,16 @@
 import {
+  badRequestResponse,
   forbiddenResponse,
+  notFoundResponse,
   unauthorizedResponse,
 } from "../../../docs/errors/errors";
 import { registry } from "../../../docs/openapi.registry";
 import {
   adminCreateUserDto,
+  adminDeleteUserDto,
   adminUpdateUserDto,
   createUserforAdminResponse,
+  deleteUserforAdminResponse,
   findManyUserForAdminResponse,
   updateUserforAdminResponse,
 } from "./dtos/admin-users.dto";
@@ -63,6 +67,7 @@ registry.registerPath({
       },
     },
     ...unauthorizedResponse,
+    ...badRequestResponse,
     ...forbiddenResponse,
   },
 });
@@ -97,6 +102,42 @@ registry.registerPath({
       },
     },
     ...unauthorizedResponse,
+    ...badRequestResponse,
+    ...notFoundResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "delete",
+  path: "/admin/users/{id}",
+  tags: ["Admin - Users"],
+  summary: "Bane um usuário",
+  description: "Endpoint para banir um usuário",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: adminDeleteUserDto,
+          example: {
+            banReason: "test ban reason",
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Usuário banido",
+      content: {
+        "application/json": {
+          schema: deleteUserforAdminResponse,
+        },
+      },
+    },
+    ...unauthorizedResponse,
+    ...badRequestResponse,
+    ...notFoundResponse,
     ...forbiddenResponse,
   },
 });
