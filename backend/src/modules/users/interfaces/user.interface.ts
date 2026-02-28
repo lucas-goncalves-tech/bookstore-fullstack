@@ -9,6 +9,8 @@ export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
   role?: User["role"];
 };
 
+export type IUpdateUser = Partial<Omit<ICreateUser, "passwordHash">>;
+
 export type ISafeUser = Omit<User, "passwordHash" | "id">;
 export interface IFindManyForAdminQuery {
   page?: number;
@@ -19,6 +21,7 @@ export interface IFindManyForAdminQuery {
 
 export abstract class IUsersRepository {
   abstract create(data: ICreateUser): Promise<ISafeUser>;
+  abstract update(id: string, data: IUpdateUser): Promise<ISafeUser>;
   abstract findByKey(key: "id" | "email", value: string): Promise<User | null>;
   abstract findManyforAdmin(query: IFindManyForAdminQuery): Promise<{
     data: Omit<User, "passwordHash">[];

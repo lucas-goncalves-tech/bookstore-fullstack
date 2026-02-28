@@ -2,27 +2,20 @@ import { inject, injectable } from "tsyringe";
 import {
   ICreateUser,
   IFindManyForAdminQuery,
-  ISafeUser,
+  IUpdateUser,
   IUsersRepository,
 } from "./interfaces/user.interface";
 import { PrismaDB } from "../../database/prisma";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 @injectable()
 export class UsersRepository implements IUsersRepository {
   constructor(@inject(PrismaDB) private readonly prisma: PrismaDB) {}
 
-  async findByKey(key: "id" | "email", value: string): Promise<User | null> {
+  async findByKey(key: "id" | "email", value: string) {
     const where: Prisma.UserWhereUniqueInput =
       key === "id" ? { id: value } : { email: value };
     return await this.prisma.user.findUnique({ where });
-  }
-
-  async create(data: ICreateUser): Promise<ISafeUser> {
-    return await this.prisma.user.create({
-      data,
-      omit: { passwordHash: true, id: true },
-    });
   }
 
   async findManyforAdmin({
@@ -67,5 +60,20 @@ export class UsersRepository implements IUsersRepository {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  async create(data: ICreateUser) {
+    return await this.prisma.user.create({
+      data,
+      omit: { passwordHash: true, id: true },
+    });
+  }
+
+  async update(id: string, data: IUpdateUser) {
+    return await this.prisma.user.update({
+      where: { id },
+      data,
+      omit: { passwordHash: true, id: true },
+    });
   }
 }

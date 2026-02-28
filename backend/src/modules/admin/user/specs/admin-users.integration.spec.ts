@@ -84,7 +84,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        })
+        }),
       );
     });
 
@@ -111,7 +111,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        })
+        }),
       );
     });
 
@@ -192,6 +192,7 @@ describe("Admin User Integration tests", () => {
         banReason: null,
         bannedAt: null,
       });
+      expect(body.data).not.toHaveProperty("passwordHash");
 
       const userFromDb = await prisma_test.user.findUnique({
         where: { email },
@@ -232,6 +233,7 @@ describe("Admin User Integration tests", () => {
         banReason: null,
         bannedAt: null,
       });
+      expect(body.data).not.toHaveProperty("passwordHash");
 
       const userFromDb = await prisma_test.user.findUnique({
         where: { email },
@@ -288,14 +290,11 @@ describe("Admin User Integration tests", () => {
     it("should update a user", async () => {
       const user = await createUser();
       const { reqAgent } = await loginWithUser("admin");
-      const email = "newEmail@example.com";
+      const email = "newemail@example.com";
       const name = "John Doe 55";
-      const password = "passwordvalid";
       const validBody: AdminUpdateUserDto = {
         email,
         name,
-        password,
-        confirmPassword: password,
         role: "USER",
       };
 
@@ -305,39 +304,41 @@ describe("Admin User Integration tests", () => {
         .expect(200);
 
       expect(body).toHaveProperty("message");
-      expect(body.data).toMatchObject({
-        email,
-        name,
-        role: "USER",
-        banReason: null,
-        bannedAt: null,
-      });
+      expect(body.data).toEqual(
+        expect.objectContaining({
+          email,
+          name,
+          role: "USER",
+          banReason: null,
+          bannedAt: null,
+        }),
+      );
+      expect(body.data).not.toHaveProperty("passwordHash");
 
       const userFromDb = await prisma_test.user.findUnique({
         where: { id: user.id },
       });
       expect(userFromDb).toBeDefined();
-      expect(userFromDb).toMatchObject({
-        email,
-        name,
-        role: "USER",
-        banReason: null,
-        bannedAt: null,
-      });
+      expect(userFromDb).toEqual(
+        expect.objectContaining({
+          email,
+          name,
+          role: "USER",
+          banReason: null,
+          bannedAt: null,
+        }),
+      );
     });
 
     it("should update a user to ADMIN role", async () => {
       const user = await createUser();
       const { reqAgent } = await loginWithUser("admin");
-      const email = "newEmail@example.com";
+      const email = "newemail@example.com";
       const name = "John Doe 55";
-      const password = "passwordvalid";
       const role = "ADMIN";
       const validBody: AdminUpdateUserDto = {
         email,
         name,
-        password,
-        confirmPassword: password,
         role,
       };
 
@@ -354,6 +355,7 @@ describe("Admin User Integration tests", () => {
         banReason: null,
         bannedAt: null,
       });
+      expect(body.data).not.toHaveProperty("passwordHash");
 
       const userFromDb = await prisma_test.user.findUnique({
         where: { id: user.id },
@@ -369,26 +371,22 @@ describe("Admin User Integration tests", () => {
     });
 
     it("should return 400 when body is invalid", async () => {
-      const UUID = crypto.randomUUID()
+      const UUID = crypto.randomUUID();
       const { reqAgent } = await loginWithUser("admin");
       const invalidBody = {
         email: "invalidEmail",
         name: "in",
-        password: "invalid",
-        confirmPassword: "invalid",
         role: "invalid",
       };
       const { body } = await reqAgent
         .put(`${BASE_URL}/${UUID}`)
         .send(invalidBody)
-        .expect(400); 
+        .expect(400);
       const errors = body.errors?.map((e: object) => Object.keys(e)[0]);
 
       expect(body).toHaveProperty("message");
       expect(errors).toContain("email");
       expect(errors).toContain("name");
-      expect(errors).toContain("password");
-      expect(errors).toContain("confirmPassword");
       expect(errors).toContain("role");
     });
 

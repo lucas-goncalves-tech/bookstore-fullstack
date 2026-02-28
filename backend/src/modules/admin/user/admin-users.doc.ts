@@ -5,8 +5,10 @@ import {
 import { registry } from "../../../docs/openapi.registry";
 import {
   adminCreateUserDto,
+  adminUpdateUserDto,
   createUserforAdminResponse,
   findManyUserForAdminResponse,
+  updateUserforAdminResponse,
 } from "./dtos/admin-users.dto";
 
 registry.registerPath({
@@ -57,6 +59,40 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: createUserforAdminResponse,
+        },
+      },
+    },
+    ...unauthorizedResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "put",
+  path: "/admin/users/{id}",
+  tags: ["Admin - Users"],
+  summary: "Atualizar usuário",
+  description: "Endpoint para atualizar usuário",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: adminUpdateUserDto,
+          example: {
+            email: "John_DoeNew@email.com",
+            name: "John Doe New",
+            role: "ADMIN",
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Usuário atualizado",
+      content: {
+        "application/json": {
+          schema: updateUserforAdminResponse,
         },
       },
     },

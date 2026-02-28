@@ -18,26 +18,16 @@ export const adminCreateUserDto = adminUserBaseDto.refine(
   {
     message: "As senhas não coincidem",
     path: ["confirmPassword"],
-  }
+  },
 );
 
-export const adminUpdateUserDto = adminUserBaseDto.partial().refine(
-  (data) => {
-    if (data.password === undefined && data.confirmPassword === undefined) {
-      return true;
-    }
-    return data.password === data.confirmPassword;
-  },
-  {
-    message: "As senhas não coincidem",
-    path: ["confirmPassword"],
-  }
-);
+export const adminUpdateUserDto = adminUserBaseDto.partial().omit({
+  password: true,
+  confirmPassword: true,
+});
 
 export type AdminCreateUserDto = z.infer<typeof adminCreateUserDto>;
 export type AdminUpdateUserDto = z.infer<typeof adminUpdateUserDto>;
-
-
 
 export const userResponse = z.object({
   id: z.string(),
@@ -66,3 +56,5 @@ export const createUserforAdminResponse = z.object({
     id: true,
   }),
 });
+
+export const updateUserforAdminResponse = createUserforAdminResponse;
