@@ -104,4 +104,10 @@ export class AdminUsersService {
       });
     });
   }
+
+  async delete(id: string) {
+    const user = await this.usersRepository.findByKey("id", id);
+    if (!user) throw new NotFoundError("Usuário não encontrado");
+    await this.usersRepository.delete(id);
+  }
 }

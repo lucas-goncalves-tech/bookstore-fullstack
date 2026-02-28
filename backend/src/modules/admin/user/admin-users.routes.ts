@@ -53,6 +53,13 @@ export class AdminUsersRoutes {
       }),
       this.controller.ban,
     );
+    this.router.delete(
+      "/:id/permanent",
+      validateMiddleware({
+        params: adminUserParamsDto,
+      }),
+      this.controller.delete,
+    );
   }
   get routes() {
     return this.router;

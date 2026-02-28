@@ -3,6 +3,7 @@ import { loginWithUser } from "../../../../tests/helpers/auth.helper";
 import { createUser } from "../../../../tests/factories/user.factory";
 import { createBook } from "../../../../tests/factories/book.factory";
 import { createReview } from "../../../../tests/factories/review.factory";
+import { createOrderWithItem } from "../../../../tests/factories/order.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
 import {
   AdminCreateUserDto,
@@ -653,6 +654,103 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.delete(`${BASE_URL}/1`).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`DELETE ${BASE_URL}/:id/permanent`, () => {
+    it("should delete user permanent", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}/permanent`)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeNull();
+    });
+
+    it("should delete all reviews when user as been deleted permanently", async () => {
+      const user = await createUser();
+      const book = await createBook();
+      const book2 = await createBook();
+      await createReview({ userId: user.id, bookId: book.id });
+      await createReview({ userId: user.id, bookId: book2.id });
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}/permanent`)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      const reviewFromDb = await prisma_test.review.findMany({
+        where: { userId: user.id },
+      });
+      expect(userFromDb).toBeNull();
+      expect(reviewFromDb).toHaveLength(0);
+    });
+
+    it("should set userId on orders to null when user as been deleted permanently", async () => {
+      const user = await createUser();
+      const book = await createBook();
+      const order = await createOrderWithItem({
+        userId: user.id,
+        bookId: book.id,
+        priceAtTime: book.price,
+        quantity: 4,
+      });
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}/permanent`)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      const orderFromDb = await prisma_test.order.findUnique({
+        where: { id: order.id },
+      });
+      expect(userFromDb).toBeNull();
+      expect(orderFromDb).toBeDefined();
+      expect(orderFromDb?.userId).toBeNull();
+    });
+
+    it("should return 404 when user not exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${UUID}/permanent`)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/1/permanent`)
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.delete(`${BASE_URL}/1/permanent`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

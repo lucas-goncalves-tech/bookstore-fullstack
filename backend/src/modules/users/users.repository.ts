@@ -76,4 +76,8 @@ export class UsersRepository implements IUsersRepository {
       omit: { passwordHash: true, id: true },
     });
   }
+
+  async delete(id: string) {
+    await this.prisma.user.delete({ where: { id } });
+  }
 }

@@ -141,3 +141,19 @@ registry.registerPath({
     ...forbiddenResponse,
   },
 });
+
+registry.registerPath({
+  method: "delete",
+  path: "/admin/users/{id}/permanent",
+  tags: ["Admin - Users"],
+  summary: "Deleta um usuário permanentemente",
+  description: "Endpoint para deletar um usuário permanentemente",
+  responses: {
+    204: {
+      description: "Usuário deletado",
+    },
+    ...unauthorizedResponse,
+    ...notFoundResponse,
+    ...forbiddenResponse,
+  },
+});

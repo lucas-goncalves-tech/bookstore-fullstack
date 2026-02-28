@@ -59,4 +59,10 @@ export class AdminUsersController {
       data: result,
     });
   };
+
+  delete = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as AdminUserParamsDto;
+    await this.adminUsersService.delete(id);
+    res.status(204).end();
+  };
 }
