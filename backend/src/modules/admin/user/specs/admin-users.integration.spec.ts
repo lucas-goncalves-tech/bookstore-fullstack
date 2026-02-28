@@ -11,7 +11,7 @@ import { prisma_test } from "../../../../tests/setup";
 describe("Admin User Integration tests", () => {
   const BASE_URL = "/api/v1/admin/users";
   describe(`GET ${BASE_URL}`, () => {
-    it("returns all users", async () => {
+    it("should return all users", async () => {
       await createUser({
         email: "user1@example.com",
       });
@@ -33,6 +33,42 @@ describe("Admin User Integration tests", () => {
         bannedAt: null,
       });
       expect(body.data[0]).not.toHaveProperty("passwordHash");
+    });
+
+    it("should return all users with orderBy asc", async () => {
+      await createUser({
+        email: "user1@example.com",
+      });
+      await createUser({
+        email: "user2@example.com",
+      });
+      const { reqAgent } = await loginWithUser("admin");
+      const { body } = await reqAgent
+        .get(BASE_URL)
+        .query({ order: "asc" })
+        .expect(200);
+      const first = new Date(body.data[0].createdAt);
+      const second = new Date(body.data[1].createdAt);
+
+      expect(first.getTime()).toBeLessThan(second.getTime());
+    });
+
+    it("should return all users with orderBy desc", async () => {
+      await createUser({
+        email: "user1@example.com",
+      });
+      await createUser({
+        email: "user2@example.com",
+      });
+      const { reqAgent } = await loginWithUser("admin");
+      const { body } = await reqAgent
+        .get(BASE_URL)
+        .query({ order: "desc" })
+        .expect(200);
+      const first = new Date(body.data[0].createdAt);
+      const second = new Date(body.data[1].createdAt);
+
+      expect(first.getTime()).toBeGreaterThan(second.getTime());
     });
 
     it("should return all users with pagination", async () => {
@@ -84,7 +120,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        }),
+        })
       );
     });
 
@@ -111,7 +147,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        }),
+        })
       );
     });
 
@@ -311,7 +347,7 @@ describe("Admin User Integration tests", () => {
           role: "USER",
           banReason: null,
           bannedAt: null,
-        }),
+        })
       );
       expect(body.data).not.toHaveProperty("passwordHash");
 
@@ -326,7 +362,7 @@ describe("Admin User Integration tests", () => {
           role: "USER",
           banReason: null,
           bannedAt: null,
-        }),
+        })
       );
     });
 
@@ -417,6 +453,59 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.put(`${BASE_URL}/1`).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`PATCH ${BASE_URL}`, () => {
+    it("should unBan user ", async () => {
+      const user = await createUser({ bannedAt: new Date() });
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${user.id}/restore`)
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        banReason: null,
+        bannedAt: null,
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        banReason: null,
+        bannedAt: null,
+      });
+    });
+
+    it("should return 404 when user not exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${UUID}/restore`)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/1/restore`)
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.patch(`${BASE_URL}/1/restore`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

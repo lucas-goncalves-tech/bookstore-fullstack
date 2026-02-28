@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { FindManyForAdminQueryDto } from "./dtos/admin-users-query.dto";
 import {
   AdminCreateUserDto,
-  AdminDeleteUserDto,
+  AdminBanUserDto,
   AdminUpdateUserDto,
 } from "./dtos/admin-users.dto";
 import { AdminUserParamsDto } from "./dtos/admin-users-params.dto";
@@ -41,10 +41,19 @@ export class AdminUsersController {
     });
   };
 
-  delete = async (req: Request, res: Response) => {
+  restore = async (req: Request, res: Response) => {
     const { id } = req.safeParams as AdminUserParamsDto;
-    const { banReason } = req.safeBody as AdminDeleteUserDto;
-    const result = await this.adminUsersService.delete(id, banReason);
+    const result = await this.adminUsersService.restore(id);
+    res.json({
+      message: `Usuário ${result.name} desbanido com sucesso`,
+      data: result,
+    });
+  };
+
+  ban = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as AdminUserParamsDto;
+    const { banReason } = req.safeBody as AdminBanUserDto;
+    const result = await this.adminUsersService.ban(id, banReason);
     res.json({
       message: `Usuário ${result.name} banido com sucesso`,
       data: result,

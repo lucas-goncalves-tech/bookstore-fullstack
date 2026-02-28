@@ -26,7 +26,7 @@ export const adminUpdateUserDto = adminUserBaseDto.partial().omit({
   confirmPassword: true,
 });
 
-export const adminDeleteUserDto = z.object({
+export const adminBanUserDto = z.object({
   banReason: zodSafeString
     .min(10, "O motivo do banimento deve ter pelo menos 10 caracteres")
     .max(255, "O motivo do banimento deve ter no máximo 255 caracteres"),
@@ -34,7 +34,7 @@ export const adminDeleteUserDto = z.object({
 
 export type AdminCreateUserDto = z.infer<typeof adminCreateUserDto>;
 export type AdminUpdateUserDto = z.infer<typeof adminUpdateUserDto>;
-export type AdminDeleteUserDto = z.infer<typeof adminDeleteUserDto>;
+export type AdminBanUserDto = z.infer<typeof adminBanUserDto>;
 
 export const userResponse = z.object({
   id: z.string(),

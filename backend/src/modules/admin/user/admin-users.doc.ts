@@ -7,7 +7,7 @@ import {
 import { registry } from "../../../docs/openapi.registry";
 import {
   adminCreateUserDto,
-  adminDeleteUserDto,
+  adminBanUserDto,
   adminUpdateUserDto,
   createUserforAdminResponse,
   deleteUserforAdminResponse,
@@ -118,7 +118,7 @@ registry.registerPath({
     body: {
       content: {
         "application/json": {
-          schema: adminDeleteUserDto,
+          schema: adminBanUserDto,
           example: {
             banReason: "test ban reason",
           },

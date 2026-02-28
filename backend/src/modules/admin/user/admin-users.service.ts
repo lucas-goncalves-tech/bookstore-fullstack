@@ -53,9 +53,15 @@ export class AdminUsersService {
     return await this.usersRepository.update(id, data);
   }
 
-  async delete(id: string, banReason: string) {
+  async restore(id: string) {
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
-    return await this.usersRepository.delete(id, banReason);
+    return await this.usersRepository.update(id, {bannedAt: null, banReason: null});
+  }
+
+  async ban(id: string, banReason: string) {
+    const user = await this.usersRepository.findByKey("id", id);
+    if (!user) throw new NotFoundError("Usuário não encontrado");
+    return await this.usersRepository.update(id, {banReason, bannedAt: new Date()});
   }
 }

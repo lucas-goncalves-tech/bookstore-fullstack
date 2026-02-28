@@ -7,7 +7,7 @@ import { validateMiddleware } from "../../../shared/middlewares/validate.middlew
 import { findManyForAdminQueryDto } from "./dtos/admin-users-query.dto";
 import {
   adminCreateUserDto,
-  adminDeleteUserDto,
+  adminBanUserDto,
   adminUpdateUserDto,
 } from "./dtos/admin-users.dto";
 import { adminUserParamsDto } from "./dtos/admin-users-params.dto";
@@ -38,13 +38,20 @@ export class AdminUsersRoutes {
       }),
       this.controller.update,
     );
+    this.router.patch(
+      "/:id/restore",
+      validateMiddleware({
+        params: adminUserParamsDto,
+      }),
+      this.controller.restore,
+    );
     this.router.delete(
       "/:id",
       validateMiddleware({
         params: adminUserParamsDto,
-        body: adminDeleteUserDto,
+        body: adminBanUserDto,
       }),
-      this.controller.delete,
+      this.controller.ban,
     );
   }
   get routes() {
