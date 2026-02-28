@@ -24,6 +24,7 @@ export class ReviewRepository {
       this.prisma.review.findMany({
         where: {
           bookId,
+          deletedAt: null,
         },
         omit: {
           userId: true,
@@ -44,11 +45,13 @@ export class ReviewRepository {
       this.prisma.review.count({
         where: {
           bookId,
+          deletedAt: null,
         },
       }),
       this.prisma.review.aggregate({
         where: {
           bookId,
+          deletedAt: null,
         },
         _avg: {
           rating: true,

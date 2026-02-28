@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { loginWithUser } from "../../../tests/helpers/auth.helper";
 import { createBook } from "../../../tests/factories/book.factory";
 import { createReview } from "../../../tests/factories/review.factory";
-import { UserReviewSchema } from "../dtos/review.dto";
 import { req } from "../../../tests/helpers/commom.helper";
+import { UserReviewSchema } from "../dtos/reviews.dto";
 
 describe("Review Integration Tests", () => {
   const BASE_URL = "/api/v1/users/me/reviews";
@@ -15,6 +15,7 @@ describe("Review Integration Tests", () => {
     comment: expect.any(String),
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
+    deletedAt: null,
     book: {
       title: expect.any(String),
       author: expect.any(String),

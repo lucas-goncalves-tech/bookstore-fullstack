@@ -18,6 +18,7 @@ describe("BookReviewsIntegration", () => {
       bookId: expect.any(String),
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
+      deletedAt: null,
       user: {
         name: expect.any(String),
       },

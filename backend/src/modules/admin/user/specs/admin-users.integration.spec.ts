@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { loginWithUser } from "../../../../tests/helpers/auth.helper";
 import { createUser } from "../../../../tests/factories/user.factory";
+import { createBook } from "../../../../tests/factories/book.factory";
+import { createReview } from "../../../../tests/factories/review.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
 import {
   AdminCreateUserDto,
@@ -120,7 +122,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        })
+        }),
       );
     });
 
@@ -147,7 +149,7 @@ describe("Admin User Integration tests", () => {
         expect.objectContaining({
           email: email1,
           name: name1,
-        })
+        }),
       );
     });
 
@@ -347,7 +349,7 @@ describe("Admin User Integration tests", () => {
           role: "USER",
           banReason: null,
           bannedAt: null,
-        })
+        }),
       );
       expect(body.data).not.toHaveProperty("passwordHash");
 
@@ -362,7 +364,7 @@ describe("Admin User Integration tests", () => {
           role: "USER",
           banReason: null,
           bannedAt: null,
-        })
+        }),
       );
     });
 
@@ -483,6 +485,41 @@ describe("Admin User Integration tests", () => {
       });
     });
 
+    it("should restore reviews soft deleted when unban user", async () => {
+      const user = await createUser({ bannedAt: new Date() });
+      const { reqAgent } = await loginWithUser("admin");
+      const review = await createReview({
+        userId: user.id,
+        deletedAt: new Date(),
+      });
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${user.id}/restore`)
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        banReason: null,
+        bannedAt: null,
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      const reviewFromDb = await prisma_test.review.findUnique({
+        where: { id: review.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        banReason: null,
+        bannedAt: null,
+      });
+      expect(reviewFromDb).toBeDefined();
+      expect(reviewFromDb).toMatchObject({
+        deletedAt: null,
+      });
+    });
+
     it("should return 404 when user not exists", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const UUID = crypto.randomUUID();
@@ -512,7 +549,7 @@ describe("Admin User Integration tests", () => {
   });
 
   describe(`DELETE ${BASE_URL}/:id`, async () => {
-    it("should delete a user", async () => {
+    it("should ban a user", async () => {
       const user = await createUser();
       const { reqAgent } = await loginWithUser("admin");
       const banReason = "test ban reason";
@@ -535,6 +572,46 @@ describe("Admin User Integration tests", () => {
       expect(userFromDb).toMatchObject({
         banReason: banReason,
         bannedAt: expect.any(Date),
+      });
+    });
+
+    it("should soft delete all user reviews", async () => {
+      const user = await createUser();
+      const book = await createBook();
+      const book2 = await createBook();
+      await createReview({ userId: user.id, bookId: book.id });
+      await createReview({ userId: user.id, bookId: book2.id });
+      const { reqAgent } = await loginWithUser("admin");
+      const banReason = "test ban reason";
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}`)
+        .send({ banReason })
+        .expect(200);
+
+      expect(body).toHaveProperty("message");
+      expect(body.data).toMatchObject({
+        banReason: banReason,
+        bannedAt: expect.any(String),
+      });
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      const reviewFromDb = await prisma_test.review.findMany({
+        where: { userId: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb).toMatchObject({
+        banReason: banReason,
+        bannedAt: expect.any(Date),
+      });
+      expect(reviewFromDb).toHaveLength(2);
+      expect(reviewFromDb[0]).toMatchObject({
+        deletedAt: expect.any(Date),
+      });
+      expect(reviewFromDb[1]).toMatchObject({
+        deletedAt: expect.any(Date),
       });
     });
 

@@ -10,12 +10,15 @@ import { UsersRepository } from "../../users/users.repository";
 import { NotFoundError } from "../../../shared/errors/not-found-error";
 import { ConflictError } from "../../../shared/errors/conflict.error";
 import bcrypt from "bcrypt";
+import { PrismaDB } from "../../../database/prisma";
 
 @injectable()
 export class AdminUsersService {
   constructor(
     @inject(UsersRepository)
     private readonly usersRepository: IUsersRepository,
+    @inject(PrismaDB)
+    private readonly prisma: PrismaDB,
   ) {}
 
   async findMany(query: IFindManyForAdminQuery) {
@@ -56,12 +59,49 @@ export class AdminUsersService {
   async restore(id: string) {
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
-    return await this.usersRepository.update(id, {bannedAt: null, banReason: null});
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.review.updateMany({
+        where: {
+          userId: id,
+        },
+        data: {
+          deletedAt: null,
+        },
+      });
+      return await tx.user.update({
+        where: {
+          id,
+        },
+        data: {
+          bannedAt: null,
+          banReason: null,
+        },
+      });
+    });
   }
 
   async ban(id: string, banReason: string) {
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
-    return await this.usersRepository.update(id, {banReason, bannedAt: new Date()});
+
+    return await this.prisma.$transaction(async (tx) => {
+      await tx.review.updateMany({
+        where: {
+          userId: id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+      return await tx.user.update({
+        where: {
+          id,
+        },
+        data: {
+          banReason,
+          bannedAt: new Date(),
+        },
+      });
+    });
   }
 }

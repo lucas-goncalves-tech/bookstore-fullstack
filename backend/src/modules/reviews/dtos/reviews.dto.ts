@@ -43,6 +43,7 @@ export const userReviewSchema = z.object({
   comment: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  deletedAt: z.coerce.date().nullable(),
   book: z.object({
     title: z.string(),
     category: z
