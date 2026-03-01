@@ -58,37 +58,47 @@ describe("BooksIntegration", () => {
     });
 
     it("returns remaining items when requesting page 2", async () => {
-      const { body } = await req.get(BASE_URL + "?limit=5&page=2").expect(200);
+      const page = 2;
+      const limit = 5;
+
+      const { body } = await req
+        .get(BASE_URL)
+        .query({ page, limit })
+        .expect(200);
 
       expect(body.data).toHaveLength(1);
       expect(body.data[0]).toMatchObject(expectecBookShape());
       expect(body.metadata).toMatchObject({
-        page: 2,
-        limit: 5,
+        page,
+        limit,
         total: 6,
         totalPages: 2,
       });
     });
 
     it("returns paginated books when custom limit is provided", async () => {
-      const { body } = await req.get(BASE_URL + "?limit=4").expect(200);
+      const limit = 4;
+
+      const { body } = await req.get(BASE_URL).query({ limit }).expect(200);
 
       expect(body.data).toHaveLength(4);
       expect(body.data[0]).toMatchObject(expectecBookShape());
       expect(body.metadata).toMatchObject({
         page: 1,
-        limit: 4,
+        limit,
         total: 6,
         totalPages: 2,
       });
     });
 
     it("returns empty array when page exceeds total pages", async () => {
-      const { body } = await req.get(BASE_URL + "?page=5").expect(200);
+      const page = 5;
+
+      const { body } = await req.get(BASE_URL).query({ page }).expect(200);
 
       expect(body.data).toHaveLength(0);
       expect(body.metadata).toMatchObject({
-        page: 5,
+        page,
         limit: 10,
         total: 6,
         totalPages: 1,
@@ -118,8 +128,11 @@ describe("BooksIntegration", () => {
         });
       }
 
+      const categorySlug = adventure.slug;
+
       const { body } = await req
-        .get(BASE_URL + "?categorySlug=" + adventure.slug)
+        .get(BASE_URL)
+        .query({ categorySlug })
         .expect(200);
 
       expect(body.data).toHaveLength(5);
@@ -142,7 +155,9 @@ describe("BooksIntegration", () => {
         title,
       });
 
-      const { body } = await req.get(BASE_URL + "?search=" + title).expect(200);
+      const search = title;
+
+      const { body } = await req.get(BASE_URL).query({ search }).expect(200);
 
       expect(body.data).toHaveLength(1);
       expect(body.data[0].title).toBe(title);
@@ -169,14 +184,19 @@ describe("BooksIntegration", () => {
         });
       }
 
+      const search = title;
+      const page = 2;
+      const limit = 5;
+
       const { body } = await req
-        .get(BASE_URL + "?search=" + title + "&page=2&limit=5")
+        .get(BASE_URL)
+        .query({ search, page, limit })
         .expect(200);
 
       expect(body.data).toHaveLength(1);
       expect(body.metadata).toMatchObject({
-        page: 2,
-        limit: 5,
+        page,
+        limit,
         total: 6,
         totalPages: 2,
       });
@@ -199,7 +219,8 @@ describe("BooksIntegration", () => {
         });
       }
 
-      const { body } = await req.get(BASE_URL + "?minPrice=20").expect(200);
+      const minPrice = 20;
+      const { body } = await req.get(BASE_URL).query({ minPrice }).expect(200);
 
       expect(body.data).toHaveLength(10);
       expect(body.metadata).toMatchObject({
@@ -227,7 +248,8 @@ describe("BooksIntegration", () => {
         });
       }
 
-      const { body } = await req.get(BASE_URL + "?maxPrice=10").expect(200);
+      const maxPrice = 10;
+      const { body } = await req.get(BASE_URL).query({ maxPrice }).expect(200);
 
       expect(body.data).toHaveLength(5);
       expect(body.metadata).toMatchObject({

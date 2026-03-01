@@ -113,14 +113,17 @@ describe("DashboardIntegration", () => {
         priceAtTime: book.price,
       });
 
+      const page = 2;
+
       const { body } = await reqAgent
-        .get(BASE_URL + "/sales?page=2")
+        .get(BASE_URL + "/sales")
+        .query({ page })
         .expect(200);
 
       const expected: DashboardSalesResponse = {
         sales: [],
         metadata: {
-          page: 2,
+          page,
           total: 1,
           totalPage: 1,
         },

@@ -62,8 +62,12 @@ describe("BookReviewsIntegration", () => {
         await createReview({ userId: user.id, bookId: book.id, rating });
       }
 
+      const page = 1;
+      const limit = 5;
+
       const { body } = await req
-        .get(`${BASE_URL}/${book.id}/reviews?page=1&limit=5`)
+        .get(`${BASE_URL}/${book.id}/reviews`)
+        .query({ page, limit })
         .expect(200);
 
       expect(body.reviews).toHaveLength(5);
@@ -73,8 +77,8 @@ describe("BookReviewsIntegration", () => {
       expect(body.averageRating).toBe(rating);
       expect(body.totalReviews).toBe(15);
       expect(body.metadata).toEqual({
-        page: 1,
-        limit: 5,
+        page,
+        limit,
         total: 15,
         totalPages: 3,
       });
@@ -87,14 +91,18 @@ describe("BookReviewsIntegration", () => {
         await createReview({ userId: user.id, bookId: book.id });
       }
 
+      const page = 3;
+      const limit = 3;
+
       const { body } = await req
-        .get(`${BASE_URL}/${book.id}/reviews?page=3&limit=3`)
+        .get(`${BASE_URL}/${book.id}/reviews`)
+        .query({ page, limit })
         .expect(200);
 
       expect(body.reviews).toEqual([]);
       expect(body.metadata).toEqual({
-        page: 3,
-        limit: 3,
+        page,
+        limit,
         total: 5,
         totalPages: 2,
       });
