@@ -5,6 +5,7 @@ import cors from "cors";
 import { inject, singleton } from "tsyringe";
 import { Routes } from "./core/routes";
 import { errorHandler } from "./shared/middlewares/error-handler.middleware";
+import { loggerMiddleware } from "./shared/middlewares/logger.middleware";
 import { env } from "./core/config/env";
 import cookieParser from "cookie-parser";
 import { globalRateLimit } from "./shared/middlewares/rate-limit.middleware";
@@ -43,6 +44,7 @@ export class App {
 
   private middlewares() {
     this.app.set("trust proxy", 1);
+    this.app.use(loggerMiddleware);
     this.app.use(
       cors({
         origin:
