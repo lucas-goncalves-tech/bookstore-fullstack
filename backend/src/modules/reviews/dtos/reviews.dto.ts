@@ -20,6 +20,7 @@ const review = z.object({
   comment: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  deletedAt: z.coerce.date().nullable(),
   user: z.object({
     name: z.string(),
   }),
@@ -63,3 +64,15 @@ export const findManyByUserIdResponse = z.object({
 });
 
 export type UserReviewSchema = z.infer<typeof userReviewSchema>;
+
+export const findMyReviewResponse = z
+  .object({
+    id: z.uuid(),
+    bookId: z.uuid(),
+    rating: z.number().min(1).max(5),
+    comment: z.string(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    deletedAt: z.coerce.date().nullable(),
+  })
+  .nullable();
