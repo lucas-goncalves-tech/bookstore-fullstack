@@ -10,19 +10,24 @@ import cookieParser from "cookie-parser";
 import { globalRateLimit } from "./shared/middlewares/rate-limit.middleware";
 import { apiReference } from "@scalar/express-api-reference";
 import { generateOpenAPISpec } from "./docs/openapi.generator";
+import { CleanupExpiredSessionsJob } from "./shared/jobs/cleanup-expired-sessions.job";
 
 @singleton()
 export class App {
   private readonly app: Express;
+
   constructor(
     @inject(Routes)
     private readonly routes: Routes,
+    @inject(CleanupExpiredSessionsJob)
+    private readonly cleanupExpiredSessionsJob: CleanupExpiredSessionsJob,
   ) {
     this.app = express();
     this.docs();
     this.middlewares();
     this.setupRoutes();
     this.errorHandling();
+    this.jobs();
   }
 
   private docs() {
@@ -60,6 +65,10 @@ export class App {
 
   private errorHandling() {
     this.app.use(errorHandler);
+  }
+
+  private jobs() {
+    this.cleanupExpiredSessionsJob.start();
   }
 
   public getServer(): Express {
