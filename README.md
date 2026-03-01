@@ -2,8 +2,7 @@
 
 > Projeto de uma livraria online para estudo de desenvolvimento Backend (Express) e Frontend (Next.js) com foco em TDD, Clean Architecture e DevOps (Docker).
 
-![CI](https://github.com/lucas-goncalves-tech/bookstore-fullstack/actions/workflows/main.yml/badge.svg)
-[![codecov](https://codecov.io/github/lucas-goncalves-tech/bookstore-fullstack/graph/badge.svg?token=N6SFV9UZC7)](https://codecov.io/github/lucas-goncalves-tech/bookstore-fullstack)
+<a href="https://github.com/lucas-goncalves-tech/bookstore-fullstack/actions/workflows/main.yml"><img src="https://github.com/lucas-goncalves-tech/bookstore-fullstack/actions/workflows/main.yml/badge.svg" alt="CI" height="28"></a> <a href="https://codecov.io/github/lucas-goncalves-tech/bookstore-fullstack"><img src="https://codecov.io/github/lucas-goncalves-tech/bookstore-fullstack/graph/badge.svg?token=N6SFV9UZC7" alt="codecov" height="28"></a>
 
 ## FrontEnd:
 
