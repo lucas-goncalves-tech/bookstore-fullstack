@@ -288,6 +288,29 @@ describe("Admin User Integration tests", () => {
       });
     });
 
+    it("should return 409 when email is already registered", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const existingUser = await createUser({
+        email: "alreadyexists@example.com",
+      });
+
+      const validBody: AdminCreateUserDto = {
+        email: existingUser.email,
+        name: "Clone User",
+        password: "passwordvalid",
+        confirmPassword: "passwordvalid",
+        role: "USER",
+      };
+
+      const { body } = await reqAgent
+        .post(BASE_URL)
+        .send(validBody)
+        .expect(409);
+
+      expect(body).toHaveProperty("message");
+      expect(body.message).toContain("Email já cadastrado");
+    });
+
     it("should return 400 when body is invalid", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const invalidBody = {
