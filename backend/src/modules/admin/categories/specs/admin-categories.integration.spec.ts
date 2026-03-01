@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { req } from "../../../../tests/helpers/commom.helper";
 import { createCategory } from "../../../../tests/factories/categorie.factory";
+import { createBook } from "../../../../tests/factories/book.factory";
 import { loginWithUser } from "../../../../tests/helpers/auth.helper";
 import { ICreateCategoryInput } from "../../../categories/interface/categories.interface";
 import { prisma_test } from "../../../../tests/setup";
@@ -50,6 +51,21 @@ describe("AdminCategoriesIntegration", () => {
       expect(categoryFromDb?.name).toEqual(newCategory.name);
       expect(categoryFromDb?.slug).toEqual(newCategory.slug);
       expect(categoryFromDb?.description).toEqual(newCategory.description);
+    });
+
+    it("returns 409 when category slug already exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      await createCategory({ slug: "acao" });
+      const duplicateCategory = generateCategory({
+        slug: "acao",
+      });
+
+      const { body } = await reqAgent
+        .post(BASE_URL)
+        .send(duplicateCategory)
+        .expect(409);
+
+      expect(body).toHaveProperty("message");
     });
 
     it("returns 400 for invalid fields", async () => {
@@ -117,6 +133,21 @@ describe("AdminCategoriesIntegration", () => {
       expect(categoryFromDb?.description).toEqual(newCategory.description);
     });
 
+    it("returns 409 when updating to an existing category slug", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      await createCategory({ slug: "terror" });
+      const categoryToUpdate = await createCategory({ slug: "romance" });
+
+      const updatePayload = generateCategory({ slug: "terror" });
+
+      const { body } = await reqAgent
+        .put(BASE_URL + "/" + categoryToUpdate.id)
+        .send(updatePayload)
+        .expect(409);
+
+      expect(body).toHaveProperty("message");
+    });
+
     it("returns 400 for invalid fields", async () => {
       const { reqAgent } = await loginWithUser("admin");
       const category = await createCategory();
@@ -177,6 +208,25 @@ describe("AdminCategoriesIntegration", () => {
         },
       });
       expect(categoryFromDb).toBeFalsy();
+    });
+
+    it("should delete category and set categoryId to null on associated books", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const category = await createCategory();
+      const book = await createBook({ categoryId: category.id });
+
+      const { body } = await reqAgent
+        .delete(BASE_URL + "/" + category.id)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const bookFromDb = await prisma_test.book.findUnique({
+        where: { id: book.id },
+      });
+
+      expect(bookFromDb).toBeDefined();
+      expect(bookFromDb?.categoryId).toBeNull();
     });
 
     it("returns 404 when category does not exist", async () => {

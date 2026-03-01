@@ -175,7 +175,7 @@ describe("AuthIntegration", () => {
       await req
         .post(BASE_URL + "/login")
         .send({ email: user.email, password: "12345678" })
-        .expect(204); // GERA SEGUNDA SESSÃO!
+        .expect(204);
       await req
         .post(BASE_URL + "/login")
         .send({ email: user.email, password: "12345678" })
@@ -206,11 +206,11 @@ describe("AuthIntegration", () => {
       await req
         .post(BASE_URL + "/login")
         .send({ email: user.email, password: "12345678" })
-        .expect(204); // GERA SEGUNDA SESSÃO!
+        .expect(204);
       await req
         .post(BASE_URL + "/login")
         .send({ email: user.email, password: "12345678" })
-        .expect(204); // GERA TERCEIRA SESSÃO!
+        .expect(204);
 
       await prisma_test.user.update({
         where: { id: user.id },

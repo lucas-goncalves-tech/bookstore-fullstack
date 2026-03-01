@@ -575,7 +575,7 @@ describe("Admin User Integration tests", () => {
     });
   });
 
-  describe(`PATCH ${BASE_URL}`, () => {
+  describe(`PATCH ${BASE_URL}/:id/restore`, () => {
     it("should unBan user ", async () => {
       const user = await createUser({ bannedAt: new Date() });
       const { reqAgent } = await loginWithUser("admin");
@@ -633,6 +633,16 @@ describe("Admin User Integration tests", () => {
       expect(reviewFromDb).toMatchObject({
         deletedAt: null,
       });
+    });
+
+    it("should return 400 when id is not a valid UUID", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/invalid-uuid/restore`)
+        .expect(400);
+
+      expect(body).toHaveProperty("message");
     });
 
     it("should return 404 when user not exists", async () => {
