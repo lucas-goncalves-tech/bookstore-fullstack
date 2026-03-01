@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, LayoutDashboard, Tags } from "lucide-react";
+import { Book, LayoutDashboard, Tags, Users } from "lucide-react";
 
 import {
   Sidebar,
@@ -31,6 +31,11 @@ const items = [
     title: "Categorias",
     url: "/admin/categories",
     icon: Tags,
+  },
+  {
+    title: "Usuários",
+    url: "/admin/users",
+    icon: Users,
   },
 ];
 
