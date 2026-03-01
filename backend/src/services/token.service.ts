@@ -13,6 +13,7 @@ const accessPayloadSchema = z.object({
 const refreshPayloadSchema = z.object({
   sub: z.uuid(),
   type: z.literal("refresh"),
+  jti: z.uuid().optional(),
 });
 
 export type AccessPayload = z.infer<typeof accessPayloadSchema>;
@@ -45,7 +46,7 @@ export function generateRefreshToken(userId: string) {
   );
 
   const refreshToken = jwt.sign(
-    { sub: userId, type: "refresh" },
+    { sub: userId, type: "refresh", jti: crypto.randomUUID() },
     env.JWT_REFRESH_SECRET,
     {
       expiresIn: env.JWT_REFRESH_EXPIRES as jwt.SignOptions["expiresIn"],
