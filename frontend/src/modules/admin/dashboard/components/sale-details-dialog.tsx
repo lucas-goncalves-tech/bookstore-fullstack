@@ -49,7 +49,7 @@ export function SaleDetailsDialog({
               Cliente
             </span>
             <span className="text-card-foreground font-medium">
-              {sale.user.name}
+              {sale.user?.name || "Deletado"}
             </span>
           </div>
           <div className="flex flex-col gap-1">

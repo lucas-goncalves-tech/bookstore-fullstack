@@ -5,9 +5,11 @@ export const dashboardSaleItemSchema = z.object({
   status: z.enum(["CONFIRMED", "PENDING"]),
   total: z.string().transform((val) => Number(val)),
   createdAt: z.string(),
-  user: z.object({
-    name: z.string(),
-  }),
+  user: z
+    .object({
+      name: z.string(),
+    })
+    .nullable(),
   orderItem: z.array(
     z.object({
       quantity: z.number(),

@@ -149,12 +149,12 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Avatar className="size-6 border border-border">
-                            <AvatarFallback className="text-[10px]text-muted-foreground">
-                              {sale.user.name.charAt(0)}
+                            <AvatarFallback className="text-[10px] text-muted-foreground">
+                              {sale.user?.name ? sale.user.name.charAt(0) : "D"}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-sm text-card-foreground font-medium">
-                            {sale.user.name}
+                            {sale.user?.name || "Deletado"}
                           </span>
                         </div>
                       </TableCell>
