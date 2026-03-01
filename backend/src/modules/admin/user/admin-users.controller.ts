@@ -9,6 +9,7 @@ import {
   AdminUpdateUserPasswordDto,
 } from "./dtos/admin-users.dto";
 import { AdminUserParamsDto } from "./dtos/admin-users-params.dto";
+import { UnauthorizedError } from "../../../shared/errors/unauthorized.error";
 
 @injectable()
 export class AdminUsersController {
@@ -33,9 +34,11 @@ export class AdminUsersController {
   };
 
   update = async (req: Request, res: Response) => {
+    const adminId = req.user?.sub;
+    if (!adminId) throw new UnauthorizedError("Usuário não autenticado");
     const { id } = req.safeParams as AdminUserParamsDto;
     const body = req.safeBody as AdminUpdateUserDto;
-    const result = await this.adminUsersService.update(id, body);
+    const result = await this.adminUsersService.update(adminId, id, body);
     res.json({
       message: `Usuário ${result.name} atualizado com sucesso`,
       data: result,
@@ -59,9 +62,11 @@ export class AdminUsersController {
   };
 
   ban = async (req: Request, res: Response) => {
+    const adminId = req.user?.sub;
+    if (!adminId) throw new UnauthorizedError("Usuário não autenticado");
     const { id } = req.safeParams as AdminUserParamsDto;
     const { banReason } = req.safeBody as AdminBanUserDto;
-    const result = await this.adminUsersService.ban(id, banReason);
+    const result = await this.adminUsersService.ban(adminId, id, banReason);
     res.json({
       message: `Usuário ${result.name} banido com sucesso`,
       data: result,
@@ -69,8 +74,10 @@ export class AdminUsersController {
   };
 
   delete = async (req: Request, res: Response) => {
+    const adminId = req.user?.sub;
+    if (!adminId) throw new UnauthorizedError("Usuário não autenticado");
     const { id } = req.safeParams as AdminUserParamsDto;
-    await this.adminUsersService.delete(id);
+    await this.adminUsersService.delete(adminId, id);
     res.status(204).end();
   };
 }

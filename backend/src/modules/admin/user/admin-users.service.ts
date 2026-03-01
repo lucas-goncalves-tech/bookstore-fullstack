@@ -10,6 +10,7 @@ import {
 import { UsersRepository } from "../../users/users.repository";
 import { NotFoundError } from "../../../shared/errors/not-found-error";
 import { ConflictError } from "../../../shared/errors/conflict.error";
+import { ForbiddenError } from "../../../shared/errors/forbidden.error";
 import bcrypt from "bcrypt";
 import { PrismaDB } from "../../../database/prisma";
 
@@ -43,7 +44,11 @@ export class AdminUsersService {
     return await this.usersRepository.create(newUser);
   }
 
-  async update(id: string, data: IUpdateUser) {
+  async update(adminId: string, id: string, data: IUpdateUser) {
+    if (adminId === id && data.role) {
+      throw new ForbiddenError("Não é permitido alterar sua própria role");
+    }
+
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
 
@@ -105,7 +110,11 @@ export class AdminUsersService {
     });
   }
 
-  async ban(id: string, banReason: string) {
+  async ban(adminId: string, id: string, banReason: string) {
+    if (adminId === id) {
+      throw new ForbiddenError("Não é permitido banir a si mesmo");
+    }
+
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
 
@@ -130,7 +139,11 @@ export class AdminUsersService {
     });
   }
 
-  async delete(id: string) {
+  async delete(adminId: string, id: string) {
+    if (adminId === id) {
+      throw new ForbiddenError("Não é permitido excluir a si mesmo");
+    }
+
     const user = await this.usersRepository.findByKey("id", id);
     if (!user) throw new NotFoundError("Usuário não encontrado");
     await this.usersRepository.delete(id);

@@ -460,6 +460,21 @@ describe("Admin User Integration tests", () => {
 
       expect(body).toHaveProperty("message");
     });
+
+    it("should return 403 when admin tries to change own role", async () => {
+      const { reqAgent, user } = await loginWithUser("admin");
+      const validBody: AdminUpdateUserDto = {
+        name: "Updated Name",
+        role: "USER",
+      };
+
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${user.id}`)
+        .send(validBody)
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
   });
 
   describe(`PATCH ${BASE_URL}/:id/password`, () => {
@@ -733,6 +748,18 @@ describe("Admin User Integration tests", () => {
 
       expect(body).toHaveProperty("message");
     });
+
+    it("should return 403 when admin tries to ban themselves", async () => {
+      const { reqAgent, user } = await loginWithUser("admin");
+      const banReason = "test ban reason";
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}`)
+        .send({ banReason })
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
   });
 
   describe(`DELETE ${BASE_URL}/:id/permanent`, () => {
@@ -827,6 +854,16 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.delete(`${BASE_URL}/1/permanent`).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 403 when admin tries to delete themselves permanently", async () => {
+      const { reqAgent, user } = await loginWithUser("admin");
+
+      const { body } = await reqAgent
+        .delete(`${BASE_URL}/${user.id}/permanent`)
+        .expect(403);
 
       expect(body).toHaveProperty("message");
     });
