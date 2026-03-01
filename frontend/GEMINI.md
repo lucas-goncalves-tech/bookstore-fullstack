@@ -134,3 +134,12 @@ Automatic quality control, linting, and static analysis procedures.
 
 - **MANDATORY**: Run appropriate validation tools (`npm run lint && npm run build && npx tsc --noEmit`) after EVERY code change.
 - Do not finish a task until the code is error-free. Submitting code with audit failures is not allowed.
+
+### @ui-ux-pro-max
+
+UI/UX design intelligence. Comprehensive design guide containing styles, typography, UX rules, and palettes.
+
+- **Design System First**: Always generate a design system based on requirements before styling.
+- **Critical UX**: Ensure accessibility (color contrast 4.5:1, focus states, alt text) and touch-friendly targets.
+- **Consistent Icons & Cursors**: Use SVGs (Lucide), stable hover states, and pointers for interactive elements.
+- **Validation Checklists**: Pre-delivery visualization, interaction, light/dark mode parity, and layout responsibilities must be met.

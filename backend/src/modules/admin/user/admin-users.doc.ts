@@ -22,6 +22,32 @@ registry.registerPath({
   tags: ["Admin - Users"],
   summary: "Listar usuários",
   description: "Endpoint para listar usuários",
+  parameters: [
+    {
+      name: "page",
+      in: "query",
+      required: false,
+      description: "Número da página",
+    },
+    {
+      name: "limit",
+      in: "query",
+      required: false,
+      description: "Limite de usuários por página",
+    },
+    {
+      name: "order",
+      in: "query",
+      required: false,
+      description: "Ordem de ordenação",
+    },
+    {
+      name: "search",
+      in: "query",
+      required: false,
+      description: "Busca por nome ou email",
+    },
+  ],
   responses: {
     200: {
       description: "Lista de usuários",
