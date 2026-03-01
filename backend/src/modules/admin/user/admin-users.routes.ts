@@ -9,6 +9,7 @@ import {
   adminCreateUserDto,
   adminBanUserDto,
   adminUpdateUserDto,
+  adminUpdateUserPasswordDto,
 } from "./dtos/admin-users.dto";
 import { adminUserParamsDto } from "./dtos/admin-users-params.dto";
 
@@ -37,6 +38,14 @@ export class AdminUsersRoutes {
         body: adminUpdateUserDto,
       }),
       this.controller.update,
+    );
+    this.router.patch(
+      "/:id/password",
+      validateMiddleware({
+        params: adminUserParamsDto,
+        body: adminUpdateUserPasswordDto,
+      }),
+      this.controller.updatePassword,
     );
     this.router.patch(
       "/:id/restore",

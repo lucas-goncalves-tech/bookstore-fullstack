@@ -9,9 +9,12 @@ export type ICreateUserInput = Omit<ICreateUser, "passwordHash"> & {
   role?: User["role"];
 };
 
-export type IUpdateUser = Partial<
-  Omit<User, "passwordHash" | "createdAt" | "id">
->;
+export type IUpdateUser = Partial<Exclude<User, "createdAt" | "id">>;
+
+export interface IUpdateUserPasswordInput {
+  password: string;
+  confirmPassword: string;
+}
 
 export type ISafeUser = Omit<User, "passwordHash" | "id">;
 export interface IFindManyForAdminQuery {

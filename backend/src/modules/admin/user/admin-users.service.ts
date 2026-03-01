@@ -4,6 +4,7 @@ import {
   ICreateUserInput,
   IFindManyForAdminQuery,
   IUpdateUser,
+  IUpdateUserPasswordInput,
   IUsersRepository,
 } from "../../users/interfaces/user.interface";
 import { UsersRepository } from "../../users/users.repository";
@@ -54,6 +55,30 @@ export class AdminUsersService {
       if (emailExist) throw new ConflictError("Email já cadastrado");
     }
     return await this.usersRepository.update(id, data);
+  }
+
+  async updatePassword(id: string, data: IUpdateUserPasswordInput) {
+    const user = await this.usersRepository.findByKey("id", id);
+    if (!user) throw new NotFoundError("Usuário não encontrado");
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    await this.prisma.$transaction(async (tx) => {
+      await tx.session.updateMany({
+        where: {
+          userId: id,
+        },
+        data: {
+          revokedAt: new Date(),
+        },
+      });
+      await tx.user.update({
+        where: {
+          id,
+        },
+        data: {
+          passwordHash,
+        },
+      });
+    });
   }
 
   async restore(id: string) {

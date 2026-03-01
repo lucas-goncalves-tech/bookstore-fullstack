@@ -8,6 +8,7 @@ import { req } from "../../../../tests/helpers/commom.helper";
 import {
   AdminCreateUserDto,
   AdminUpdateUserDto,
+  AdminUpdateUserPasswordDto,
 } from "../dtos/admin-users.dto";
 import { prisma_test } from "../../../../tests/setup";
 
@@ -456,6 +457,81 @@ describe("Admin User Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.put(`${BASE_URL}/1`).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`PATCH ${BASE_URL}/:id/password`, () => {
+    it("should update user password", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const validBody: AdminUpdateUserPasswordDto = {
+        password: "newpassword",
+        confirmPassword: "newpassword",
+      };
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${user.id}/password`)
+        .send(validBody)
+        .expect(204);
+
+      expect(body).toEqual({});
+
+      const userFromDb = await prisma_test.user.findUnique({
+        where: { id: user.id },
+      });
+      expect(userFromDb).toBeDefined();
+      expect(userFromDb?.passwordHash).not.toEqual(user.passwordHash);
+    });
+
+    it("should return 400 when body is invalid", async () => {
+      const user = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const invalidBody = {
+        password: "invalid",
+        confirmPassword: "invalid",
+      };
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${user.id}/password`)
+        .send(invalidBody)
+        .expect(400);
+      const errors = body.errors?.map((e: object) => Object.keys(e)[0]);
+
+      expect(body).toHaveProperty("message");
+      expect(errors).toContain("password");
+      expect(errors).toContain("confirmPassword");
+    });
+
+    it("should return 404 when user not exists", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const validBody: AdminUpdateUserPasswordDto = {
+        password: "newpassword",
+        confirmPassword: "newpassword",
+      };
+      const UUID = crypto.randomUUID();
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/${UUID}/password`)
+        .send(validBody)
+        .expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+
+      const { body } = await reqAgent
+        .patch(`${BASE_URL}/1/password`)
+        .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.patch(`${BASE_URL}/1/password`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

@@ -26,6 +26,16 @@ export const adminUpdateUserDto = adminUserBaseDto.partial().omit({
   confirmPassword: true,
 });
 
+export const adminUpdateUserPasswordDto = adminUserBaseDto
+  .pick({
+    password: true,
+    confirmPassword: true,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+
 export const adminBanUserDto = z.object({
   banReason: zodSafeString
     .min(10, "O motivo do banimento deve ter pelo menos 10 caracteres")
@@ -34,6 +44,9 @@ export const adminBanUserDto = z.object({
 
 export type AdminCreateUserDto = z.infer<typeof adminCreateUserDto>;
 export type AdminUpdateUserDto = z.infer<typeof adminUpdateUserDto>;
+export type AdminUpdateUserPasswordDto = z.infer<
+  typeof adminUpdateUserPasswordDto
+>;
 export type AdminBanUserDto = z.infer<typeof adminBanUserDto>;
 
 export const userResponse = z.object({

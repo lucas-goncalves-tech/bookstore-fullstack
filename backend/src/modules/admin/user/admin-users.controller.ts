@@ -6,6 +6,7 @@ import {
   AdminCreateUserDto,
   AdminBanUserDto,
   AdminUpdateUserDto,
+  AdminUpdateUserPasswordDto,
 } from "./dtos/admin-users.dto";
 import { AdminUserParamsDto } from "./dtos/admin-users-params.dto";
 
@@ -39,6 +40,13 @@ export class AdminUsersController {
       message: `Usuário ${result.name} atualizado com sucesso`,
       data: result,
     });
+  };
+
+  updatePassword = async (req: Request, res: Response) => {
+    const { id } = req.safeParams as AdminUserParamsDto;
+    const body = req.safeBody as AdminUpdateUserPasswordDto;
+    await this.adminUsersService.updatePassword(id, body);
+    res.status(204).end();
   };
 
   restore = async (req: Request, res: Response) => {

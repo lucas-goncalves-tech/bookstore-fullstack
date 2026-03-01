@@ -13,6 +13,7 @@ import {
   deleteUserforAdminResponse,
   findManyUserForAdminResponse,
   updateUserforAdminResponse,
+  adminUpdateUserPasswordDto,
 } from "./dtos/admin-users.dto";
 
 registry.registerPath({
@@ -103,6 +104,65 @@ registry.registerPath({
     },
     ...unauthorizedResponse,
     ...badRequestResponse,
+    ...notFoundResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "patch",
+  path: "/admin/users/{id}/password",
+  tags: ["Admin - Users"],
+  summary: "Atualizar senha do usuário",
+  description: "Endpoint para atualizar senha do usuário",
+  parameters: [
+    {
+      name: "id",
+      in: "path",
+      required: true,
+      description: "ID do usuário",
+    },
+  ],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: adminUpdateUserPasswordDto,
+          example: {
+            password: "newPassword",
+            confirmPassword: "newPassword",
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    204: {
+      description: "Senha do usuário atualizada",
+    },
+    ...unauthorizedResponse,
+    ...badRequestResponse,
+    ...notFoundResponse,
+    ...forbiddenResponse,
+  },
+});
+
+registry.registerPath({
+  method: "patch",
+  path: "/admin/users/{id}/restore",
+  tags: ["Admin - Users"],
+  summary: "Desbane um usuário",
+  description: "Endpoint para desbanir usuário",
+  responses: {
+    200: {
+      description: "Usuário desbanido",
+      content: {
+        "application/json": {
+          schema: updateUserforAdminResponse,
+        },
+      },
+    },
+    ...unauthorizedResponse,
     ...notFoundResponse,
     ...forbiddenResponse,
   },
