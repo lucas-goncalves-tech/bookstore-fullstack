@@ -8,6 +8,7 @@ import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { bookParamsDto } from "./dtos/book-params";
 import { createReviewDto } from "../reviews/dtos/reviews.dto";
 import { bookReviewsQueryDto } from "./dtos/book-query.dto";
+import { nocacheMiddleware } from "../../shared/middlewares/nocache.middleware";
 
 @injectable()
 export class BookReviewsRoutes {
@@ -27,6 +28,7 @@ export class BookReviewsRoutes {
 
     this.router.get(
       "/:id/reviews/me",
+      nocacheMiddleware,
       authMiddleware,
       validateMiddleware({ params: bookParamsDto }),
       this.controller.findMyReview,

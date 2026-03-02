@@ -10,6 +10,7 @@ import {
   registerRateLimit,
 } from "../../shared/middlewares/rate-limit.middleware";
 import { createUserDto, loginDto } from "./dto/auth.dto";
+import { nocacheMiddleware } from "../../shared/middlewares/nocache.middleware";
 
 @injectable()
 export class AuthRoutes {
@@ -35,9 +36,14 @@ export class AuthRoutes {
       this.controller.login,
     );
 
-    this.router.get("/refresh", this.controller.refresh);
+    this.router.get("/refresh", nocacheMiddleware, this.controller.refresh);
 
-    this.router.get("/logout", authMiddleware, this.controller.logout);
+    this.router.get(
+      "/logout",
+      nocacheMiddleware,
+      authMiddleware,
+      this.controller.logout,
+    );
   }
 
   get routes() {

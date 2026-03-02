@@ -8,6 +8,7 @@ import { ReviewController } from "../reviews/reviews.controller";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { validateMiddleware } from "../../shared/middlewares/validate.middleware";
 import { orderParamsDto } from "../orders/dtos/orders-params.dto";
+import { nocacheMiddleware } from "../../shared/middlewares/nocache.middleware";
 
 export class UsersRoutes {
   private readonly router = Router();
@@ -20,6 +21,7 @@ export class UsersRoutes {
   }
 
   private setupRoutes() {
+    this.router.use(nocacheMiddleware);
     this.router.get("/me", authMiddleware, this.controller.me);
     this.router.get(
       "/me/orders",

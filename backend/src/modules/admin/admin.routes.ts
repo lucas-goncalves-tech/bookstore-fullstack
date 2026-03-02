@@ -6,6 +6,7 @@ import { DashboardRoutes } from "./dashboard/dashboard.routes";
 import { AdminCategoriesRoutes } from "./categories/admin-categories.routes";
 import { AdminBooksRoutes } from "./books/admin-books.routes";
 import { AdminUsersRoutes } from "./user/admin-users.routes";
+import { nocacheMiddleware } from "../../shared/middlewares/nocache.middleware";
 
 @injectable()
 export class AdminRoutes {
@@ -25,7 +26,7 @@ export class AdminRoutes {
   }
 
   private setupRoutes() {
-    this.router.use(authMiddleware, adminOnlyMiddleware);
+    this.router.use(authMiddleware, adminOnlyMiddleware, nocacheMiddleware);
     this.router.use("/dashboard", this.dashboardRoutes.routes);
     this.router.use("/categories", this.categoriesRoutes.routes);
     this.router.use("/books", this.booksRoutes.routes);
