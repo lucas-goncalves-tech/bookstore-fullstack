@@ -26,9 +26,6 @@ const createBook = async (data: BookFormValues) => {
     const { data: bookWithCover } = await api.post<Book>(
       `/admin/books/${createdBook.data.id}/cover`,
       formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      },
     );
     return bookWithCover;
   }

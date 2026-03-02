@@ -14,11 +14,13 @@ export const dashboardSaleItemSchema = z.object({
     z.object({
       quantity: z.number(),
       priceAtTime: z.string().transform((val) => Number(val)),
-      book: z.object({
-        title: z.string(),
-        author: z.string(),
-        coverThumbUrl: z.string().nullable(),
-      }),
+      book: z
+        .object({
+          title: z.string(),
+          author: z.string(),
+          coverThumbUrl: z.string().nullable(),
+        })
+        .nullable(),
     }),
   ),
 });

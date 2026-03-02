@@ -81,7 +81,7 @@ export function SaleDetailsDialog({
                 <div
                   className="relative size-16 rounded bg-muted shrink-0 border border-border overflow-hidden"
                 >
-                  {item.book.coverThumbUrl ? (
+                  {item.book?.coverThumbUrl ? (
                     <Image
                       src={item.book.coverThumbUrl}
                       alt={item.book.title}
@@ -93,10 +93,10 @@ export function SaleDetailsDialog({
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-bold text-card-foreground line-clamp-1">
-                    {item.book.title}
+                    {item.book?.title || "Livro deletado"}
                   </h4>
                   <p className="text-xs text-muted-foreground">
-                    {item.book.author}
+                    {item.book?.author || "N/A"}
                   </p>
                 </div>
                 <div className="text-right shrink-0">

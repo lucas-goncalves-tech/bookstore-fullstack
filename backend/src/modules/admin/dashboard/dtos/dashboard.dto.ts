@@ -13,18 +13,22 @@ export const dashboardSalesResponse = z.object({
       total: z.any(),
       status: z.any(),
       createdAt: z.date(),
-      user: z.object({
-        name: z.string(),
-      }),
+      user: z
+        .object({
+          name: z.string(),
+        })
+        .nullable(),
       orderItem: z.array(
         z.object({
           quantity: z.number(),
           priceAtTime: z.any(),
-          book: z.object({
-            title: z.string(),
-            author: z.string(),
-            coverThumbUrl: z.string().nullable(),
-          }),
+          book: z
+            .object({
+              title: z.string(),
+              author: z.string(),
+              coverThumbUrl: z.string().nullable(),
+            })
+            .nullable(),
         }),
       ),
     }),

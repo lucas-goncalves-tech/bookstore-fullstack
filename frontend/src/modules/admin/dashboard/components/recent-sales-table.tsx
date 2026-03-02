@@ -121,7 +121,7 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                           <div
                             className="relative h-12 w-9 rounded bg-muted overflow-hidden shadow-sm shrink-0"
                           >
-                            {firstItem?.book.coverThumbUrl ? (
+                            {firstItem?.book?.coverThumbUrl ? (
                               <Image 
                                 src={firstItem.book.coverThumbUrl}
                                 alt={firstItem.book.title}
@@ -133,7 +133,7 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                           </div>
                           <div className="flex flex-col">
                             <span className="text-sm font-bold text-card-foreground line-clamp-1">
-                              {firstItem?.book.title || "N/A"}
+                              {firstItem?.book?.title || "Livro deletado"}
                               {sale.orderItem.length > 1 && (
                                 <span className="text-primary ml-1">
                                   +{sale.orderItem.length - 1}
@@ -141,7 +141,7 @@ export function RecentSalesTable({ initialData }: RecentSalesTableProps) {
                               )}
                             </span>
                             <span className="text-xs text-muted-foreground">
-                              {firstItem?.book.author || "N/A"}
+                              {firstItem?.book?.author || "N/A"}
                             </span>
                           </div>
                         </div>
