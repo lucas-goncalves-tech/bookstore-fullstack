@@ -478,12 +478,6 @@ describe("Admin User Integration tests", () => {
       expect(body).toHaveProperty("message");
     });
 
-    it("should return 401 for unauthenticated requests", async () => {
-      const { body } = await req.put(`${BASE_URL}/1`).expect(401);
-
-      expect(body).toHaveProperty("message");
-    });
-
     it("should return 403 when admin tries to change own role", async () => {
       const { reqAgent, user } = await loginWithUser("admin");
       const validBody: AdminUpdateUserDto = {
@@ -495,6 +489,31 @@ describe("Admin User Integration tests", () => {
         .put(`${BASE_URL}/${user.id}`)
         .send(validBody)
         .expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 409 when email already exist", async () => {
+      const email = "test@email.com";
+      await createUser({ email });
+      const user2 = await createUser();
+      const { reqAgent } = await loginWithUser("admin");
+      const validBody: AdminUpdateUserDto = {
+        email,
+        name: "Updated Name",
+        role: "USER",
+      };
+
+      const { body } = await reqAgent
+        .put(`${BASE_URL}/${user2.id}`)
+        .send(validBody)
+        .expect(409);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const { body } = await req.put(`${BASE_URL}/1`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

@@ -59,6 +59,7 @@ export class AdminUsersService {
       );
       if (emailExist) throw new ConflictError("Email já cadastrado");
     }
+
     return await this.usersRepository.update(id, data);
   }
 
