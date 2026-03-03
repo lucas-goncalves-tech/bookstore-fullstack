@@ -3,30 +3,33 @@ import { api } from "@/lib/axios";
 import { adminUserKeys } from "./query-keys";
 import { AdminUsersResponse } from "../schemas/admin-user.schema";
 
+export type AdminUserQueryParams = {
+  page?: number;
+  limit?: number;
+  order?: string;
+  search?: string;
+};
+
 const fetchUsers = async (
-  page = 1,
-  limit = 10,
-  order?: string,
-  search?: string,
+  params: AdminUserQueryParams = { page: 1, limit: 10 },
 ): Promise<AdminUsersResponse> => {
   const { data } = await api.get<AdminUsersResponse>("/admin/users", {
-    params: { page, limit, order, search },
+    params,
   });
   return data;
 };
 
 export function useAdminUsers(
-  page = 1,
-  limit = 10,
-  order?: string,
-  search?: string,
+  params: AdminUserQueryParams = { page: 1, limit: 10 },
   initialData?: AdminUsersResponse | null,
 ) {
+  const isInitialDataValid =
+    params.page === 1 && !params.order && !params.search;
+
   return useQuery({
-    queryKey: adminUserKeys.lists(page, limit, order, search),
-    queryFn: () => fetchUsers(page, limit, order, search),
-    initialData:
-      page === 1 && !order && !search && initialData ? initialData : undefined,
+    queryKey: adminUserKeys.lists(params as Record<string, unknown>),
+    queryFn: () => fetchUsers(params),
+    initialData: isInitialDataValid && initialData ? initialData : undefined,
     staleTime: 0,
   });
 }

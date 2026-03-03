@@ -9,11 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useAdminBooks } from "../hooks/use-books";
+import { useAdminBooks, AdminBookQueryParams } from "../hooks/use-books";
 import { useDeleteBook } from "../hooks/use-delete-book";
 import { useRestoreBook } from "../hooks/use-restore-book";
 import { Book, BooksResponse } from "@/modules/home/schemas/book.schema";
 import { Edit, MoreHorizontal, Archive, RefreshCcw } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { PriceSortOrder } from "@/modules/home/components/book-filter";
+import { useMemo, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,7 +35,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SkeletonBooksTable } from "./skeleton-books-table";
@@ -43,9 +46,38 @@ interface BooksTableProps {
 }
 
 export function BooksTable({ onEdit, initialData }: BooksTableProps) {
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const search = searchParams.get("search") || undefined;
+  const categorySlug = searchParams.get("categorySlug") || undefined;
+  const sortOrder = (searchParams.get("sort") as PriceSortOrder) || "none";
+  const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
+  const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
+  const page = Number(searchParams.get("page")) || 1;
   const limit = 10;
-  const { data, isLoading } = useAdminBooks(page, limit, initialData);
+
+  const params = useMemo<AdminBookQueryParams>(() => ({
+    search,
+    categorySlug,
+    minPrice,
+    maxPrice,
+    page,
+    limit,
+  }), [search, categorySlug, minPrice, maxPrice, page, limit]);
+
+  const { data, isLoading } = useAdminBooks(params, initialData);
+
+  const sortedBooks = useMemo(() => {
+    if (!data?.data) return [];
+    if (sortOrder === "none") return data.data;
+
+    return [...data.data].sort((a, b) => {
+      const priceA = Number(a.price);
+      const priceB = Number(b.price);
+      return sortOrder === "asc" ? priceA - priceB : priceB - priceA;
+    });
+  }, [data?.data, sortOrder]);
   const deleteBook = useDeleteBook();
   const restoreBook = useRestoreBook();
 
@@ -93,7 +125,7 @@ export function BooksTable({ onEdit, initialData }: BooksTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.data?.map((book) => (
+            {sortedBooks?.map((book) => (
               <TableRow key={book.id}>
                 <TableCell>
                   <Avatar className="h-10 w-10 text-xs rounded-none">
@@ -233,7 +265,13 @@ export function BooksTable({ onEdit, initialData }: BooksTableProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          onClick={() => {
+            const newParams = new URLSearchParams(searchParams.toString());
+            const newPage = Math.max(1, page - 1);
+            if (newPage === 1) newParams.delete("page");
+            else newParams.set("page", String(newPage));
+            router.push(`?${newParams.toString()}`, { scroll: false });
+          }}
           disabled={page === 1}
         >
           Anterior
@@ -242,7 +280,11 @@ export function BooksTable({ onEdit, initialData }: BooksTableProps) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage((p) => p + 1)}
+          onClick={() => {
+            const newParams = new URLSearchParams(searchParams.toString());
+            newParams.set("page", String(page + 1));
+            router.push(`?${newParams.toString()}`, { scroll: false });
+          }}
           disabled={!data?.data || data.metadata.totalPages <= page}
         >
           Próxima

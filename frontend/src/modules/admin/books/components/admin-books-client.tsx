@@ -13,12 +13,15 @@ import {
 } from "@/components/ui/sheet";
 import { BookForm } from "@/modules/admin/books/components/book-form";
 import { Book, BooksResponse } from "@/modules/home/schemas/book.schema";
+import { useCategories } from "@/modules/home/hooks/use-categories";
+import { AdminBookFilter } from "./admin-book-filter";
 
 interface AdminBooksClientProps {
   initialData?: BooksResponse | null;
 }
 
 export function AdminBooksClient({ initialData }: AdminBooksClientProps) {
+  const { data: categories = [] } = useCategories();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | undefined>(undefined);
 
@@ -42,14 +45,19 @@ export function AdminBooksClient({ initialData }: AdminBooksClientProps) {
     setSelectedBook(undefined);
   };
 
+  const actionButton = (
+    <Button onClick={handleCreate} size="sm" className="h-9 w-full sm:w-auto">
+      <Plus className="mr-2 h-4 w-4" />
+      Novo Livro
+    </Button>
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Gerenciar Livros</h1>
-        <Button onClick={handleCreate}>
-          <Plus className="mr-2 h-4 w-4" />
-          Novo Livro
-        </Button>
+      <h1 className="text-2xl font-bold tracking-tight px-1">Gerenciar Livros</h1>
+
+      <div className="bg-card rounded-md border border-border shadow-sm px-4">
+        <AdminBookFilter categories={categories} actionButton={actionButton} />
       </div>
 
       <BooksTable onEdit={handleEdit} initialData={initialData} />

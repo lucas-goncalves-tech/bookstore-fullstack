@@ -15,6 +15,7 @@ import { UserForm } from "./user-form";
 import { UserPasswordForm } from "./user-password-form";
 import { UserBanForm } from "./user-ban-form";
 import { AdminUser, AdminUsersResponse } from "../schemas/admin-user.schema";
+import { AdminUserFilter } from "./admin-user-filter";
 
 interface AdminUsersClientProps {
   initialData?: AdminUsersResponse | null;
@@ -90,10 +91,19 @@ export function AdminUsersClient({ initialData }: AdminUsersClientProps) {
     }
   };
 
+  const actionButton = (
+    <Button onClick={handleCreate} size="sm" className="h-9 w-full sm:w-auto">
+      <Plus className="mr-2 h-4 w-4" />
+      Novo Usuário
+    </Button>
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">Gerenciar Usuários</h1>
+      <h1 className="text-2xl font-bold tracking-tight px-1">Gerenciar Usuários</h1>
+
+      <div className="bg-card rounded-md border border-border shadow-sm px-4">
+        <AdminUserFilter actionButton={actionButton} />
       </div>
 
       <UsersTable
@@ -101,12 +111,6 @@ export function AdminUsersClient({ initialData }: AdminUsersClientProps) {
         onChangePassword={handleChangePassword}
         onBan={handleBan}
         initialData={initialData}
-        headerAction={
-          <Button onClick={handleCreate}>
-            <Plus className="mr-2 h-4 w-4" />
-            Novo Usuário
-          </Button>
-        }
       />
 
       <Sheet open={modalType !== null} onOpenChange={handleModalOpenChange}>

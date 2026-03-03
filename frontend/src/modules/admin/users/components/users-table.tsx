@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { useAdminUsers } from "../hooks/use-users";
 import { useRestoreUser } from "../hooks/use-restore-user";
 import { usePermanentDeleteUser } from "../hooks/use-permanent-delete-user";
@@ -19,7 +19,6 @@ import {
   MoreHorizontal,
   Ban,
   RefreshCcw,
-  Search,
   KeyRound,
   Trash2,
 } from "lucide-react";
@@ -41,41 +40,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SimplePagination } from "@/components/simple-pagination";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface UsersTableProps {
   onEdit: (user: AdminUser) => void;
   onChangePassword: (user: AdminUser) => void;
   onBan: (user: AdminUser) => void;
   initialData?: AdminUsersResponse | null;
-  headerAction?: React.ReactNode;
-}
-
-// Simple internal debounce hook pattern since we can't guarantee use-debounce exists
-function useInternalDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
 }
 
 export function UsersTable({
@@ -83,22 +58,23 @@ export function UsersTable({
   onChangePassword,
   onBan,
   initialData,
-  headerAction,
 }: UsersTableProps) {
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const search = searchParams.get("search") || undefined;
+  const order = searchParams.get("order") || undefined;
+  const page = Number(searchParams.get("page")) || 1;
   const limit = 10;
 
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useInternalDebounce(search, 500);
-  const [order, setOrder] = useState("");
-
-  const { data, isLoading } = useAdminUsers(
+  const params = useMemo(() => ({
+    search,
+    order,
     page,
     limit,
-    order || undefined,
-    debouncedSearch || undefined,
-    initialData
-  );
+  }), [search, order, page, limit]);
+
+  const { data, isLoading } = useAdminUsers(params, initialData);
 
   const restoreUser = useRestoreUser();
   const permanentDeleteUser = usePermanentDeleteUser();
@@ -107,63 +83,10 @@ export function UsersTable({
   const [userToPermanentDelete, setUserToPermanentDelete] =
     useState<AdminUser | null>(null);
 
-  // Reset page when search or order changes
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, order]);
-
-  const handleRestore = async () => {
-    if (!userToRestore) return;
-    try {
-      await restoreUser.mutateAsync(userToRestore.id);
-      setUserToRestore(null);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handlePermanentDelete = async () => {
-    if (!userToPermanentDelete) return;
-    try {
-      await permanentDeleteUser.mutateAsync(userToPermanentDelete.id);
-      setUserToPermanentDelete(null);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const totalPages = data?.metadata?.totalPages || 1;
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="relative w-full sm:max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Buscar por nome ou e-mail..."
-            className="pl-8"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-          <div className="w-full sm:w-[180px]">
-            <Select value={order} onValueChange={setOrder}>
-              <SelectTrigger>
-                <SelectValue placeholder="Ordenar por..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Padrão</SelectItem>
-                <SelectItem value="asc">Mais antigos primeiro</SelectItem>
-                <SelectItem value="desc">Mais recentes primeiro</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {headerAction && <div className="w-full sm:w-auto">{headerAction}</div>}
-        </div>
-      </div>
-
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
@@ -291,7 +214,15 @@ export function UsersTable({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handleRestore}
+              onClick={async () => {
+                if (!userToRestore) return;
+                try {
+                  await restoreUser.mutateAsync(userToRestore.id);
+                  setUserToRestore(null);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
               disabled={restoreUser.isPending}
             >
               {restoreUser.isPending ? "Desbanindo..." : "Desbanir"}
@@ -317,7 +248,15 @@ export function UsersTable({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
-              onClick={handlePermanentDelete}
+              onClick={async () => {
+                if (!userToPermanentDelete) return;
+                try {
+                  await permanentDeleteUser.mutateAsync(userToPermanentDelete.id);
+                  setUserToPermanentDelete(null);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               disabled={permanentDeleteUser.isPending}
             >
@@ -330,7 +269,12 @@ export function UsersTable({
       <SimplePagination
         currentPage={page}
         totalPages={totalPages}
-        onPageChange={setPage}
+        onPageChange={(newPage) => {
+          const newParams = new URLSearchParams(searchParams.toString());
+          if (newPage === 1) newParams.delete("page");
+          else newParams.set("page", String(newPage));
+          router.push(`?${newParams.toString()}`, { scroll: false });
+        }}
         isLoading={isLoading}
       />
     </div>
