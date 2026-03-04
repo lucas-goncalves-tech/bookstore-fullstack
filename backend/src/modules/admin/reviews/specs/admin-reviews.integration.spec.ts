@@ -27,18 +27,23 @@ describe("Admin Reviews Integration tests", () => {
       expect(body.data).toHaveLength(1);
 
       const review = body.data[0];
+      expect(review).toMatchObject({
+        id: expect.any(String),
+        rating: expect.any(Number),
+        comment: expect.any(String),
+        createdAt: expect.any(String),
+        deletedAt: null,
+      });
       expect(review.book).toMatchObject({
+        id: expect.any(String),
         title: expect.any(String),
         coverThumbUrl: expect.any(String),
         author: expect.any(String),
       });
       expect(review.user).toMatchObject({
+        id: expect.any(String),
         name: expect.any(String),
         email: expect.any(String),
-      });
-      expect(review.rating).toMatchObject({
-        star: expect.any(Number),
-        comment: expect.any(String),
       });
     });
 

@@ -1,3 +1,5 @@
+import "./admin-reviews.doc";
+
 import { container, injectable } from "tsyringe";
 import { AdminReviewsController } from "./admin-reviews.controller";
 import { Router } from "express";

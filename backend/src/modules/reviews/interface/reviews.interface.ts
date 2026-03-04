@@ -5,3 +5,9 @@ export interface IQueryReviewInput {
   page?: number;
   limit?: number;
 }
+export interface IFindManyForAdminReviewsQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  order?: "asc" | "desc";
+}

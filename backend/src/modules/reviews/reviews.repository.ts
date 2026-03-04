@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { PrismaDB } from "../../database/prisma";
-import { ICreateReviewInput } from "./interface/reviews.interface";
+import { ICreateReviewInput, IFindManyForAdminReviewsQuery } from "./interface/reviews.interface";
+import { Prisma } from "@prisma/client";
 
 @injectable()
 export class ReviewRepository {
@@ -138,5 +139,48 @@ export class ReviewRepository {
         userId_bookId: { userId, bookId },
       },
     });
+  }
+
+  async findManyForAdmin({ page = 1, limit = 10, search, order = "desc" }: IFindManyForAdminReviewsQuery) {
+    const skip = (page - 1) * limit;
+    const safeLimit = limit > 100 ? 100 : limit;
+
+    const where: Prisma.ReviewWhereInput = {};
+    if (search) {
+      where.OR = [
+        { user: { email: { contains: search, mode: "insensitive" } } },
+        { user: { name: { contains: search, mode: "insensitive" } } },
+        { book: { title: { contains: search, mode: "insensitive" } } },
+      ];
+    }
+
+    const [reviews, total] = await Promise.all([
+      this.prisma.review.findMany({
+        where,
+        skip,
+        take: safeLimit,
+        orderBy: { createdAt: order },
+        select: {
+          id: true,
+          createdAt: true,
+          deletedAt: true,
+          rating: true,
+          comment: true,
+          user: { select: { id: true, name: true, email: true } },
+          book: { select: { id: true, title: true, coverThumbUrl: true, author: true } },
+        },
+      }),
+      this.prisma.review.count({ where }),
+    ]);
+
+    return {
+      data: reviews,
+      metadata: {
+        page,
+        limit: safeLimit,
+        total,
+        totalPages: Math.ceil(total / safeLimit),
+      },
+    };
   }
 }
