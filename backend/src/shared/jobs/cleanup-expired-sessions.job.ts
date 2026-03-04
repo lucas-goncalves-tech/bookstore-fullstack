@@ -18,24 +18,35 @@ export class CleanupExpiredSessionsJob {
   }
 
   private async execute() {
-    const cutoffDate = new Date(Date.now() - GRACE_PERIOD_MS);
+  const cutoffDate = new Date(Date.now() - GRACE_PERIOD_MS);
 
+  try {
     const { count } = await this.prisma.session.deleteMany({
       where: {
         OR: [
           { expiresAt: { lt: cutoffDate } },
-          {
-            revokedAt: { not: null, lt: cutoffDate },
-          },
+          { revokedAt: { not: null, lt: cutoffDate } },
         ],
       },
     });
 
     if (count > 0) {
       //eslint-disable-next-line
-      console.log(
-        `[CleanupExpiredSessions] ${count} sessões expiradas removidas.`,
-      );
+      console.log(`[CleanupExpiredSessions] ${count} sessões expiradas removidas.`);
     }
+  } catch (error) {
+    // P2021 = "The table {table} does not exist in the current database."
+    if (
+      error instanceof Error &&
+      "code" in error &&
+      (error as { code: string }).code === "P2021"
+    ) {
+      //eslint-disable-next-line
+      console.warn("[CleanupExpiredSessions] Tabela 'session' ainda não existe. Aguardando migrations...");
+      return;
+    }
+    throw error;
   }
+}
+
 }
