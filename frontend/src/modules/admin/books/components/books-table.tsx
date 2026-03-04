@@ -39,6 +39,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SkeletonBooksTable } from "./skeleton-books-table";
+import { SimplePagination } from "@/components/simple-pagination";
 
 interface BooksTableProps {
   onEdit: (book: Book) => void;
@@ -261,35 +262,17 @@ export function BooksTable({ onEdit, initialData }: BooksTableProps) {
       </AlertDialog>
 
       {/* Simple Pagination */}
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            const newPage = Math.max(1, page - 1);
-            if (newPage === 1) newParams.delete("page");
-            else newParams.set("page", String(newPage));
-            router.push(`?${newParams.toString()}`, { scroll: false });
-          }}
-          disabled={page === 1}
-        >
-          Anterior
-        </Button>
-        <span className="text-sm text-muted-foreground">Página {page}</span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            newParams.set("page", String(page + 1));
-            router.push(`?${newParams.toString()}`, { scroll: false });
-          }}
-          disabled={!data?.data || data.metadata.totalPages <= page}
-        >
-          Próxima
-        </Button>
-      </div>
+      <SimplePagination
+        currentPage={page}
+        totalPages={data?.metadata?.totalPages || 1}
+        onPageChange={(newPage) => {
+          const newParams = new URLSearchParams(searchParams.toString());
+          if (newPage === 1) newParams.delete("page");
+          else newParams.set("page", String(newPage));
+          router.replace(`?${newParams.toString()}`, { scroll: false });
+        }}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

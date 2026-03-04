@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -26,6 +27,7 @@ interface AdminBookFilterProps {
 
 export function AdminBookFilter({ categories, actionButton }: AdminBookFilterProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const search = searchParams.get("search") ?? "";
@@ -60,39 +62,23 @@ export function AdminBookFilter({ categories, actionButton }: AdminBookFilterPro
         }
       });
 
-      router.push(`?${params.toString()}`, { scroll: false });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams],
+    [router, pathname, searchParams],
   );
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (localPriceRange[0] !== minPrice || localPriceRange[1] !== maxPrice) {
-        updateParams({
-          minPrice: String(localPriceRange[0]),
-          maxPrice: String(localPriceRange[1]),
-        }, true);
-      }
-    }, DEBOUNCE_DELAY);
+  const handlePriceChange = useDebouncedCallback((range: [number, number]) => {
+    if (range[0] !== minPrice || range[1] !== maxPrice) {
+      updateParams({
+        minPrice: String(range[0]),
+        maxPrice: String(range[1]),
+      }, true);
+    }
+  }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler);
-  }, [localPriceRange, minPrice, maxPrice, updateParams]);
-
-  const [localSearch, setLocalSearch] = useState(search);
-
-  useEffect(() => {
-    setLocalSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (localSearch !== search) {
-        updateParams({ search: localSearch || undefined });
-      }
-    }, DEBOUNCE_DELAY);
-
-    return () => clearTimeout(handler);
-  }, [localSearch, search, updateParams]);
+  const handleSearch = useDebouncedCallback((term: string) => {
+    updateParams({ search: term || undefined });
+  }, DEBOUNCE_DELAY);
 
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -109,8 +95,8 @@ export function AdminBookFilter({ categories, actionButton }: AdminBookFilterPro
           <Input
             type="search"
             placeholder="Buscar livro, autor..."
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
+            defaultValue={search}
+            onChange={(e) => handleSearch(e.target.value)}
             className="h-9 w-full pl-8 bg-background"
           />
         </div>
@@ -155,7 +141,10 @@ export function AdminBookFilter({ categories, actionButton }: AdminBookFilterPro
           </span>
           <Slider
             value={localPriceRange}
-            onValueChange={(value) => setLocalPriceRange([value[0], value[1]])}
+            onValueChange={(value) => {
+              setLocalPriceRange([value[0], value[1]]);
+              handlePriceChange([value[0], value[1]]);
+            }}
             min={0}
             max={500}
             step={10}

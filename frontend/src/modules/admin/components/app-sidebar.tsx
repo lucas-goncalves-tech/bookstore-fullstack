@@ -1,6 +1,6 @@
 "use client";
 
-import { Book, LayoutDashboard, Tags, Users } from "lucide-react";
+import { Book, LayoutDashboard, Tags, Users, Star } from "lucide-react";
 
 import {
   Sidebar,
@@ -36,6 +36,11 @@ const items = [
     title: "Usuários",
     url: "/admin/users",
     icon: Users,
+  },
+  {
+    title: "Avaliações",
+    url: "/admin/reviews",
+    icon: Star,
   },
 ];
 

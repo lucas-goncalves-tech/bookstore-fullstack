@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,6 +21,7 @@ interface AdminUserFilterProps {
 
 export function AdminUserFilter({ actionButton }: AdminUserFilterProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const search = searchParams.get("search") ?? "";
@@ -41,26 +43,14 @@ export function AdminUserFilter({ actionButton }: AdminUserFilterProps) {
         }
       });
 
-      router.push(`?${params.toString()}`, { scroll: false });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams],
+    [router, pathname, searchParams],
   );
 
-  const [localSearch, setLocalSearch] = useState(search);
-
-  useEffect(() => {
-    setLocalSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (localSearch !== search) {
-        updateParams({ search: localSearch || undefined });
-      }
-    }, DEBOUNCE_DELAY);
-
-    return () => clearTimeout(handler);
-  }, [localSearch, search, updateParams]);
+  const handleSearch = useDebouncedCallback((term: string) => {
+    updateParams({ search: term || undefined });
+  }, DEBOUNCE_DELAY);
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-3">
@@ -71,8 +61,8 @@ export function AdminUserFilter({ actionButton }: AdminUserFilterProps) {
           <Input
             type="search"
             placeholder="Buscar por nome ou e-mail..."
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
+            defaultValue={search}
+            onChange={(e) => handleSearch(e.target.value)}
             className="h-9 w-full pl-8 bg-background"
           />
         </div>

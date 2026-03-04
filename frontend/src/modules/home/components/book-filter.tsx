@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -27,6 +28,7 @@ const DEFAULT_MAX_PRICE = 500;
 export function BookFilter({ categories }: BookFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   // Read values from URL
   const search = searchParams.get("search") ?? "";
@@ -68,49 +70,23 @@ export function BookFilter({ categories }: BookFilterProps) {
         }
       });
 
-      router.push(`?${params.toString()}`, { scroll: false });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams],
+    [router, pathname, searchParams],
   );
 
-  // Debounced URL update for slider
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (localPriceRange[0] !== minPrice || localPriceRange[1] !== maxPrice) {
-        updateParams({
-          minPrice: String(localPriceRange[0]),
-          maxPrice: String(localPriceRange[1]),
-        }, true);
-      }
-    }, DEBOUNCE_DELAY);
+  const handlePriceChange = useDebouncedCallback((range: [number, number]) => {
+    if (range[0] !== minPrice || range[1] !== maxPrice) {
+      updateParams({
+        minPrice: String(range[0]),
+        maxPrice: String(range[1]),
+      }, true);
+    }
+  }, DEBOUNCE_DELAY);
 
-    return () => clearTimeout(handler);
-  }, [localPriceRange, minPrice, maxPrice, updateParams]);
-
-  // Debounced search handler
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      updateParams({ search: value || undefined });
-    },
-    [updateParams],
-  );
-
-  // Debounce for search input
-  const [localSearch, setLocalSearch] = useState(search);
-
-  useEffect(() => {
-    setLocalSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      if (localSearch !== search) {
-        handleSearchChange(localSearch);
-      }
-    }, DEBOUNCE_DELAY);
-
-    return () => clearTimeout(handler);
-  }, [localSearch, search, handleSearchChange]);
+  const handleSearch = useDebouncedCallback((term: string) => {
+    updateParams({ search: term || undefined });
+  }, DEBOUNCE_DELAY);
 
   const formatPrice = (value: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -131,8 +107,8 @@ export function BookFilter({ categories }: BookFilterProps) {
               <Input
                 type="text"
                 placeholder="Buscar livro, autor..."
-                value={localSearch}
-                onChange={(e) => setLocalSearch(e.target.value)}
+                defaultValue={search}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="h-12 pr-12 bg-background/50 hover:bg-background/80 transition-colors"
               />
               <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-primary">
@@ -200,9 +176,10 @@ export function BookFilter({ categories }: BookFilterProps) {
             <div className="flex h-12 items-center">
               <Slider
                 value={localPriceRange}
-                onValueChange={(value) =>
-                  setLocalPriceRange([value[0], value[1]])
-                }
+                onValueChange={(value) => {
+                  setLocalPriceRange([value[0], value[1]]);
+                  handlePriceChange([value[0], value[1]]);
+                }}
                 min={0}
                 max={500}
                 step={10}
