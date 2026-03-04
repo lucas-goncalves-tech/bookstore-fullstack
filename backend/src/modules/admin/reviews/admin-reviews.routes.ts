@@ -5,6 +5,7 @@ import { AdminReviewsController } from "./admin-reviews.controller";
 import { Router } from "express";
 import { validateMiddleware } from "../../../shared/middlewares/validate.middleware";
 import { findManyForAdminReviewsQueryDto } from "./dtos/admin-reviews-query.dto";
+import { adminReviewParamsDto } from "./dtos/admin-reviews-params.dto";
 
 @injectable()
 export class AdminReviewsRoutes {
@@ -18,6 +19,11 @@ export class AdminReviewsRoutes {
       "/",
       validateMiddleware({ query: findManyForAdminReviewsQueryDto }),
       this.controller.findMany,
+    );
+    this.router.delete(
+      "/:id",
+      validateMiddleware({ params: adminReviewParamsDto }),
+      this.controller.delete,
     );
   }
   get routes() {

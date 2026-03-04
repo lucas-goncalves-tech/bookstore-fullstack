@@ -4,6 +4,7 @@ import { createUser } from "../../../../tests/factories/user.factory";
 import { createBook } from "../../../../tests/factories/book.factory";
 import { createReview } from "../../../../tests/factories/review.factory";
 import { req } from "../../../../tests/helpers/commom.helper";
+import { prisma_test } from "../../../../tests/setup";
 
 describe("Admin Reviews Integration tests", () => {
   const BASE_URL = "/api/v1/admin/reviews";
@@ -158,6 +159,53 @@ describe("Admin Reviews Integration tests", () => {
 
     it("should return 401 for unauthenticated requests", async () => {
       const { body } = await req.get(BASE_URL).expect(401);
+
+      expect(body).toHaveProperty("message");
+    });
+  });
+
+  describe(`DELETE ${BASE_URL}/:id`, () => {
+    it("should delete a review returning 204", async () => {
+      const review = await createReview();
+      const { reqAgent } = await loginWithUser("admin");
+
+      await reqAgent.delete(`${BASE_URL}/${review.id}`).expect(204);
+
+      const reviewInDb = await prisma_test.review.findUnique({
+        where: { id: review.id },
+      });
+      expect(reviewInDb).toBeNull();
+    });
+
+    it("should return 400 when id is not a valid UUID", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+
+      const { body } = await reqAgent.delete(`${BASE_URL}/invalid-uuid`).expect(400);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 404 when review does not exist", async () => {
+      const { reqAgent } = await loginWithUser("admin");
+      const fakeId = crypto.randomUUID();
+
+      const { body } = await reqAgent.delete(`${BASE_URL}/${fakeId}`).expect(404);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("returns 403 for unauthorized roles", async () => {
+      const { reqAgent } = await loginWithUser("user");
+      const fakeId = crypto.randomUUID();
+
+      const { body } = await reqAgent.delete(`${BASE_URL}/${fakeId}`).expect(403);
+
+      expect(body).toHaveProperty("message");
+    });
+
+    it("should return 401 for unauthenticated requests", async () => {
+      const fakeId = crypto.randomUUID();
+      const { body } = await req.delete(`${BASE_URL}/${fakeId}`).expect(401);
 
       expect(body).toHaveProperty("message");
     });

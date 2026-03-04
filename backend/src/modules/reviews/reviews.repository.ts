@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { PrismaDB } from "../../database/prisma";
-import { ICreateReviewInput, IFindManyForAdminReviewsQuery } from "./interface/reviews.interface";
+import { ICreateReviewInput, IFindManyForAdminReviewsQuery, IReviewRepository } from "./interface/reviews.interface";
 import { Prisma } from "@prisma/client";
 
 @injectable()
-export class ReviewRepository {
+export class ReviewRepository implements IReviewRepository {
   constructor(@inject(PrismaDB) private readonly prisma: PrismaDB) {}
 
   async findUniqueByBookId(userId: string, bookId: string) {
@@ -133,11 +133,23 @@ export class ReviewRepository {
     });
   }
 
+  async findById(id: string) {
+    return await this.prisma.review.findUnique({
+      where: { id },
+    });
+  }
+
   async delete(bookId: string, userId: string) {
     await this.prisma.review.delete({
       where: {
         userId_bookId: { userId, bookId },
       },
+    });
+  }
+
+  async deleteById(id: string) {
+    await this.prisma.review.delete({
+      where: { id },
     });
   }
 
