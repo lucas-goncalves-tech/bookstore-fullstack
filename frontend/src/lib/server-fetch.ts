@@ -140,7 +140,7 @@ export async function serverFetch<T>(
     const data = await response.json();
     return data as T;
   } catch (error) {
-    console.error(`[serverFetch] Exception for ${endpoint}:`, error);
+    console.error("[serverFetch] Exception for %s:", endpoint, error);
     return null;
   }
 }

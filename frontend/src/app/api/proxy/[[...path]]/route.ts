@@ -117,7 +117,7 @@ async function handleRequest(
 
     return res;
   } catch (error) {
-    console.error(`API proxy error (${method}):`, error);
+    console.error("API proxy error (%s):", method, error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

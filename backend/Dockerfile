@@ -7,7 +7,7 @@ RUN npx prisma generate
 COPY . .
 
 FROM base AS dev
-CMD ["npm", "run", "dev"]
+USER non-root CMD ["npm", "run", "dev"]
 
 FROM base AS prod
 RUN npx prisma generate --no-engine

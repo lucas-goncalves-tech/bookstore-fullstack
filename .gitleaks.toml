@@ -1,0 +1,6 @@
+title = "leaks config"
+
+[[rule. allowlist]]
+description = "ignore prisma generated folder"
+regexTarget = "match"
+paths = ['''backend/src/database/generated/prisma/*''']

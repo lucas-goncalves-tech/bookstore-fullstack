@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { env } from "../../core/config/env";
 
 const REDACTED_KEYS = new Set([
   "password",
@@ -8,6 +9,13 @@ const REDACTED_KEYS = new Set([
   "token",
   "access_token",
 ]);
+
+/**
+ * Remove quebras de linha (\n e \r) para prevenir Log Forgery / Log Injection (CWE-117)
+ */
+function sanitizeForLog(input: string): string {
+  return input.replace(/[\r\n]/g, " ");
+}
 
 /**
  * Funcao recursiva para varrer objetos e mascarar chaves sensiveis
@@ -69,7 +77,7 @@ export function loggerMiddleware(
   }
 
   // Não exibe logs durante testes do Vitest para não destruir a leitura limpa do 'npm test'
-  if (process.env.NODE_ENV === "test") {
+  if (env.NODE_ENV === "test") {
     return next();
   }
 
@@ -91,7 +99,7 @@ export function loggerMiddleware(
     }
 
     // eslint-disable-next-line no-console
-    console.log(logMessage);
+    console.log(sanitizeForLog(logMessage));
   });
 
   next();

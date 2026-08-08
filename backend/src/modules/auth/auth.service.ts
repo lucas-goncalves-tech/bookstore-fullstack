@@ -52,8 +52,9 @@ export class AuthService {
     data: ILoginInput,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const userExist = await this.usersRepository.findByKey("email", data.email);
+
     const FAKE_HASH =
-      "$2b$10$D7Y/.IVUm.SFcnYQE4dlb.BPJtVCwmOV/kaehohZrWeodfAEP8qqS";
+      "$2b$10$D7Y/.IVUm.SFcnYQE4dlb.BPJtVCwmOV/kaehohZrWeodfAEP8qqS"; // nosemgrep: generic.secrets.security.detected-bcrypt-hash.detected-bcrypt-hash -- FP: Pre-computed dummy hash to prevent timing attacks and account enumerations.
     const hashToCompare = userExist ? userExist.passwordHash : FAKE_HASH;
     const isPassValid = await bcrypt.compare(data.password, hashToCompare);
 
